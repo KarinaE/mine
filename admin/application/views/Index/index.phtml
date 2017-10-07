@@ -1,0 +1,175 @@
+<div class="col-md-3 col-md-offset-0">
+    <h3><?=$this->moduleLanguage['shop']?></h3>
+    <ul class="list-group">
+        <?foreach ($this->components as $key => $val):?>
+            <?if ($val['type'] == 'shop'):?>
+                <li class="list-group-item">
+                    <a href="<?=models_helpers_Url::getValidBaseUrl().$val['path']?>">
+                        <img src="<?=IMG . '/components/' . $val['img']?>" width="32" /> <?=$val['name']?>
+                    </a>
+                </li>
+            <?endif;?>
+        <?endforeach;?>
+    </ul>
+    <h3><?=$this->moduleLanguage['clients']?></h3>
+    <ul class="list-group">
+        <?foreach ($this->components as $key => $val):?>
+            <?if ($val['type'] == 'clients'):?>
+                <li class="list-group-item">
+                    <a href="<?=models_helpers_Url::getValidBaseUrl().$val['path']?>">
+                        <img src="<?=IMG . '/components/' . $val['img']?>" width="32" /> <?=$val['name']?>
+                    </a>
+                </li>
+            <?endif;?>
+        <?endforeach;?>
+    </ul>
+    <h3><?=$this->moduleLanguage['content']?></h3>
+    <ul class="list-group">
+    <?foreach ($this->components as $key => $val):?>
+        <?if ($val['type'] == 'content'):?>
+        <li class="list-group-item">
+            <a href="<?=models_helpers_Url::getValidBaseUrl().$val['path']?>">
+                <img src="<?=IMG . '/components/' . $val['img']?>" width="32" /> <?=$val['name']?>
+            </a>
+        </li>
+        <?endif;?>
+    <?endforeach;?>
+    </ul>
+    <h3><?=$this->moduleLanguage['design']?></h3>
+    <ul class="list-group">
+    <?foreach ($this->components as $key => $val):?>
+        <?if ($val['type'] == 'view'):?>
+        <li class="list-group-item">
+            <a href="<?=models_helpers_Url::getValidBaseUrl().$val['path']?>">
+                <img src="<?=IMG . '/components/' . $val['img']?>" width="32" /> <?=$val['name']?>
+            </a>
+        </li>
+        <?endif;?>
+    <?endforeach;?>
+    </ul>
+    <h3><?=$this->moduleLanguage['options']?></h3>
+    <ul class="list-group">
+    <?foreach ($this->components as $key => $val):?>
+        <?if ($val['type'] == 'options'):?>
+        <li class="list-group-item">
+            <a href="<?=models_helpers_Url::getValidBaseUrl().$val['path']?>">
+                <img src="<?=IMG . '/components/' . $val['img']?>" width="32" /> <?=$val['name']?>
+            </a>
+        </li>
+        <?endif;?>
+    <?endforeach;?>
+    </ul>
+    <h3><?=$this->moduleLanguage['plugins']?></h3>
+    <ul class="list-group">
+    <?foreach ($this->components as $key => $val):?>
+        <?if ($val['type'] == 'plugin'):?>
+        <li class="list-group-item">
+            <a href="<?=models_helpers_Url::getValidBaseUrl().$val['path']?>">
+                <img src="<?=IMG . '/components/' . $val['img']?>" width="32" /> <?=$val['name']?>
+            </a>
+        </li>
+        <?endif;?>
+    <?endforeach;?>
+    </ul>
+</div>
+<div class="col-md-5  col-md-offset-0">
+    <h3><?=$this->moduleLanguage['popular']?></h3>
+    <ul class="list-group popular">
+    <?if($this->popular):?>
+    <?foreach ($this->popular as $key => $val):?>
+        <li class="list-group-item">
+            <span class="title">
+                <a href="<?=models_helpers_Url::getValidBaseUrl().'content/edit/'.$val['id']?>">
+                    <?=$val['name']?>
+                </a>
+            </span>
+            <span class="date"><?=$val['date_add']?></span>
+            <span class="badge"><?=$val['views']?></span>
+        </li>
+    <?endforeach;?>
+    <?endif;?>
+    </ul>
+    <h3><?=$this->moduleLanguage['last_add']?></h3>
+    <ul class="list-group popular">
+    <?if($this->last):?>
+    <?foreach ($this->last as $key => $val):?>
+        <li class="list-group-item">
+            <span class="lastTitle">
+                <a href="<?=models_helpers_Url::getValidBaseUrl().'content/edit/'.$val['id']?>">
+                    <?=$val['name']?>
+                </a>
+            </span>
+            <span class="date"><?=$val['date_add']?></span>
+            <span class="badge"><?=$val['author_name']?></span>
+        </li>
+    <?endforeach;?>
+    <?endif;?>
+    </ul>
+    <h3><?=$this->moduleLanguage['last_edited']?></h3>
+    <ul class="list-group edited">
+    <?if($this->edited):?>
+    <?foreach ($this->edited as $key => $val):?>
+        <li class="list-group-item">
+            <span class="lastTitle">
+                <a href="<?=models_helpers_Url::getValidBaseUrl().'content/edit/'.$val['id']?>">
+                    <?=$val['name']?>
+                </a>
+            </span>
+            <span class="date"><?=$val['date_edit']?></span>
+            <span class="badge"><?=$val['author_edit']?></span>
+        </li>
+    <?endforeach;?>
+    <?endif;?>
+    </ul>
+</div>
+<div class="col-md-3  col-md-offset-0">
+    <h3><?=$this->moduleLanguage['user_stat']?></h3>
+    <table class="table table-condensed small">
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td><?=$this->moduleLanguage['user_stat_last_login']?></td>
+                <td><?php echo $this->userInfo['last_visit'] ? $this->userInfo['last_visit'] : $this->moduleLanguage['user_stat_last_never']?></td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td><?=$this->moduleLanguage['user_stat_materials']?></td>
+                <td><?=$this->userStats[0]["quntity"]?></td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td><?=$this->moduleLanguage['user_stat_categories']?></td>
+                <td><?=$this->userStats[1]["quntity"]?></td>
+            </tr>
+            <tr>
+                <th scope="row">4</th>
+                <td><?=$this->moduleLanguage['user_stat_modules']?></td>
+                <td><?=$this->userStats[2]["quntity"]?></td>
+            </tr>
+            <tr>
+                <th scope="row">5</th>
+                <td><?=$this->moduleLanguage['user_stat_templates']?></td>
+                <td><?=$this->userStats[3]["quntity"]?></td>
+            </tr>
+        </tbody>
+    </table>
+    <h3><?=$this->moduleLanguage['user_stat_last_logins']?></h3>
+    <table class="table table-condensed  small">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th><?=$this->moduleLanguage['user_stat_user']?></th>
+                <th align="center"><?=$this->moduleLanguage['user_stat_last_login']?></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?foreach($this->usersLogs as $key => $val):?>
+            <tr>
+                <th scope="row"><?=$val['id']?></th>
+                <td><?=$val['name']?></td>
+                <td align="center"><?=$val['last_visit']?></td>
+            </tr>
+        <?endforeach;?>
+        </tbody>
+    </table>
+</div>

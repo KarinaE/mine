@@ -1,0 +1,686 @@
+<link href="<?=CSS?>/bootstrap-switch.css" rel="stylesheet">
+<link href="<?=CSS?>/chosen.css" rel="stylesheet">
+<link href="<?=CSS?>/codemirror.css" rel="stylesheet">
+<script src="<?=JS?>/chosen.jquery.js"></script>
+<script src="<?=JS?>/highlight.js"></script>
+<script src="<?=JS?>/bootstrap-switch.js"></script>
+<script src="<?=JS?>/main.js"></script>
+<script src="<?=JS?>/codemirror.js"></script>
+<script src="<?=JS?>/matchbrackets.js"></script>
+<script src="<?=JS?>/htmlmixed.js"></script>
+<script src="<?=JS?>/xml.js"></script>
+<script src="<?=JS?>/javascript.js"></script>
+<script src="<?=JS?>/css.js"></script>
+<script src="<?=JS?>/clike.js"></script>
+<script src="<?=JS?>/php.js"></script>
+
+<script type="text/javascript">
+$(function()
+{   
+    $('.code').css( "display", "none" );
+    $(".chosen-select").chosen();
+});
+</script>
+
+<?if(@$this->data->_category == 'code'):?>
+<?$fp = fopen($_SERVER['DOCUMENT_ROOT'].models_helpers_Url::getDomain().@$this->data->_code, "r");?>
+<?while(!feof($fp)){@$code .= fgets($fp);}?>
+<?elseif(@$this->data->_category != 'search'):?>
+<?@$this->data->_code = unserialize(htmlspecialchars_decode(@$this->data->code));?>
+<?endif;?>
+
+<form name="editForm" method="POST" ng-app="filtersModule">
+    <input type="hidden" name="author" value="<?=@$this->data->_author ? @$this->data->_author : $this->userInfo['id'];?>">
+    <input type="hidden" name="action" value="<?=Request::instance()->getAction();?>">
+    <input type="hidden" name="id" value="<?=@$this->data->_id?>">
+    <div class="col-md-2 module-category">
+        <div class="form-group">
+            <select class="form-control" id="category" name="category">
+                <?=models_helpers_Options::basicOptions(models_helpers_Options::getModulesType(),@$this->data->_category,'code',$this->moduleLanguage['modules_form_code'])?>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-3 module-category">
+        <div class="form-group">
+            <input type="text" name="name" class="form-control" value="<?=@$this->data->_name?>" placeholder="<?=$this->moduleLanguage['modules_form_name_placeholder']?>">          
+        </div>
+    </div>
+    <div class="col-md-7 buttons">
+        <a class="btn btn-primary save" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['modules_save']?></a>
+        <a class="btn btn-success save-exit" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['modules_save_and_exit']?></a>
+        <a class="btn btn-success save-add" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['modules_save_and_create']?></a>
+        <a class="btn btn-danger  exit" data-pk="<?php echo models_helpers_Url::getValidBaseUrl().'modules/';?>"><?=$this->moduleLanguage['modules_exit']?></a>
+    </div>
+    <div class="content-block code">
+        <div class="form-group col-md-11">
+            <label><?=$this->moduleLanguage['modules_form_code_scripts']?></label>
+            <input type="text" name="code_script" class="form-control" value="<?=@$this->data->_script?>" placeholder="<?=$this->moduleLanguage['modules_form_code_scripts_placeholder']?>">
+        </div> 
+        <div class="form-group col-md-12">
+            <label><?=$this->moduleLanguage['modules_form_code_source']?></label> 
+            <textarea name="code" id="code" class="form-control" rows="10"><?=@$code?></textarea>
+        </div>        
+    </div>
+    
+    <div class="content-block col-md-12 menu">
+        <input type="hidden" name="menu_queries" value="show_title,css,ul_css,level_start,level_end,show_child,cat_tree">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label><?=$this->moduleLanguage['modules_form_menu_show_title']?></label>
+                <input type="radio" name="menu_show_title" <?=@$this->data->_code["show_title"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+            </div>
+            <div class="form-group">
+                <label><?=$this->moduleLanguage['modules_form_menu_css']?></label>
+                <input type="text" name="menu_css" class="form-control" value="<?=@$this->data->_code["css"]?>" placeholder="<?=$this->moduleLanguage['modules_form_menu_css_placeholder']?>">
+            </div>
+            <div class="form-group">
+                <label><?=$this->moduleLanguage['modules_form_menu_ul_css']?></label>
+                <input type="text" name="menu_ul_css" class="form-control" value="<?=@$this->data->_code["ul_css"]?>" placeholder="<?=$this->moduleLanguage['modules_form_menu_ul_css_placeholder']?>">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group col-md-12">
+                <label><?=$this->moduleLanguage['modules_form_menu_childs']?></label>
+                <input type="radio" name="menu_show_child" <?=@$this->data->_code["show_child"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+            </div>
+            <div class="form-group col-md-12">
+                <label><?=$this->moduleLanguage['modules_form_menu_parent_id']?></label>
+                <select size="10" name="menu_cat_tree" class="form-control chosen-select">
+                    <?=models_helpers_Options::basicOptions(models_helpers_Options::getCategoriesGtoups(),@$this->data->_code["cat_tree"])?>
+                </select>
+            </div>
+            <div class="form-group col-md-5">
+                <label><?=$this->moduleLanguage['modules_form_menu_level_start']?></label>
+                <select class="form-control" name="menu_level_start">
+                    <?=models_helpers_Options::basicOptions(models_helpers_Options::$getLevels,@$this->data->_code["level_start"],'',$this->moduleLanguage['modules_form_menu_level_start_placeholder'])?>
+                </select>
+            </div>
+            <div class="form-group col-md-5">
+                <label><?=$this->moduleLanguage['modules_form_menu_level_end']?></label>
+                <select class="form-control" name="menu_level_end">
+                    <?=models_helpers_Options::basicOptions(models_helpers_Options::$getLevels,@$this->data->_code["level_end"],'',$this->moduleLanguage['modules_form_menu_level_end_placeholder'])?>
+                </select>
+            </div>
+        </div>            
+    </div>
+    
+    <div class="content-block col-md-12 search">
+        <input type="hidden" name="search_scripts" value="search.js">
+        <div class="form-group col-md-5 no-left-padding">
+            <label><?=$this->moduleLanguage['modules_form_search_css']?></label>
+            <input type="text" name="search_code" class="form-control" value="<?=@$this->data->_code?>" placeholder="<?=$this->moduleLanguage['modules_form_search_css_placeholder']?>">
+        </div>           
+    </div>
+    
+    <div class="content-block col-md-12 slider">
+        <input type="hidden" name="slider_queries" value="params,show_title,multi_pg,show_order,css,qunty,matQnty,time,imgHght,parent_cat,page_depend">
+        <div class="col-md-6">            
+            <div class="form-group col-md-4 no-left-padding">
+                <label><?=$this->moduleLanguage['modules_form_slider_show_title']?></label>
+                <input type="radio" name="slider_show_title" <?=@$this->data->_code["show_title"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+            </div>
+            <div class="form-group col-md-4">
+                <label><?=$this->moduleLanguage['modules_form_slider_repeat']?></label>
+                <input type="radio" name="slider_multi_pg" <?=@$this->data->_code["multi_pg"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+            </div>  
+            <div class="form-group col-md-4">
+                <label><?=$this->moduleLanguage['modules_form_slider_params']?></label>
+                <input type="text" name="slider_params" class="form-control" value="<?=@$this->data->_code["params"]?>" placeholder="<?=$this->moduleLanguage['modules_form_slider_params_placeholder']?>">
+            </div>
+            <div class="form-group col-md-7 no-left-padding">
+                <label><?=$this->moduleLanguage['modules_form_slider_order']?></label>
+                <select name="slider_show_order" class="form-control">
+                <?=models_helpers_Options::basicOptions(models_helpers_Options::sortOrder(),@$this->data->_code["show_order"])?>
+                </select>
+            </div>       
+            <div class="form-group col-md-5">
+                <label><?=$this->moduleLanguage['modules_form_slider_css']?></label>
+                <input type="text" name="slider_css" class="form-control" value="<?=@$this->data->_code["css"]?>" placeholder="<?=$this->moduleLanguage['modules_form_slider_css_placeholder']?>">
+            </div>
+            <div class="form-group col-md-4 no-left-padding">
+                <label><?=$this->moduleLanguage['modules_form_slider_slides']?></label>
+                <input type="text" name="slider_qunty" class="form-control" value="<?=@$this->data->_code["qunty"]?>" placeholder="<?=$this->moduleLanguage['modules_form_slider_slides_placeholder']?>">
+            </div>                           
+            <div class="form-group col-md-4">
+                <label><?=$this->moduleLanguage['modules_form_slider_materials']?></label>
+                <input type="text" name="slider_matQnty" class="form-control" value="<?=@$this->data->_code["matQnty"]?>" placeholder="<?=$this->moduleLanguage['modules_form_slider_materials_placeholder']?>">
+            </div>
+            <div class="form-group col-md-4">
+                <label><?=$this->moduleLanguage['modules_form_slider_time']?></label>
+                <input type="text" name="slider_time" class="form-control" value="<?=@$this->data->_code["time"]?>" placeholder="<?=$this->moduleLanguage['modules_form_slider_time_placeholder']?>">
+            </div>
+            <div class="form-group col-md-6 no-left-padding">
+                <label><?=$this->moduleLanguage['modules_form_slider_height']?></label>
+                <input type="text" name="slider_imgHght" class="form-control" value="<?=@$this->data->_code["imgHght"]?>" placeholder="<?=$this->moduleLanguage['modules_form_slider_height_placeholder']?>">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group col-md-12 no-left-padding">
+                <label><?=$this->moduleLanguage['modules_form_slider_category']?></label>
+                <select size="10" name="slider_parent_cat[]"  multiple class="form-control chosen-select">
+                    <?=models_helpers_Options::basicOptions(models_helpers_Options::getCategories(),@$this->data->_code["parent_cat"])?>
+                </select>
+            </div>
+            <div class="form-group margin-top">
+                <label><?=$this->moduleLanguage['modules_form_slider_only_this_page']?></label>
+                <input type="radio" name="slider_page_depend" <?=@$this->data->_code["page_depend"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+            </div>
+        </div>            
+    </div>
+    
+    <div class="content-block col-md-12 links">
+        <input type="hidden" name="links_queries" value="show_title,link,show_img,titletag,css,ul_css,level_end,cat_tree">
+        <div class="col-md-6">
+            <div class="form-group col-md-4 no-left-padding">
+                <label><?=$this->moduleLanguage['modules_form_links_title']?></label>
+                <input type="radio" name="links_show_title" <?=@$this->data->_code["show_title"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+            </div>
+            <div class="form-group col-md-4">
+                <label><?=$this->moduleLanguage['modules_form_links_title_link']?></label>
+                <input type="radio" name="links_link" <?=@$this->data->_code["link"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+            </div>
+            <div class="form-group col-md-4">
+                <label><?=$this->moduleLanguage['modules_form_links_show_image']?></label>
+                <input type="radio" name="links_show_img" <?=@$this->data->_code["show_img"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+            </div>
+            <div class="form-group col-md-6 no-left-padding">
+                <label><?=$this->moduleLanguage['modules_form_links_css']?></label>
+                <input type="text" name="links_css" class="form-control" value="<?=@$this->data->_code["css"]?>" placeholder="<?=$this->moduleLanguage['modules_form_links_css_placeholder']?>">
+            </div>
+            <div class="form-group col-md-6">
+                <label><?=$this->moduleLanguage['modules_form_links_css_ul']?></label>
+                <input type="text" name="links_ul_css" class="form-control" value="<?=@$this->data->_code["ul_css"]?>" placeholder="<?=$this->moduleLanguage['modules_form_links_css_ul_placeholder']?>">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group col-md-5">
+                <label><?=$this->moduleLanguage['modules_form_links_level_end']?></label>
+                <select class="form-control" name="links_level_end">
+                    <?=models_helpers_Options::basicOptions(models_helpers_Options::$getLevels,@$this->data->_code["level_end"],'',$this->moduleLanguage['modules_form_links_level_end_placeholder'])?>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label><?=$this->moduleLanguage['modules_form_links_tag']?></label>
+                <input type="text" name="links_titletag" class="form-control" value="<?=@$this->data->_code["titletag"]?>" placeholder="<?=$this->moduleLanguage['modules_form_links_tag_placeholder']?>">
+            </div>            
+            <div class="form-group col-md-12">
+                <label><?=$this->moduleLanguage['modules_form_links_parent_id']?></label>
+                <select size="10" name="links_cat_tree" class="form-control chosen-select">
+                    <?=models_helpers_Options::basicOptions(models_helpers_Options::getCategories(),@$this->data->_code["cat_tree"])?>
+                </select>
+            </div>
+        </div>           
+    </div>
+    
+    <div class="content-block col-md-12 comments">
+        <input type="hidden" name="comments_queries" value="show_title,answer,avatar,pagin,css,qunty,parent_cat,page_depend">
+        <div class="col-md-6">            
+            <div class="form-group col-md-8 no-left-padding">
+                <label><?=$this->moduleLanguage['modules_form_comments_css']?></label>
+                <input type="text" name="comments_css" class="form-control" value="<?=@$this->data->_code["css"]?>" placeholder="<?=$this->moduleLanguage['modules_form_comments_css_placeholder']?>">
+            </div>
+            <div class="form-group col-md-3">
+                <label><?=$this->moduleLanguage['modules_form_comments_comments']?></label>
+                <input type="text" name="comments_qunty" class="form-control" value="<?=@$this->data->_code["qunty"]?>" placeholder="<?=$this->moduleLanguage['modules_form_comments_comments_placeholder']?>">
+            </div>
+            <div class="form-group col-md-4 no-left-padding">
+                <label><?=$this->moduleLanguage['modules_form_comments_show_title']?></label>
+                <input type="radio" name="comments_show_title" <?=@$this->data->_code["show_title"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+            </div>
+            <div class="form-group col-md-4">
+                <label><?=$this->moduleLanguage['modules_form_comments_show_avatar']?></label>
+                <input type="radio" name="comments_avatar" <?=@$this->data->_code["avatar"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+            </div>
+          
+             <div class="form-group col-md-4">
+                <label><?=$this->moduleLanguage['modules_form_comments_pagination']?></label>
+                <input type="radio" name="comments_pagin" <?=@$this->data->_code["pagin"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+            </div>
+            <div class="form-group col-md-4 no-left-padding">
+                <label><?=$this->moduleLanguage['modules_form_comments_answer']?></label>
+                <input type="radio" name="comments_answer" <?=@$this->data->_code["answer"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+            </div> 
+            <div class="form-group col-md-4">
+                <label><?=$this->moduleLanguage['modules_form_comments_category_answers']?></label>
+                <input type="radio" name="comments_page_depend" <?=@$this->data->_code["page_depend"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+            </div>                 
+        </div>
+        <div class="col-md-6">
+            <div class="form-group col-md-12">
+                <label><?=$this->moduleLanguage['modules_form_comments_category']?></label>
+                <select size="10" name="comments_parent_cat" class="form-control chosen-select">
+                    <?=models_helpers_Options::basicOptions(models_helpers_Options::getCategories(),@$this->data->_code["parent_cat"],' ',$this->moduleLanguage['modules_form_comments_category_placeholder'])?>
+                </select>
+            </div>
+        </div>         
+    </div>
+    
+    <div class="content-block col-md-12 pagelinks">
+        <input type="hidden" name="pagelinks_queries" value="show_title,description,show_art_title,title_params,multi_pg,pagin,links_ppage,css,block_css,show_order,params,qunty,term,parent_cat,lookbook,page_depend,date,monthFormat,product,showCat,show_date,showComm,showViews,statPos,show_img,image_position,img_css,img_size">
+        <div class="tabs">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-1" data-toggle="tab"><?=$this->moduleLanguage['modules_form_pagelinks_tab1']?></a></li>
+                <li><a href="#tab-2" data-toggle="tab"><?=$this->moduleLanguage['modules_form_pagelinks_tab2']?></a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab-1">
+                    <div class="col-md-6">
+                        <div class="form-group col-md-8 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_show_order']?></label>
+                            <select name="pagelinks_show_order" class="form-control">
+                            <?=models_helpers_Options::basicOptions(models_helpers_Options::sortOrder(),@$this->data->_code["show_order"])?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_param']?></label>
+                            <input type="text" name="pagelinks_params" class="form-control" value="<?=@$this->data->_code["params"]?>" placeholder="<?=$this->moduleLanguage['modules_form_pagelinks_param_placeholder']?>">
+                        </div>
+                        <div class="form-group col-md-4 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_show_title']?></label>
+                            <input type="radio" name="pagelinks_show_title" <?=@$this->data->_code["show_title"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_show_description']?></label>
+                            <input type="radio" name="pagelinks_description" <?=@$this->data->_code["description"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_title']?></label>
+                            <input type="radio" name="pagelinks_show_art_title" <?=@$this->data->_code["show_art_title"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_params_title']?></label>
+                            <input type="radio" name="pagelinks_title_params" <?=@$this->data->_code["title_params"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_repeat_pages']?></label>
+                            <input type="radio" name="pagelinks_multi_pg" <?=@$this->data->_code["multi_pg"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_pagination']?></label>
+                            <input type="radio" name="pagelinks_pagin" <?=@$this->data->_code["pagin"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4  no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_links']?></label>
+                            <input type="text" name="pagelinks_links_ppage" class="form-control" value="<?=@$this->data->_code["links_ppage"]?>" placeholder="<?=$this->moduleLanguage['modules_form_pagelinks_links_placeholder']?>">
+                        </div>                        
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_css']?></label>
+                            <input type="text" name="pagelinks_css" class="form-control" value="<?=@$this->data->_code["css"]?>" placeholder="<?=$this->moduleLanguage['modules_form_pagelinks_css_placeholder']?>">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_css_ul']?></label>
+                            <input type="text" name="pagelinks_block_css" class="form-control" value="<?=@$this->data->_code["block_css"]?>" placeholder="<?=$this->moduleLanguage['modules_form_pagelinks_css_ul_placeholder']?>">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group col-md-12 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_category']?></label>
+                            <select size="10" name="pagelinks_parent_cat[]"  multiple class="form-control chosen-select">
+                                <?=models_helpers_Options::basicOptions(models_helpers_Options::getCategories(),@$this->data->_code["parent_cat"])?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_lookbook']?></label>
+                            <input type="radio" name="pagelinks_lookbook" <?=@$this->data->_code["lookbook"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group margin-top">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_page_depend']?></label>
+                            <input type="radio" name="pagelinks_page_depend" <?=@$this->data->_code["page_depend"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                    </div>  
+                </div>
+                <div class="tab-pane" id="tab-2">
+                    <div class="col-md-6">
+                        <div class="form-group col-md-4 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_quantity']?></label>
+                            <input type="text" name="pagelinks_qunty" class="form-control" value="<?=@$this->data->_code["qunty"]?>" placeholder="<?=$this->moduleLanguage['modules_form_pagelinks_quantity_placeholder']?>">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_period']?></label>
+                            <input type="text" name="pagelinks_term" class="form-control" value="<?=@$this->data->_code["term"]?>" placeholder="<?=$this->moduleLanguage['modules_form_pagelinks_period_placeholder']?>">
+                        </div>                        
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_show_comments']?></label>
+                            <input type="radio" name="pagelinks_showComm" <?=@$this->data->_code["showCat"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_show_views']?></label>
+                            <input type="radio" name="pagelinks_showViews" <?=@$this->data->_code["showViews"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>                        
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_show_category']?></label>
+                            <input type="radio" name="pagelinks_showCat" <?=@$this->data->_code["showCat"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>                        
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_show_date']?></label>
+                            <input type="radio" name="pagelinks_show_date" <?=@$this->data->_code["show_date"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_date_format']?></label>
+                            <input type="text" name="pagelinks_date" class="form-control" value="<?=@$this->data->_code["date"]?>" placeholder="<?=$this->moduleLanguage['modules_form_pagelinks_date_format_placeholder']?>">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_month_format']?></label>
+                            <select name="pagelinks_monthFormat" class="form-control">
+                            <?=models_helpers_Options::basicOptions(models_helpers_Options::monthFormat(),@$this->data->_code["monthFormat"],'',$this->moduleLanguage['modules_form_pagelinks_month_format_placeholder'])?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_product']?></label>
+                            <input type="radio" name="pagelinks_product" <?=@$this->data->_code["product"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                    </div>
+                    <div class="col-md-5 pull-right">
+                        <div class="form-group col-md-5 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_show_image']?></label>
+                            <input type="radio" name="pagelinks_show_img" <?=@$this->data->_code["show_img"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>                      
+                        <div class="form-group col-md-6">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_image_css']?></label>
+                            <input type="text" name="pagelinks_img_css" class="form-control" value="<?=@$this->data->_code["img_css"]?>" placeholder="<?=$this->moduleLanguage['modules_form_pagelinks_image_css_placeholder']?>">
+                        </div>
+                        <div class="form-group col-md-4 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_image_size']?></label>
+                            <input type="text" name="pagelinks_img_size" class="form-control" value="<?=@$this->data->_code["img_size"]?>" placeholder="<?=$this->moduleLanguage['modules_form_pagelinks_image_size_placeholder']?>">
+                        </div>
+  
+                        <div class="form-group col-md-6">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_image_position']?></label>
+                            <select name="pagelinks_image_position" class="form-control">
+                            <?=models_helpers_Options::basicOptions(models_helpers_Options::imagePosition(),@$this->data->_code["image_position"],'',$this->moduleLanguage['modules_form_pagelinks_image_position_placeholder'])?>
+                            </select>                        
+                        </div>
+                        <div class="form-group col-md-6 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_pagelinks_description_position']?></label>
+                            <select name="pagelinks_statPos" class="form-control">
+                            <?=models_helpers_Options::basicOptions(models_helpers_Options::descriptionPosition(),@$this->data->_code["statPos"],'',$this->moduleLanguage['modules_form_pagelinks_description_position_placeholder'])?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+        </div>
+    </div>
+    
+    <div class="content-block col-md-12 products">
+        <input type="hidden" name="products_queries" value="show_title,description,show_art_title,title_params,multi_pg,pagin,links_ppage,css,block_css,show_order,brand,qunty,term,parent_cat,page_depend,brand_depend,angular,date,monthFormat,showCat,show_price,show_date,showComm,showViews,statPos,show_img,image_position,img_css,img_size,slider">
+        <div class="tabs">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-5" data-toggle="tab"><?=$this->moduleLanguage['modules_form_products_tab1']?></a></li>
+                <li><a href="#tab-6" data-toggle="tab"><?=$this->moduleLanguage['modules_form_products_tab2']?></a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab-5">
+                    <div class="col-md-6">
+                        <div class="form-group col-md-7 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_products_show_order']?></label>
+                            <select name="products_show_order" class="form-control">
+                            <?=models_helpers_Options::basicOptions(models_helpers_Options::sortOrder(),@$this->data->_code["show_order"])?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label><?=$this->moduleLanguage['modules_form_products_brand']?></label>
+                            <select name="products_brand" class="form-control">
+                                <?=models_helpers_Options::basicOptions(models_helpers_Options::getBrands(),@$this->data->_code["brand"],'',$this->moduleLanguage['modules_form_products_brand_placeholder'])?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_products_show_title']?></label>
+                            <input type="radio" name="products_show_title" <?=@$this->data->_code["show_title"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_products_show_description']?></label>
+                            <input type="radio" name="products_description" <?=@$this->data->_code["description"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_products_title']?></label>
+                            <input type="radio" name="products_show_art_title" <?=@$this->data->_code["show_art_title"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_products_params_title']?></label>
+                            <input type="radio" name="products_title_params" <?=@$this->data->_code["title_params"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_products_repeat_pages']?></label>
+                            <input type="radio" name="products_multi_pg" <?=@$this->data->_code["multi_pg"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_products_pagination']?></label>
+                            <input type="radio" name="products_pagin" <?=@$this->data->_code["pagin"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4  no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_products_links']?></label>
+                            <input type="text" name="products_links_ppage" class="form-control" value="<?=@$this->data->_code["links_ppage"]?>" placeholder="<?=$this->moduleLanguage['modules_form_products_links_placeholder']?>">
+                        </div>                        
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_products_css']?></label>
+                            <input type="text" name="products_css" class="form-control" value="<?=@$this->data->_code["css"]?>" placeholder="<?=$this->moduleLanguage['modules_form_products_css_placeholder']?>">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_products_css_ul']?></label>
+                            <input type="text" name="products_block_css" class="form-control" value="<?=@$this->data->_code["block_css"]?>" placeholder="<?=$this->moduleLanguage['modules_form_products_css_ul_placeholder']?>">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group col-md-12 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_products_category']?></label>
+                            <select size="10" name="products_parent_cat[]"  multiple class="form-control chosen-select">
+                                <?=models_helpers_Options::basicOptions(models_helpers_Options::getCategories(),@$this->data->_code["parent_cat"])?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_products_brand_depend']?></label>
+                            <input type="radio" name="products_brand_depend" <?=@$this->data->_code["brand_depend"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label><?=$this->moduleLanguage['modules_form_products_page_depend']?></label>
+                            <input type="radio" name="products_page_depend" <?=@$this->data->_code["page_depend"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_products_angular_tplt']?></label>
+                            <input type="radio" name="products_angular" <?=@$this->data->_code["angular"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                    </div>  
+                </div>
+                <div class="tab-pane" id="tab-6">
+                    <div class="col-md-6">
+                        <div class="form-group col-md-4 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_products_quantity']?></label>
+                            <input type="text" name="products_qunty" class="form-control" value="<?=@$this->data->_code["qunty"]?>" placeholder="<?=$this->moduleLanguage['modules_form_products_quantity_placeholder']?>">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_products_period']?></label>
+                            <input type="text" name="products_term" class="form-control" value="<?=@$this->data->_code["term"]?>" placeholder="<?=$this->moduleLanguage['modules_form_products_period_placeholder']?>">
+                        </div>                        
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_products_show_comments']?></label>
+                            <input type="radio" name="products_showComm" <?=@$this->data->_code["showCat"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_products_show_views']?></label>
+                            <input type="radio" name="products_showViews" <?=@$this->data->_code["showViews"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>                        
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_products_show_category']?></label>
+                            <input type="radio" name="products_showCat" <?=@$this->data->_code["showCat"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_products_show_price']?></label>
+                            <input type="radio" name="products_show_price" <?=@$this->data->_code["show_price"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>                       
+                        <div class="form-group col-md-4 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_products_show_date']?></label>
+                            <input type="radio" name="products_show_date" <?=@$this->data->_code["show_date"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <div class="form-group col-md-4 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_products_date_format']?></label>
+                            <input type="text" name="products_date" class="form-control" value="<?=@$this->data->_code["date"]?>" placeholder="<?=$this->moduleLanguage['modules_form_products_date_format_placeholder']?>">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_products_month_format']?></label>
+                            <select name="products_monthFormat" class="form-control">
+                            <?=models_helpers_Options::basicOptions(models_helpers_Options::monthFormat(),@$this->data->_code["monthFormat"],'',$this->moduleLanguage['modules_form_products_month_format_placeholder'])?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-5 pull-right">
+                        <div class="form-group col-md-5 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_products_show_image']?></label>
+                            <input type="radio" name="products_show_img" <?=@$this->data->_code["show_img"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>                      
+                        <div class="form-group col-md-6">
+                            <label><?=$this->moduleLanguage['modules_form_products_image_css']?></label>
+                            <input type="text" name="products_img_css" class="form-control" value="<?=@$this->data->_code["img_css"]?>" placeholder="<?=$this->moduleLanguage['modules_form_products_image_css_placeholder']?>">
+                        </div>
+                        <div class="form-group col-md-4 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_products_image_size']?></label>
+                            <input type="text" name="products_img_size" class="form-control" value="<?=@$this->data->_code["img_size"]?>" placeholder="<?=$this->moduleLanguage['modules_form_products_image_size_placeholder']?>">
+                        </div>
+  
+                        <div class="form-group col-md-6">
+                            <label><?=$this->moduleLanguage['modules_form_products_image_position']?></label>
+                            <select name="products_image_position" class="form-control">
+                            <?=models_helpers_Options::basicOptions(models_helpers_Options::imagePosition(),@$this->data->_code["image_position"],'',$this->moduleLanguage['modules_form_products_image_position_placeholder'])?>
+                            </select>                        
+                        </div>
+                        <div class="form-group col-md-6 no-left-padding">
+                            <label><?=$this->moduleLanguage['modules_form_products_description_position']?></label>
+                            <select name="products_statPos" class="form-control">
+                            <?=models_helpers_Options::basicOptions(models_helpers_Options::descriptionPosition(),@$this->data->_code["statPos"],'',$this->moduleLanguage['modules_form_products_description_position_placeholder'])?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['modules_form_products_slider']?></label>
+                            <input type="radio" name="products_slider" <?=@$this->data->_code["slider"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>  
+                    </div>
+                </div>
+            </div>        
+        </div>
+    </div>
+    
+    <div class="content-block col-md-12 lang">
+        <input type="hidden" name="lang_queries" value="css,show_title,show_text,show_img">
+        <div class="form-group col-md-5 no-left-padding">
+            <label><?=$this->moduleLanguage['modules_form_lang_css']?></label>
+            <input type="text" name="lang_css" class="form-control" value="<?=@$this->data->_code["css"]?>" placeholder="<?=$this->moduleLanguage['modules_form_lang_css_placeholder']?>">
+        </div>
+        <div class="form-group col-md-2">
+            <label><?=$this->moduleLanguage['modules_form_lang_show_title']?></label>
+            <input type="radio" name="lang_show_title" <?=@$this->data->_code["show_title"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+        </div>  
+        <div class="form-group col-md-2">
+            <label><?=$this->moduleLanguage['modules_form_lang_show_short']?></label>
+            <input type="radio" name="lang_show_text" <?=@$this->data->_code["show_text"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+        </div>  
+        <div class="form-group col-md-2">
+            <label><?=$this->moduleLanguage['modules_form_lang_show_flag']?></label>
+            <input type="radio" name="lang_show_img" <?=@$this->data->_code["show_img"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+        </div>            
+    </div>
+    
+    <div class="content-block col-md-12 currency">
+        <input type="hidden" name="currency_queries" value="css,show_text,show_symbol">
+        <div class="form-group col-md-5 no-left-padding">
+            <label><?=$this->moduleLanguage['modules_form_currency_css']?></label>
+            <input type="text" name="currency_css" class="form-control" value="<?=@$this->data->_code["css"]?>" placeholder="<?=$this->moduleLanguage['modules_form_symbol_css_placeholder']?>">
+        </div>
+        <div class="form-group col-md-2">
+            <label><?=$this->moduleLanguage['modules_form_currency_show_short']?></label>
+            <input type="radio" name="currency_show_text" <?=@$this->data->_code["show_text"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+        </div>  
+        <div class="form-group col-md-2">
+            <label><?=$this->moduleLanguage['modules_form_currency_show_symbol']?></label>
+            <input type="radio" name="currency_show_symbol" <?=@$this->data->_code["show_symbol"] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+        </div>            
+    </div>
+
+    <div class="content-block col-md-12 filters" ng-controller="FiltersModuleCtrl">
+        <input type="hidden" name="filters_queries" value="type">
+        <input type="hidden" name="filters_type" value="filters">
+        <div class="col-md-7 no-left-padding">
+            <div class="form-group col-md-4 no-left-padding">
+                <label><?=$this->moduleLanguage['modules_form_filters_type']?></label>
+                <select  class="form-control"
+                         ng-model="filter"
+                         ng-options="item.name for item in filters track by item.id">
+                </select>
+            </div>
+
+            <div ng-switch on="filter.id" class="col-md-4">
+                <div class="form-group" ng-switch-when="1">
+                    <label><?=$this->moduleLanguage['modules_form_filters_category']?></label>
+                    <select class="form-control" ng-model="$parent.category_select" ng-options="item.name for item in categories track by item.id"></select>
+                </div>
+
+                <div class="form-group" ng-switch-when="2">
+                    <label><?=$this->moduleLanguage['modules_form_filters_brands']?></label>
+                    <select class="form-control" ng-model="$parent.brand_select" ng-options="item.name for item in brands track by item.id"></select>
+                </div>
+
+                <div class="form-group" ng-switch-when="3">
+                    <label><?=$this->moduleLanguage['modules_form_filters_option']?></label>
+                    <select class="form-control" ng-model="$parent.option_select" ng-options="item.name for item in options track by item.id"></select>
+                </div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <label><?=$this->moduleLanguage['modules_form_filters_order']?></label>
+                <input type="text" ng-model="order" class="form-control" value="<?=@$this->data->_code["css"]?>" placeholder="<?=$this->moduleLanguage['modules_form_symbol_css_placeholder']?>">
+            </div>
+
+            <a ng-click="addOption()" class="btn btn-primary upload-opt col-md-2"><?=$this->moduleLanguage['modules_form_filters_add']?></a>
+        </div>
+
+        <div class="col-md-5">
+            <table class="table table-striped small">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th><?=$this->moduleLanguage['modules_form_filters_table_name']?></th>
+                    <th><?=$this->moduleLanguage['modules_form_filters_table_value']?></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in moduleOptions | orderBy : ordr" ng-if="item.id">
+                        <td ng-bind="item.ordr"></td>
+                        <td ng-bind="item.name"></td>
+                        <td>
+                            <span ng-if="item.type == 1" ng-repeat="obj in $parent.categories | filter:{id:item.data*1}:true" ng-bind="obj.name"></span>
+                            <span ng-if="item.type == 2" ng-repeat="obj in $parent.brands | filter:{id:item.data*1}" ng-bind="obj.name"></span>
+                            <span ng-if="item.type == 3" ng-repeat="obj in $parent.options | filter:{id:item.data*1}" ng-bind="obj.name"></span>
+                        </td>
+                        <td><a class="deleteLink" ng-click="deleteOption(item.id)"><?=$this->moduleLanguage['modules_delete']?></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+<script>
+var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+    lineNumbers: true,
+    matchBrackets: true,
+    mode: "application/x-httpd-php",
+    indentUnit: 4,
+    indentWithTabs: true
+});
+
+var current = $("#category option:selected").val() == 'undefined' ? 'code' : $("#category option:selected").val();
+$('.'+current).addClass("show");
+$('#category').on('change', function() 
+{   
+    $('.show').removeClass("show");
+    
+    var type = $("#category option:selected").val();
+    $('.'+type).addClass("show");
+});
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"></script>
+<script type="text/javascript" src="<?=JS?>/angular/modules/app.js"></script>
+<script type="text/javascript" src="<?=JS?>/angular/modules/controllers.js"></script>
+<script type="text/javascript" src="<?=JS?>/angular/modules/services.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-resource.js"></script>

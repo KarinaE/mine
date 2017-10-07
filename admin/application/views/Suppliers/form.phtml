@@ -1,0 +1,138 @@
+<link href="<?=CSS?>/bootstrap-switch.css" rel="stylesheet">
+<link href="<?=CSS?>/chosen.css" rel="stylesheet">
+
+<script src="<?=JS?>/chosen.jquery.js"></script>
+<script src="<?=JS?>/highlight.js"></script>
+<script src="<?=JS?>/bootstrap-switch.js"></script>
+<script src="<?=JS?>/main.js"></script>
+<script src="<?=JS?>/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $(".chosen-select").chosen();
+    });
+</script>
+
+<div class="col-md-7 buttons">
+    <a class="btn btn-primary save" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['suppliers_save']?></a>
+    <a class="btn btn-success save-exit" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['suppliers_save_and_exit']?></a>
+    <a class="btn btn-success save-add" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['suppliers_save_and_create']?></a>
+    <a class="btn btn-danger  exit" data-pk="<?php echo models_helpers_Url::getValidBaseUrl().'suppliers/';?>"><?=$this->moduleLanguage['suppliers_exit']?></a>
+</div>
+<div class="content-block col-md-12">
+    <form name="editForm" method="POST">
+        <input type="hidden" name="author" value="<?=$this->data->_author ? $this->data->_author : $this->userInfo['id'];?>">
+        <input type="hidden" name="action" value="<?=Request::instance()->getAction();?>">
+        <input type="hidden" name="params" value="<?if($this->params)foreach($this->params as $key => $val):echo $val['id']."|";endforeach;?>">
+        <input type="hidden" name="langs"  value="<?if($this->langs)foreach($this->langs  as $key => $val):echo $val['short_name']."|";endforeach;?>">
+        <div class="tab-pane active">
+            <div class="col-md-4">
+                <div class="form-group col-md-12">
+                    <label><?=$this->moduleLanguage['suppliers_form_name']?></label>
+                    <input type="text" name="name" class="form-control" value="<?=$this->data->_name?>" placeholder="<?=$this->moduleLanguage['suppliers_form_name_placeholder']?>">
+                </div>
+                <?if(Request::instance()->getAction() == 'edit'):?>
+                    <div class="form-group col-md-9">
+                        <label><?=$this->moduleLanguage['suppliers_form_sizes']?></label>
+                        <select name="size_type" class="form-control chosen-select">
+                            <?=models_helpers_Options::basicOptions(models_helpers_Options::getSizes(),'','')?>
+                        </select>
+                    </div>
+                    <a type="submit" class="btn btn-primary mrg-btn-cnt add-size"><?=$this->moduleLanguage['suppliers_form_contacts_load_button']?></a>
+                <?endif;?>
+                <div class="form-group col-md-7">
+                    <label><?=$this->moduleLanguage['suppliers_form_contact_person']?></label>
+                    <input type="text" name="contact_person" class="form-control" value="<?=$this->data->_contact_person?>" placeholder="<?=$this->moduleLanguage['suppliers_form_contact_person_placeholder']?>">
+                </div>
+                <div class="form-group col-md-5">
+                    <label><?=$this->moduleLanguage['suppliers_form_phone']?></label>
+                    <input type="text" name="phone" class="form-control" value="<?=$this->data->_phone?>" placeholder="<?=$this->moduleLanguage['suppliers_form_phone_placeholder']?>">
+                </div>
+                <div class="form-group col-md-5">
+                    <label class="center-block"><?=$this->moduleLanguage['suppliers_form_avatar_preview']?></label>
+                    <img width="128" class="img-thumbnail" src="<?=$this->data->_image?>" />
+                </div>
+                <div class="form-group col-md-7">
+                    <label><?=$this->moduleLanguage['suppliers_form_avatar']?></label>
+                    <input type="text" name="image" class="form-control" onclick="openKCFinder(this)" value="<?=$this->data->_image?>" placeholder="<?=$this->moduleLanguage['suppliers_form_avatar_load']?>">
+                </div>
+                <div class="form-group col-md-7">
+                    <label><?=$this->moduleLanguage['suppliers_form_email']?></label>
+                    <input type="text" name="email" value="<?=$this->data->_email?>" class="form-control" placeholder="<?=$this->moduleLanguage['suppliers_form_email_placeholder']?>">
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="col-md-12">
+                <?if(Request::instance()->getAction() == 'add'):?>
+                    <div class="form-group">
+                        <label><?=$this->moduleLanguage['suppliers_form_contacts_warning']?></label>
+                    </div>
+                <?else:?>
+                    <div id="sizes"></div>
+                <?endif;?>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script type="text/javascript">
+    function openKCFinder(field)
+    {
+        window.KCFinder = {
+            callBack: function(url)
+            {
+                field.value = url;
+                window.KCFinder = null;
+            }
+        };
+        window.open('<?=JS?>/kcfinder/browse.php?type=images&language=<?=strtolower(models_helpers_Url::getConfigLanguage())?>',
+            'kcfinder_image', 'status=0, toolbar=0, location=0, menubar=0, ' +
+            'directories=0, resizable=1, scrollbars=0, width=800, height=600'
+        );
+    }
+    <?if(Request::instance()->getAction() == 'edit'):?>
+    var id = <?=$this->data->_id?>;
+
+    $(document).ready(function()
+    {
+        $('a.add-size').on('click', function(e)
+        {
+            e.preventDefault();
+            $('div.loading.sizes').css('display', 'block');
+            var data = new FormData();
+            // присвоение данных таблицы для отправки постом
+            data.append('size_type', $('select[name="size_type"]').val());
+
+            $.ajax({
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: data,
+                url: BASE_URL + '/suppliers/addSize/' + id,
+                success: function(jsonData)
+                {
+                    if(jsonData)
+                        alert(jsonData);
+
+                    $('div.loading.sizes').css('display', 'none');
+                    getSizes();
+                }
+            });
+        });
+
+    });
+
+    getSizes();
+
+    // вызов картинок материала
+    function getSizes()
+    {
+        $.get(BASE_URL + '/suppliers/getSizes/' + id, null, function(data)
+        {
+            $('.col-md-12 #sizes').html(data);
+        });
+    }
+
+    <?endif;?>
+</script>

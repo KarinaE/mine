@@ -1,0 +1,42 @@
+<table class="table table-striped small">
+  <thead>
+    <tr>
+      <th style="text-align:center;"><?=$this->moduleLanguage['content_form_image_img']?></th>
+      <th style="text-align:center;"><?=$this->moduleLanguage['content_form_image_file']?></th>
+      <th style="text-align:center;"><?=$this->moduleLanguage['content_form_image_main']?></th>
+      <th style="text-align:center;"><?=$this->moduleLanguage['content_form_image_action']?></th>
+    </tr>
+  </thead>
+  <tbody>
+    <?if($this->images):?>
+    <?foreach($this->images as $val):?>
+    <tr>
+      <td align="center"><img width="40" src="<?=models_helpers_Url::getDomain() == '/' ? '' : models_helpers_Url::getDomain();?><?=$val['smallimg']?>"/></td>
+      <td align="center" style="vertical-align: middle;"><b><?=$val['image']?></b></td>
+      <td align="center"><?if($val['main'] == 1):?><img width="25" src="<?=IMG?>/check.png"><?endif;?></td>
+      <td align="center" style="vertical-align: middle;"><a style="cursor: pointer;" data-pk="<?=$val['id']?>" class="imgdel"><?=$this->moduleLanguage['content_form_image_delete']?></a></td>
+    </tr>
+    <?endforeach;?>
+    <?endif;?>  
+  </tbody>
+</table>
+<div class="loading"></div>
+<script type="text/javascript">
+$(document).ready(function()
+{
+    $('a.imgdel').click(function()
+    {
+        imgid = $(this).data('pk');
+        $('div.loading').css('display', 'block');
+        $.ajax({
+            url: BASE_URL + '/content/deleteimage/' + imgid,
+            type: "POST",
+            complete: function(data)
+            {
+                getImages();
+            },
+            dataType: 'html'
+        });
+    });
+});
+</script>

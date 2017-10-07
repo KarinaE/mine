@@ -1,0 +1,73 @@
+<div class="col-md-12 buttons">
+    <a class="btn btn-primary save" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['comments_save']?></a>
+    <a class="btn btn-success save-exit" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['comments_save_and_exit']?></a>
+    <a class="btn btn-danger  exit" data-pk="<?php echo models_helpers_Url::getValidBaseUrl().'modules/';?>"><?=$this->moduleLanguage['comments_exit']?></a>
+</div>
+<form name="editForm" method="POST">
+    <input type="hidden" name="action" value="<?=Request::instance()->getAction();?>">
+    <input type="hidden" name="page_id" value="<?=$this->data->_page_id?>">
+    <?if(Request::instance()->getAction() == 'reply'):?>
+    <input type="hidden" name="name" value="<?=$this->data->_replyName;?>">
+    <input type="hidden" name="avatar" value="<?=$this->userInfo['avatar'];?>">
+    <input type="hidden" name="parent_id" value="<?=$this->data->_id?>">
+    <input type="hidden" name="chain" value="<?=$this->data->_chain ? $this->data->_chain : $this->data->_id?>">
+    <input type="hidden" name="email" value="<?=$this->data->_email?>">
+    <div class="content-block col-md-12">
+        <fieldset>
+        <legend><?=$this->moduleLanguage['comments_form_legend']?></legend>
+        <?foreach($this->data->tree as $comment):?>
+            <div class="v" style="margin-left: <?=$margin?>px;">
+                <?echo $comment['comment']?>
+                <div class="info">
+                    <?=$comment['name']?> - <?=$comment['email']?>, <?=$comment['date_add']?>
+                </div>
+            </div>
+            <?$margin = $margin+25;?>
+        <?endforeach;?>
+        </fieldset>
+        <div class="form-group col-md-3">
+            <label><?=$this->moduleLanguage['comments_form_added']?></label>
+            <?=$this->data->_date_add?>
+        </div>
+        <div class="form-group col-md-2">
+            <label><?=$this->moduleLanguage['comments_form_page_id']?></label>
+            <?=$this->data->_page_id?>
+        </div>
+        <div class="form-group col-md-2">
+            <label><?=$this->moduleLanguage['comments_form_comment_id']?></label>
+            <?=$this->data->_id?>
+        </div>
+        <div class="form-group col-md-2">
+            <label><?=$this->moduleLanguage['comments_form_answer_author']?></label>
+            <?=$this->data->_id?>
+        </div>
+        <div class="form-group col-md-12">
+            <label><?=$this->moduleLanguage['comments_form_answer_text']?></label>
+            <textarea  name='comment' class="form-control" rows="5"></textarea>
+        </div>
+    </div>
+    <?else:?>
+    <div class="content-block col-md-12">
+        <div class="form-group col-md-3">
+            <label><?=$this->moduleLanguage['comments_form_author']?></label>
+            <input type="text" name="name" class="form-control" value="<?=$this->data->_name?>">
+        </div>
+        <div class="form-group col-md-3">
+            <label><?=$this->moduleLanguage['comments_form_email']?></label>
+            <input type="text" name="email" class="form-control" value="<?=$this->data->_email?>">
+        </div>
+        <div class="form-group col-md-3">
+            <label><?=$this->moduleLanguage['comments_form_page_id']?></label>
+            <?=$this->data->_page_id?>
+        </div>
+        <div class="form-group col-md-3">
+            <label><?=$this->moduleLanguage['comments_form_date']?></label>
+            <?=$this->data->_date_add?>
+        </div>
+        <div class="form-group col-md-12">
+            <label><?=$this->moduleLanguage['comments_form_text']?></label>
+            <textarea  name='comment' class="form-control" rows="5"><?=$this->data->_comment?></textarea>
+        </div>
+    </div>
+    <?endif;?>
+</form>

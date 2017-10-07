@@ -1,0 +1,271 @@
+<link href="<?=CSS?>/bootstrap-switch.css" rel="stylesheet">
+<link href="<?=CSS?>/chosen.css" rel="stylesheet">
+
+<script src="<?=JS?>/chosen.jquery.js"></script>
+<script src="<?=JS?>/highlight.js"></script>
+<script src="<?=JS?>/bootstrap-switch.js"></script>
+<script src="<?=JS?>/main.js"></script>
+<script type="text/javascript">
+$(function(){   
+    $(".chosen-select").chosen();
+});
+</script>
+<div class="col-md-5">   
+    <a type="submit" class="btn btn-primary mrg-btn-opts upd-currency"><?=$this->moduleLanguage['configs_update_currency']?></a>  
+    <a type="submit" class="btn btn-primary upd-usr mrg-btn-opts"><?=$this->moduleLanguage['configs_copy_users']?></a>                
+</div> 
+<div class="col-md-7 buttons">
+    <?if(models_helpers_Access::checkAccess('edit') || models_helpers_Access::checkAccess('edit_your')):?>
+    <a class="btn btn-success save" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['configs_save']?></a>
+    <?endif;?>
+    <a class="btn btn-danger exit" data-pk="<?php echo models_helpers_Url::getValidBaseUrl().'index';?>"><?=$this->moduleLanguage['configs_exit']?></a>
+</div>
+<div class="content-block col-md-12">
+    <form name="editForm" method="POST">
+        <input type="hidden" name="author" value="<?=$this->data->_author ? $this->data->_author : $this->userInfo['id'];?>">
+        <input type="hidden" name="action" value="<?=Request::instance()->getAction();?>">
+        <div class="tabs">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-1" data-toggle="tab"><?=$this->moduleLanguage['configs_system']?></a></li>
+                <li><a href="#tab-2" data-toggle="tab"><?=$this->moduleLanguage['configs_rights']?></a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab-1"> 
+                    <div class="col-md-3">   
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['configs_root']?></label>
+                            <input type="text" name="path" class="form-control" value="<?=$this->data->_path?>" placeholder="<?=$this->moduleLanguage['configs_root_placeholder']?>">
+                        </div>
+                    </div>
+                    <div class="col-md-2">   
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['configs_admin_folder']?></label>
+                            <input type="text" name="admin_folder" class="form-control" value="<?=$this->data->_admin_folder?>" placeholder="<?=$this->moduleLanguage['configs_admin_folder_placeholder']?>">
+                        </div>
+                    </div>
+                    <div class="col-md-2">   
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['configs_sitename']?></label>
+                            <input type="text" name="sitename" class="form-control" value="<?=$this->data->_sitename?>" placeholder="<?=$this->moduleLanguage['configs_sitename_placeholder']?>">
+                        </div>
+                    </div>
+                    <div class="col-md-2">   
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['configs_admin_lang']?></label>
+                            <select name="admin_lang" class="form-control">
+                                <?=models_helpers_Options::basicOptions(models_helpers_Options::getLanguages(),$this->data->_admin_lang,'',$this->moduleLanguage['configs_admin_lang_placeholder'])?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">   
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['configs_adminame']?></label>
+                            <input type="text" name="admin_alias" class="form-control" value="<?=$this->data->_admin_alias?>" placeholder="<?=$this->moduleLanguage['configs_adminame_placeholder']?>">
+                        </div>
+                    </div>   
+                    <div class="col-md-7">
+                        <div class="alert alert-info" role="alert"><?=$this->moduleLanguage['configs_languages']?></div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['configs_load']?></label>
+                            <input class="mrg-load" name="img" type="file">
+                        </div>
+                        <div class="col-md-3">   
+                            <div class="form-group">
+                                <label><?=$this->moduleLanguage['configs_langname']?></label>
+                                <input type="text" name="name" class="form-control" placeholder="<?=$this->moduleLanguage['configs_langname_placeholder']?>">
+                            </div>
+                        </div>
+                        <div class="col-md-3">   
+                            <div class="form-group">
+                                <label><?=$this->moduleLanguage['configs_langname_short']?></label>
+                                <input type="text" name="short_name" class="form-control" placeholder="<?=$this->moduleLanguage['configs_langname_short_placeholder']?>">
+                            </div>
+                        </div>
+                        <?if(models_helpers_Access::checkAccess('add')):?>
+                        <a type="submit" class="btn btn-primary mrg-btn-opts upload"><?=$this->moduleLanguage['configs_load_button']?></a>
+                        <?endif;?>
+                        <div id="languages" class="ajax-bottom"></div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="alert alert-info" role="alert"><?=$this->moduleLanguage['configs_params']?></div>
+                        <div class="col-md-9">   
+                            <div class="form-group">
+                                <label><?=$this->moduleLanguage['configs_params_name']?></label>
+                                <input type="text" name="param" class="form-control">
+                            </div>
+                        </div>
+                        <?if(models_helpers_Access::checkAccess('add')):?>
+                        <a type="submit" class="btn btn-primary mrg-btn-opts add"><?=$this->moduleLanguage['configs_add']?></a>
+                        <?endif;?>
+                        <div id="params" class="ajax-bottom"></div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab-2">
+                    <div class="col-md-12">
+                        <div class="col-md-4">   
+                            <div class="form-group">
+                                <label><?=$this->moduleLanguage['configs_rights_name']?></label>
+                                <input type="text" name="groupname" class="form-control" placeholder="<?=$this->moduleLanguage['configs_rights_name_placeholder']?>">
+                            </div>
+                        </div>
+                        <div class="col-md-4">   
+                            <div class="form-group">
+                                <label><?=$this->moduleLanguage['configs_rights_group_id']?></label>
+                                <input type="text" name="ident" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-2">   
+                            <div class="form-group">
+                                <label><?=$this->moduleLanguage['configs_rights_id']?></label>
+                                <input type="text" name="id" class="form-control">
+                            </div>
+                        </div>
+                        <?if(models_helpers_Access::checkAccess('add')):?>
+                        <a type="submit" class="btn btn-primary mrg-btn-opts add-usr"><?=$this->moduleLanguage['configs_add']?></a>
+                        <?endif;?>
+                        <div id="users" class="ajax-bottom"></div>
+                    </div>
+                </div>
+            </div>     
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+$(document).ready(function()
+{
+    $('a.upload').on('click', function(e)
+    {
+        e.preventDefault();   
+        $('div.loading').css('display', 'block');
+        var data = new FormData();
+        // присвоение данных таблицы для отправки постом
+        data.append('img', $('input[type="file"]').prop('files')[0]);
+        data.append('name', $('input[name="name"]').val());
+        data.append('short_name', $('input[name="short_name"]').val());
+    
+        $.ajax({
+            type: 'POST',               
+            processData: false,
+            contentType: false,
+            data: data,
+            url: BASE_URL + '/configs/addLang/',
+            success: function(jsonData)
+            {
+                if(jsonData)
+                    alert(jsonData);
+                getLanguages();
+            }
+        }); 
+    });  
+        
+    $('a.add').on('click', function(e)
+    {
+        e.preventDefault();   
+        $('div.parloading').css('display', 'block');
+        var data = new FormData();
+        // присвоение данных таблицы для отправки постом
+        data.append('param', $('input[name="param"]').val());
+    
+        $.ajax({
+            type: 'POST',               
+            processData: false,
+            contentType: false,
+            data: data,
+            url: BASE_URL + '/configs/addParam/',
+            success: function(jsonData)
+            {
+                if(jsonData)
+                    alert(jsonData);
+                getParams();
+            }
+        }); 
+    });  
+        
+    $('a.add-usr').on('click', function(e)
+    {
+        e.preventDefault();   
+        $('div.usrloading').css('display', 'block');
+        var data = new FormData();
+        // присвоение данных таблицы для отправки постом
+        data.append('id', $('input[name="id"]').val());
+        data.append('name', $('input[name="groupname"]').val());
+        data.append('ident', $('input[name="ident"]').val());
+    
+        $.ajax({
+            type: 'POST',               
+            processData: false,
+            contentType: false,
+            data: data,
+            url: BASE_URL + '/configs/addGroup/',
+            success: function(jsonData)
+            {
+                if(jsonData)
+                    alert(jsonData);
+                getUsers();
+            }
+        }); 
+    }); 
+    
+    $('a.upd-usr').on('click', function(e)
+    {
+        e.preventDefault();   
+        
+        $.ajax({
+            url: BASE_URL + '/configs/updateUsers/',
+            success: function(jsonData)
+            {
+                if(jsonData)
+                    alert(jsonData);
+                else
+                    alert('<?=$this->moduleLanguage['configs_success']?>');
+            }
+        }); 
+    });
+    
+    $('a.upd-currency').on('click', function(e)
+    {
+        e.preventDefault();
+    
+        $.ajax({              
+            processData: false,
+            contentType: false,
+            url: BASE_URL + '/configs/updateCurrency/',
+            success: function(jsonData)
+            {
+                if(jsonData)
+                    alert(jsonData);
+            }
+        }); 
+    });      
+});
+
+getLanguages();
+getParams();
+getUsers();
+// вызов языков
+function getLanguages()
+{
+    $.get(BASE_URL + '/configs/getLanguages/', null, function(data)
+    {
+        $('.col-md-7 #languages').html(data);
+    });
+}
+
+// вызов параметров
+function getParams()
+{
+    $.get(BASE_URL + '/configs/getParams/', null, function(data)
+    {
+        $('.col-md-5 #params').html(data);
+    });
+}
+
+// пользователи
+function getUsers()
+{
+    $.get(BASE_URL + '/configs/getUsers/', null, function(data)
+    {
+        $('.col-md-12 #users').html(data);
+    });
+}
+</script>

@@ -1,0 +1,45 @@
+<?$this->modules = unserialize($this->modules['pos_array']);?>
+<table class="table table-striped small">
+  <thead>
+    <tr>
+      <th style="text-align:center;"><?=$this->moduleLanguage['templates_form_module_name']?></th>
+      <th style="text-align:center;"><?=$this->moduleLanguage['templates_form_module_position']?></th>
+      <th style="text-align:center;"><?=$this->moduleLanguage['templates_form_module_order']?></th>
+      <th style="text-align:center;"><?=$this->moduleLanguage['templates_form_module_action']?></th>
+    </tr>
+  </thead>
+  <tbody>
+  <?if(!empty($this->modules)):?>
+  <?foreach($this->modules as $key=>$val):?>
+    <tr>
+      <td align="center"><?=models_Templates::getModuleName($val['mod_name'])?></td>
+      <td align="center" style="vertical-align: middle;"><?=$val['position']?></td>
+      <td align="center"><b><?=$val['pos_order']?></b></td>
+      <td align="center" style="vertical-align: middle;"><a style="cursor: pointer;" data-pk="<?=$key?>" class="moddel"><?=$this->moduleLanguage['templates_form_delete']?></a></td>
+    </tr>
+    <?endforeach;?>
+    <?endif;?>
+  </tbody>
+</table>
+<div class="loading"></div>
+<script type="text/javascript">
+$(document).ready(function()
+{
+    $('a.moddel').click(function()
+    {
+        var key = $(this).data('pk');
+
+        $('div.loading').css('display', 'block');
+        $.ajax({
+            url: BASE_URL + '/templates/deleteModule/' + id,
+            type: "POST",
+            data: {data:key},
+            complete: function()
+            {
+                getModules();
+            },
+            dataType: 'html'
+        });
+    });
+});
+</script>

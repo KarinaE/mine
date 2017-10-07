@@ -1,0 +1,114 @@
+<?php $filters = $this->filter->getData(); ?>
+<form class="col-md-7 search-block" id="filter" action="<?=models_helpers_Url::getValidBaseUrl()?><?php echo $this->filter->getLinkForm()?>" method="post" onsubmit="return PathGenerator(this);">
+    <div class="col-md-3">
+        <select class="form-control" name="status"><?=models_helpers_Options::basicOptions(models_helpers_Options::statuses(), @$filters['status'], 0, $this->moduleLanguage['comments_search_status'])?></select>
+    </div>
+    <div class="col-md-6">
+        <div class="input-group">
+            <input type="text" name="fulltext" value="<?=@$filters['fulltext']?>" class="form-control" placeholder="<?=$this->moduleLanguage['comments_search_text']?>"/>
+            <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" value="<?=$this->moduleLanguage['comments_search_button']?>"/>
+            </span>
+        </div>    
+    </div>
+    <div class="col-md-1">
+        <a href="#" class="clearSrch"><img src="<?=IMG?>/form/reset.png" title="<?=$this->moduleLanguage['comments_search_reset']?>"/></a>
+    </div>
+</form>
+<div class="col-md-5 buttons">
+    <?if(models_helpers_Access::checkAccess('change_status')):?>
+    <a class="btn btn-success activate" data-pk="<?php echo models_helpers_Url::getValidBaseUrl().'comments/';?>"><?=$this->moduleLanguage['comments_activation']?></a>
+    <a class="btn btn-warning deactivate" data-pk="<?php echo models_helpers_Url::getValidBaseUrl().'comments/';?>"><?=$this->moduleLanguage['comments_deactivation']?></a>
+    <a class="btn btn-danger  delete" data-pk="<?php echo models_helpers_Url::getValidBaseUrl().'comments/';?>"><?=$this->moduleLanguage['comments_delete']?></a>
+    <?endif;?>
+</div>
+<div class="maincontent center-block">
+<form method="post" name="baseform">
+    <table class="table table-hover small">
+        <thead>
+            <tr>
+                <th colspan="2"><input type="checkbox" class="dl" name="select_all" title="<?=$this->moduleLanguage['comments_table_check_all']?>"></th>
+                <th><a href="<?=models_helpers_Url::getValidBaseUrl()?><?php echo $this->filter->getLinkSort('id') ?>" class="<?php echo $this->filter->checkSortOrder('id') ?>"><?=$this->moduleLanguage['comments_table_id']?></a></th>
+                <th width="45%"><a href="<?=models_helpers_Url::getValidBaseUrl()?><?php echo $this->filter->getLinkSort('comment') ?>" class="<?php echo $this->filter->checkSortOrder('comment') ?>"><?=$this->moduleLanguage['comments_table_text']?></a></th>
+                <th width="10%"><a href="<?=models_helpers_Url::getValidBaseUrl()?><?php echo $this->filter->getLinkSort('email') ?>" class="<?php echo $this->filter->checkSortOrder('email') ?>"><?=$this->moduleLanguage['comments_table_email']?></a></th>           
+                <th><?=$this->moduleLanguage['comments_table_action']?></th>
+                <th><?=$this->moduleLanguage['comments_search_status']?></th>
+                <th><a href="<?=models_helpers_Url::getValidBaseUrl()?><?php echo $this->filter->getLinkSort('name') ?>" class="<?php echo $this->filter->checkSortOrder('name') ?>"><?=$this->moduleLanguage['comments_table_author']?></a></th>
+                <th><a href="<?=models_helpers_Url::getValidBaseUrl()?><?php echo $this->filter->getLinkSort('t1.date_add') ?>" class="<?php echo $this->filter->checkSortOrder('t1.date_add') ?>"><?=$this->moduleLanguage['comments_table_date']?></a></th> 
+            </tr>
+        </thead>
+        <tbody>
+        <?if($this->datalist):?>
+        <?foreach($this->datalist as $key => $val):?>
+            <tr class="<?=$val['answer'] == 0 ?  $val['parent_id'] !=0 ? 'answer-chain' : 'answer' : 'answered'?>">
+                <td colspan="2"><input class="il" type="checkbox" name="dellist[]" value="<?=$val['id']?>"/></td>
+                <th><?=$val['id']?></th>
+                <td><?=preg_replace('!\s++!u', ' ', $val['comment'])?></td>
+                <td><?=$val['email']?></td>
+                <td>
+                    <?if(models_helpers_Access::checkAccess('add')):?>
+                    <a href="<?=models_helpers_Url::getValidBaseUrl().'comments/reply/'.$val['id']?>">
+                        <img src="<?=IMG?>/reply.png" width="17" title="<?=$this->moduleLanguage['comments_table_answer']?>">
+                    </a>
+                    <?endif;?>
+                    <?if(models_helpers_Access::checkAccess('edit') || models_helpers_Access::checkAccess('edit_your')):?>
+                    <a href="<?=models_helpers_Url::getValidBaseUrl().'comments/edit/'.$val['id']?>">
+                        <img src="<?=IMG?>/edit.png" width="17" title="<?=$this->moduleLanguage['comments_table_edit']?>">
+                    </a>
+                    <?endif;?>
+                    <a href="<?=models_helpers_Url::getDomain().'/'.$val['url']?>#comment<?=$val['id']?>">
+                        <img src="<?=IMG?>/view.png" width="17" title="<?=$this->moduleLanguage['comments_table_show']?>">
+                    </a>
+                </td>
+                <td>
+                    <?if(models_helpers_Access::checkAccess('change_status')):?>
+                    <a href="<?=models_helpers_Url::getValidBaseUrl().'comments/changeStatus/'.$val['id']?>">
+                    <?endif;?>
+                    <img src="<?=IMG . '/form/'?><?=$val['status'] == 1 ? 'active' : 'deact'?>.png" />
+                    <?if(models_helpers_Access::checkAccess('change_status')):?>
+                    </a>
+                    <?endif;?>
+                </td>
+                <td><?=$val['name']?></td>
+                <td><?=$val['date_add']?></td>
+            </tr>
+            <?if($val['answer'] == 1 && is_array($val['answers'])):?>
+                <?foreach($val['answers'] as $key=>$row):?>
+                <tr class="answer_adm">
+                    <td style="border-right:2px solid #ddd;"></td>
+                    <td><input class="il" type="checkbox" name="dellist[]" value="<?=$row['id']?>"/></td>
+                    <th><?=$row['id']?></th>
+                    <td><?=preg_replace('!\s++!u', ' ', $row['comment'])?></td>
+                    <td><?=$row['email']?></td>
+                    <td>
+                        <a href="<?=models_helpers_Url::getValidBaseUrl().'comments/reply/'.$row['id']?>">
+                            <img src="<?=IMG?>/reply.png" width="17" title="<?=$this->moduleLanguage['comments_table_answer']?>">
+                        </a>
+                        <a href="<?=models_helpers_Url::getValidBaseUrl().'comments/edit/'.$row['id']?>">
+                            <img src="<?=IMG?>/edit.png" width="17" title="<?=$this->moduleLanguage['comments_table_edit']?>">
+                        </a>
+                        <a href="<?=models_helpers_Url::getDomain().'/'.$row['url']?>#comment<?=$row['id']?>">
+                            <img src="<?=IMG?>/view.png" width="17" title="<?=$this->moduleLanguage['comments_table_show']?>">
+                        </a>
+                    </td>
+                    <td>
+                        <?if(models_helpers_Access::checkAccess('change_status')):?>
+                        <a href="<?=models_helpers_Url::getValidBaseUrl().'comments/changeStatus/'.$row['id']?>">
+                        <?endif;?>
+                        <img src="<?=IMG . '/form/'?><?=$row['status'] == 1 ? 'active' : 'deact'?>.png" />
+                        <?if(models_helpers_Access::checkAccess('change_status')):?>
+                        </a>
+                        <?endif;?>
+                    </td>
+                    <td><?=$row['name']?></td>
+                    <td><?=$row['date_add']?></td>
+                </tr>
+                <?endforeach;?>
+            <?endif;?>
+        <?endforeach;?>
+        <?endif;?>
+        </tbody>
+    </table> 
+</form>
+<?php echo $this->pagesTotal['cnt'] > 1 ? models_helpers_Paging::instance()->getPaging( $this->filter->getLinkListing(), $this->pagesTotal['cnt'], $this->filter->getPageCurrent() ): '';?>
+</div>

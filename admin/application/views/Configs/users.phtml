@@ -1,0 +1,102 @@
+<link href="<?=CSS?>/bootstrap-switch.css" rel="stylesheet">
+
+<script src="<?=JS?>/highlight.js"></script>
+<script src="<?=JS?>/bootstrap-switch.js"></script>
+<script src="<?=JS?>/main.js"></script>
+<div class="tabs col-md-12" style="margin-top: 10px;"> 
+    <ul class="nav nav-tabs">
+        <?foreach($this->users as $key=>$val):?>
+        <li <?= $key == 0 ? 'class="active"' : ''?>><a href="#tab-<?=$val['ident']?>" data-toggle="tab"><?=$val['name']?></a></li>
+        <?endforeach;?>
+    </ul>
+    <div class="tab-content">
+        <?foreach($this->users as $key=>$val):?>
+        <div class="tab-pane <?= $key == 0 ? 'active' : ''?>" id="tab-<?=$val['ident']?>">
+            <table class="table table-striped small">
+              <thead>
+                <tr>
+                  <th>Пункт меню</th>
+                  <th style="text-align:center;"><?=$this->moduleLanguage['configs_users_add']?></th>
+                  <th style="text-align:center;"><?=$this->moduleLanguage['configs_users_edit']?></th>
+                  <th style="text-align:center;"><?=$this->moduleLanguage['configs_users_edit_all']?></th>
+                  <th style="text-align:center;"><?=$this->moduleLanguage['configs_users_change']?></th>
+                </tr>
+              </thead>
+              <tbody>
+              <?$i=1;?>
+              <?if($this->users[$key]['access']):?>
+              <?foreach($this->users[$key]['access'] as $value):?>
+                <tr>
+                  <td><?=$value['name']?></td>
+                  <td align="center"><input type="radio" name="<?=$val['ident']?>add<?=$i?>" <?=$value['add'] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio"></td>
+                  <td align="center"><input type="radio" name="<?=$val['ident']?>edit_your<?=$i?>" <?=$value['edit_your'] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio"></td>
+                  <td align="center"><input type="radio" name="<?=$val['ident']?>edit<?=$i?>" <?=$value['edit'] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio"></td>
+                  <td align="center"><input type="radio" name="<?=$val['ident']?>change_status<?=$i?>" <?=$value['change_status'] == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio"></td>
+                </tr>
+              <?$i++;?>
+              <?endforeach;?>
+              <?endif;?>
+              </tbody>
+            </table>
+            <?if(models_helpers_Access::checkAccess('edit') || models_helpers_Access::checkAccess('edit_your')):?>
+            <a class="btn btn-success usrsave" data-vk="<?=$val['id']?>" data-pk="<?=$val['ident']?>"><?=$this->moduleLanguage['configs_users_save']?></a>
+            <a class="btn btn-danger usrdel" data-pk="<?=$val['id']?>"><?=$this->moduleLanguage['configs_users_delete']?></a>
+            <?endif;?>
+        </div>
+        <?endforeach;?>
+    </div>     
+</div>
+<div class="usrloading"></div>
+<script type="text/javascript">
+$(document).ready(function()
+{
+    $('a.usrdel').click(function()
+    {
+        if (window.confirm('<?=$this->moduleLanguage['configs_users_warning']?>'))
+        {
+            var id = $(this).data('pk');
+    
+            $('div.usrloading').css('display', 'block');
+            $.ajax({
+                url: BASE_URL + '/configs/deleteGroup/' + id,
+                type: "POST",
+                complete: function()
+                {
+                    getUsers();
+                },
+                dataType: 'html'
+            });
+        }
+    });
+    
+    $('a.usrsave').click(function()
+    {
+        var id = $(this).data('vk');
+        var ident = $(this).data('pk');
+        var data = new FormData();
+        var i = 1;
+        $('#tab-'+ident+' > table > tbody > tr').each(function()
+        {
+            data.append('add'+i+'', $('input[name="'+ident+'add'+i+'"]').prop('checked'));
+            data.append('edit_your'+i+'', $('input[name="'+ident+'edit_your'+i+'"]').prop('checked'));
+            data.append('edit'+i+'', $('input[name="'+ident+'edit'+i+'"]').prop('checked'));
+            data.append('change_status'+i+'', $('input[name="'+ident+'change_status'+i+'"]').prop('checked'));
+            i++; 
+        });
+
+        $('div.usrloading').css('display', 'block');
+        $.ajax({
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: data,            
+            url: BASE_URL + '/configs/saveGroup/' + id,
+            complete: function()
+            {
+                getUsers();
+            },
+            dataType: 'html'
+        });
+    });
+});
+</script>

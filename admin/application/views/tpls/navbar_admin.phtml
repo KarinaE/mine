@@ -1,0 +1,15 @@
+<ol class="breadcrumb">
+    <?php foreach($this->navbarData as $key => $val ):?>
+    <li>
+        <?if ($val['img']):?>
+            <img src="<?=IMG . '/components/' . $val['img']?>" width="32" />
+        <?endif;?>
+        <?php if( $this->navbarLast != $key ): ?>
+            <a href="<?=substr(models_helpers_Url::getValidBaseUrl(),0,-1)?><?php echo $val['link'];?>"><?php echo $val['name']; ?></a>
+        <?php else: ?>
+            <?php echo $val['name']; ?>
+        <?php endif;?>
+    </li>
+    <?php endforeach; ?>
+    <br class="clear"/>
+</ol>

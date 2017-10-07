@@ -1,0 +1,291 @@
+<link href="<?=CSS?>/bootstrap-switch.css" rel="stylesheet">
+<link href="<?=CSS?>/chosen.css" rel="stylesheet">
+
+<script src="<?=JS?>/chosen.jquery.js"></script>
+<script src="<?=JS?>/highlight.js"></script>
+<script src="<?=JS?>/main.js"></script>
+<script src="<?=JS?>/holder.min.js"></script>
+<script src="<?=JS?>/bootstrap-switch.js"></script>
+<script src="<?=JS?>/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+var id = <?=$this->data->_id ? $this->data->_id : 0?>;
+
+$(function(){   
+    $(".chosen-select").chosen();
+});
+$(document).ready(function()
+{
+    CKEDITOR.replace( 'content', {
+    	height: 300,
+        language: '<?=models_helpers_Url::getConfigLanguage()?>',
+    
+        filebrowserImageBrowseUrl: '<?=JS?>/kcfinder/browse.php?opener=ckeditor&type=images',
+        filebrowserImageUploadUrl: '<?=JS?>/kcfinder/upload.php?opener=ckeditor&type=images',
+    });
+});
+
+function openKCFinder(field,type)
+{
+    window.KCFinder = {
+        callBack: function(url)
+        {
+            $.ajax({
+                type: 'POST',
+                data: {src:url,type:type},
+                url: BASE_URL + '/product/uploadWardrobeImage/' + id,
+                success: function(jsonData)
+                {
+                    field.src = url;
+
+                    if(jsonData)
+                        alert(jsonData);
+                }
+            });
+
+            window.KCFinder = null;
+        }
+    };
+    window.open('<?=JS?>/kcfinder/browse.php?type=images&language=<?=strtolower(models_helpers_Url::getConfigLanguage())?>',
+        'kcfinder_image', 'status=0, toolbar=0, location=0, menubar=0, ' +
+        'directories=0, resizable=1, scrollbars=0, width=800, height=600'
+    );
+}
+</script>
+<script src="<?=JS?>/products.js"></script>
+
+<div class="col-md-7 buttons">
+    <a class="btn btn-primary save" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['product_save']?></a>
+    <a class="btn btn-success save-exit" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['product_save_and_exit']?></a>
+    <a class="btn btn-success save-add" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['product_save_and_create']?></a>
+    <a class="btn btn-danger  exit" data-pk="<?php echo models_helpers_Url::getValidBaseUrl().'product/';?>"><?=$this->moduleLanguage['product_exit']?></a>
+</div>
+<div class="content-block col-md-12">
+    <form name="editForm" method="POST">
+        <input type="hidden" name="author" value="<?=$this->data->_author ? $this->data->_author : $this->userInfo['id'];?>">
+        <input type="hidden" name="action" value="<?=Request::instance()->getAction();?>">
+        <input type="hidden" name="params" value="<?if($this->params)foreach($this->params as $key => $val):echo $val['id']."|";endforeach;?>">
+        <input type="hidden" name="langs"  value="<?if($this->langs)foreach($this->langs  as $key => $val):echo $val['short_name']."|";endforeach;?>">
+        <div class="tabs">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-1" data-toggle="tab"><?=$this->moduleLanguage['product_form_tab1']?></a></li>
+                <li><a href="#tab-2" data-toggle="tab"><?=$this->moduleLanguage['product_form_tab2']?></a></li>
+                <li><a href="#tab-3" data-toggle="tab"><?=$this->moduleLanguage['product_form_tab3']?></a></li>
+                <li><a href="#tab-4" data-toggle="tab"><?=$this->moduleLanguage['product_form_tab4']?></a></li>
+                <li><a href="#tab-5" data-toggle="tab"><?=$this->moduleLanguage['product_form_tab5']?></a></li>
+                <li><a href="#tab-6" data-toggle="tab"><?=$this->moduleLanguage['product_form_tab6']?></a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab-1">
+                    <div class="col-md-6">   
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['product_form_name']?></label>
+                            <input type="text" name="name" class="form-control" value="<?=$this->data->_name?>" placeholder="<?=$this->moduleLanguage['product_form_name_placeholder']?>">
+                        </div>
+                        <div class="col-md-7 radio-switch">
+                            <div class="form-group">
+                                <label><?=$this->moduleLanguage['product_form_hide_name']?></label>
+                                <input type="radio" name="show_title" <?=$this->data->_show_title == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                            </div>
+                            <div class="form-group">
+                                <label><?=$this->moduleLanguage['product_form_show_date']?></label>
+                                <input type="radio" name="show_date" <?=$this->data->_show_date == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                            </div>
+                            <div class="form-group">
+                                <label><?=$this->moduleLanguage['product_form_show_comments']?></label>
+                                <input type="radio" name="showCmnt" <?=$this->data->_showCmnt == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['product_table_category']?></label>
+                            <select size="10" name="category" class="form-control chosen-select">
+                                <?=models_helpers_Options::basicOptions(models_helpers_Options::getCategories(),$this->data->_category)?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['product_form_url']?></label>
+                            <input type="text" name="url" class="form-control" value="<?=$this->data->_url?>" placeholder="<?=$this->moduleLanguage['product_form_url_placeholder']?>">
+                        </div> 
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['product_form_language']?></label>
+                            <select class="form-control" name="main_lang">
+                                <?=models_helpers_Options::basicOptions(models_helpers_Options::getLanguage(),$this->data->_main_lang,'',$this->moduleLanguage['product_form_language_placeholder'])?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab-2">
+                   <div class="col-md-6">   
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['product_form_title']?></label>
+                            <input type="text" name="title" value="<?=$this->data->_title?>" class="form-control">
+                        </div> 
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['product_form_description']?></label>
+                            <textarea class="form-control" rows="5" name="description"><?=$this->data->_description?></textarea>
+                        </div> 
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['product_form_keywords']?></label>
+                            <input type="text" name="keywords" value="<?=$this->data->_keywords?>" class="form-control">
+                        </div> 
+                    </div>
+                    <div class="col-md-5 col-md-offset-1 radio-switch">
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['product_form_image']?></label>
+                            <input type="radio" name="cat_img" <?=$this->data->_cat_img == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">
+                        </div>
+                        <?if(Request::instance()->getAction() == 'add'):?>
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['product_form_image_warning']?></label>
+                        </div>
+                        <?else:?>
+                        <div class="form-group col-md-6">
+                            <label><?=$this->moduleLanguage['product_form_image_load']?></label>
+                            <input class="mrg-load" name="img" type="file">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label><?=$this->moduleLanguage['product_form_image_main']?></label>
+                            <input type="checkbox" name="main"> 
+                        </div>
+                        <a type="submit" class="btn btn-primary mrg-btn upload"><?=$this->moduleLanguage['product_form_image_load_button']?></a>
+                        <div id="images"></div>
+                        <?endif;?>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab-3">
+                    <div class="col-md-6">   
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['product_form_template']?></label>
+                            <select size="10" name="template" class="form-control">
+                                <?=models_helpers_Options::basicOptions(models_helpers_Options::getTemplates(),$this->data->_template)?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label><?=$this->moduleLanguage['product_form_contype']?></label>
+                            <select disabled class="form-control" name="contype">
+                                <?=models_helpers_Options::basicOptions(models_helpers_Options::getContentType(),$this->data->_contype,'',$this->moduleLanguage['product_form_contype_placeholder'])?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label><?=$this->moduleLanguage['product_form_order']?></label>
+                            <input type="text" name="ordr" value="<?=$this->data->_ordr?>" class="form-control">
+                        </div> 
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <?if(Request::instance()->getAction() == 'add'):?>
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['product_form_other_langs_warning']?></label>
+                        </div>
+                        <?else:?>
+                        <?if($this->langs):?>
+                        <?foreach($this->langs as $key => $val):?>
+                        <div class="form-group">
+                            <label><?=$val['name']?></label>
+                            <input type="text" name="<?=$val['short_name']?>" value="<?=$this->data->_language[$val['short_name']]?>" class="form-control">
+                        </div>    
+                        <?endforeach;?>
+                        <?endif;?>
+                        <?endif;?>
+                        <?if($this->params):?>
+                        <?foreach($this->params as $key => $val):?>
+                        <div class="form-group">
+                            <label><?=$val['name']?></label>
+                            <input type="text" name="param_<?=$val['id']?>" value="<?=@$this->data->_params[$val['id']]?>" class="form-control">
+                        </div>    
+                        <?endforeach;?>
+                        <?endif;?>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab-4">
+                    <textarea id="content" name='content'><?=$this->data->_content?></textarea>
+                </div>
+                <div class="tab-pane" id="tab-5">
+                    <div class="col-md-6">
+                        <div class="form-group col-md-3">
+                            <label><?=$this->moduleLanguage['product_form_price']?></label>
+                            <input type="text" name="price" value="<?=$this->data->_price?>" class="form-control" placeholder="<?=$this->moduleLanguage['product_form_price_placeholder']?>">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label><?=$this->moduleLanguage['product_form_oldprice']?></label>
+                            <input type="text" name="oldprice" value="<?=$this->data->_oldprice?>" class="form-control" placeholder="<?=$this->moduleLanguage['product_form_oldprice_placeholder']?>">
+                        </div>
+                        <div class="form-group  col-md-6">
+                            <label><?=$this->moduleLanguage['product_form_type_size']?></label>
+                            <select class="form-control chosen-select" name="type_size">
+                                <?=models_helpers_Options::basicOptions(models_helpers_Options::getSizes(),$this->data->_type_size,'')?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label><?=$this->moduleLanguage['product_form_bonus']?></label>
+                            <input type="text" name="bonus" value="<?=$this->data->_bonus?>" class="form-control" placeholder="<?=$this->moduleLanguage['product_form_bonus_placeholder']?>">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label><?=$this->moduleLanguage['product_form_vendor']?></label>
+                            <input type="text" name="vendor" value="<?=$this->data->_vendor?>" class="form-control" placeholder="<?=$this->moduleLanguage['product_form_vendor_placeholder']?>">
+                        </div>
+                        <div class="form-group  col-md-6">
+                            <label><?=$this->moduleLanguage['product_form_brand']?></label>
+                            <select class="form-control chosen-select" name="brand">
+                                <?=models_helpers_Options::basicOptions(models_helpers_Options::getBrands(),$this->data->_brand,'')?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-8 wardrobe-images">
+                            <label class="center-block"><?=$this->moduleLanguage['product_form_image_look']?></label>
+                            <?$img  = explode('|',$this->data->_src)?>
+                            <?$type = explode('|',$this->data->_type)?>
+                            <?$src = array($type[0] => $img[0], $type[1] => $img[1])?>
+                            <img width="150" class="img-thumbnail center-block"
+                                             onclick="openKCFinder(this,1)"
+                                             alt="<?=$this->moduleLanguage['product_form_image_look_placeholder']?>"
+                                             title="<?=$this->moduleLanguage['product_form_image_look_placeholder']?>"
+                                             src="<?=$src[1] ? $src[1] : 'holder.js/150x150?text='. $this->moduleLanguage['product_form_image_look_placeholder']?>" />
+                            <img width="150" class="img-thumbnail center-block"
+                                             onclick="openKCFinder(this,2)"
+                                             alt="<?=$this->moduleLanguage['product_form_image_look_placeholder']?>"
+                                             title="<?=$this->moduleLanguage['product_form_image_look_placeholder']?>"
+                                             src="<?=$src[2] ? $src[2] : 'holder.js/150x150?text='. $this->moduleLanguage['product_form_image_look_placeholder']?>" />
+                        </div>
+                    </div>
+                    <div class="form-group  col-md-6">
+                        <div class="form-group  col-md-6">
+                            <label><?=$this->moduleLanguage['product_form_options_option']?></label>
+                            <select class="form-control" name="option">
+                                <?=models_helpers_Options::basicOptions(models_helpers_Options::getOptions(),$this->data->_option,'',$this->moduleLanguage['product_form_options_option_placeholder'])?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label><?=$this->moduleLanguage['product_form_options_order']?></label>
+                            <input type="text" name="order" class="form-control" placeholder="<?=$this->moduleLanguage['product_form_options_order_placeholder']?>">
+                        </div>
+                        <a type="submit" class="btn btn-primary upload-opt col-md-3"><?=$this->moduleLanguage['product_form_add']?></a>
+                        <?if(Request::instance()->getAction() == 'add'):?>
+                            <div class="form-group col-md-12">
+                                <label><?=$this->moduleLanguage['product_form_options_warning']?></label>
+                            </div>
+                        <?else:?>
+                            <div id="options" class="ajax-bottom"></div>
+                        <?endif;?>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab-6">
+                    <div class="col-md-12 images-preview">
+                        <div class="col-md-4">
+                            <?if($this->data->_type_size):?>
+                            <div id="sizesTable" class="size-table-margin"></div>
+                            <?else:?>
+                            <div class="form-group col-md-12">
+                                <label><?=$this->moduleLanguage['product_form_diamond_warning']?></label>
+                            </div>
+                            <?endif;?>
+                            <div id="optionsView"></div>
+                        </div>
+                        <div class="col-md-8">
+                            <div id="optionsImages"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>     
+        </div>
+    </form>
+</div>

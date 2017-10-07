@@ -1,0 +1,78 @@
+<?php $filters = $this->filter->getData(); ?>
+<form class="col-md-7 search-block" id="filter" action="<?=models_helpers_Url::getValidBaseUrl()?><?php echo $this->filter->getLinkForm()?>" method="post" onsubmit="return PathGenerator(this);">
+    <div class="col-md-3">
+        <select class="form-control" name="status"><?=models_helpers_Options::basicOptions(models_helpers_Options::statuses(), @$filters['status'], 0, $this->moduleLanguage['parameters_search_status'])?></select>
+    </div>
+    <div class="col-md-4">
+        <div class="input-group">
+            <input type="text" name="fulltext" value="<?=@$filters['fulltext']?>" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_search_text']?>"/>
+            <span class="input-group-btn">
+            <input type="submit" class="btn btn-default" value="<?=$this->moduleLanguage['parameters_search_button']?>"/>
+            </span>
+        </div>    
+    </div>
+    <div class="col-md-1">
+        <a href="#" class="clearSrch"><img src="<?=IMG?>/form/reset.png" title="<?=$this->moduleLanguage['parameters_search_reset']?>"/></a>
+    </div>
+</form>
+<div class="col-md-5 buttons">
+    <?if(models_helpers_Access::checkAccess('add')):?>
+    <a class="btn btn-primary add" href="<?php echo models_helpers_Url::getValidBaseUrl().'parameters/add';?>"><?=$this->moduleLanguage['parameters_create']?></a>
+    <?endif;?>
+    <?if(models_helpers_Access::checkAccess('change_status')):?>
+    <a class="btn btn-success activate" data-pk="<?php echo models_helpers_Url::getValidBaseUrl().'parameters/';?>"><?=$this->moduleLanguage['parameters_activation']?></a>
+    <a class="btn btn-warning deactivate" data-pk="<?php echo models_helpers_Url::getValidBaseUrl().'parameters/';?>"><?=$this->moduleLanguage['parameters_deactivation']?></a>
+    <a class="btn btn-danger  delete" data-pk="<?php echo models_helpers_Url::getValidBaseUrl().'parameters/';?>"><?=$this->moduleLanguage['parameters_delete']?></a>
+    <?endif;?>
+</div>
+<div class="maincontent center-block">
+<form method="post" name="baseform">
+    <table class="table table-striped table-hover small">
+        <thead>
+            <tr>
+                <th><input type="checkbox" class="dl" name="select_all" title="<?=$this->moduleLanguage['parameters_table_check_all']?>"></th>
+                <th><a href="<?=models_helpers_Url::getValidBaseUrl()?><?php echo $this->filter->getLinkSort('id') ?>" class="<?php echo $this->filter->checkSortOrder('id') ?>"><?=$this->moduleLanguage['parameters_table_id']?></a></th>
+                <th><a href="<?=models_helpers_Url::getValidBaseUrl()?><?php echo $this->filter->getLinkSort('name') ?>" class="<?php echo $this->filter->checkSortOrder('name') ?>"><?=$this->moduleLanguage['parameters_table_name']?></a></th>
+                <th><?=$this->moduleLanguage['parameters_search_status']?></th>
+                <th><?=$this->moduleLanguage['parameters_table_type']?></th>
+                <th><?=$this->moduleLanguage['parameters_table_options']?></th>
+                <th><a href="<?=models_helpers_Url::getValidBaseUrl()?><?php echo $this->filter->getLinkSort('author') ?>" class="<?php echo $this->filter->checkSortOrder('author')?>"><?=$this->moduleLanguage['parameters_table_author']?></a></th>
+                <th><a href="<?=models_helpers_Url::getValidBaseUrl()?><?php echo $this->filter->getLinkSort('t1.date_add') ?>" class="<?php echo $this->filter->checkSortOrder('t1.date_add') ?>"><?=$this->moduleLanguage['parameters_table_date']?></a></th> 
+            </tr>
+        </thead>
+        <tbody>
+        <?if($this->datalist):?>
+        <?foreach($this->datalist as $key => $val):?>
+            <tr>
+                <td><input class="il" type="checkbox" name="dellist[]" value="<?=$val['id']?>"/></td>
+                <th><?=$val['id']?></th>
+                <td>
+                    <?if(models_helpers_Access::checkAccess('edit') || models_helpers_Access::checkAccess('edit_your')):?>
+                    <a href="<?=models_helpers_Url::getValidBaseUrl().'parameters/edit/'.$val['id']?>">
+                    <?endif;?>
+                    <?=$val['name']?>
+                    <?if(models_helpers_Access::checkAccess('edit') || models_helpers_Access::checkAccess('edit_your')):?>
+                    </a>
+                    <?endif;?>
+                    </td>
+                <td>
+                    <?if(models_helpers_Access::checkAccess('change_status')):?>
+                    <a href="<?=models_helpers_Url::getValidBaseUrl().'parameters/changeStatus/'.$val['id']?>">
+                    <?endif;?>
+                    <img src="<?=IMG . '/form/'?><?=$val['status'] == 1 ? 'active' : 'deact'?>.png" />
+                    <?if(models_helpers_Access::checkAccess('change_status')):?>
+                    </a>
+                    <?endif;?>
+                </td>
+                <td><?=$val['type']?></td>
+                <td><?=count(unserialize(htmlspecialchars_decode($val['pos_array'])))?></td>
+                <td><?=$val['author']?></td>
+                <td><?=$val['date']?></td>
+            </tr>
+        <?endforeach;?>
+        <?endif;?>
+        </tbody>
+    </table> 
+</form>
+<?php echo $this->pagesTotal['cnt'] > 1 ? models_helpers_Paging::instance()->getPaging( $this->filter->getLinkListing(), $this->pagesTotal['cnt'], $this->filter->getPageCurrent() ): '';?>
+</div>

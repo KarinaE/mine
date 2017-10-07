@@ -1,0 +1,192 @@
+<?php
+defined('_ACCESS') or die;
+    
+class models_Order extends models_BaseModel
+{              
+    public function getCollection($filter)
+    {
+        // creating conditions
+        $where = $this->prepareSql($filter);
+        $whereItems = $this->prepareItemsSql($filter);
+        $filter = $filter->getData();
+        
+        $limit = $filter['onpage'];
+        $offset = ($filter['page']-1) * $limit;
+        
+        // get orders 
+        $res = $this->db->select_full('
+            SELECT t1.*, DATE_FORMAT(t1.date_add,"%d-%m-%y %H:%i") AS date_add, t2.id AS t2id, t2.first_name, t2.last_name,
+            t3.id AS t3id, t3.phone, t4.id AS t4id, t4.email, t5.id AS t5id, t5.address
+            FROM ' .  self::TBL_ORDERS . ' AS t1 
+            LEFT JOIN ' . self::TBL_CLIENTS_INFO . ' AS t2 ON t1.id_client = t2.id 
+            LEFT JOIN ' . self::TBL_CLIENTS_PHONES . ' AS t3 ON (t3.id_client = t2.id) AND t3.is_main = 1
+            LEFT JOIN ' . self::TBL_CLIENTS_EMAILS . ' AS t4 ON (t4.id_client = t2.id) AND t4.is_main = 1
+            LEFT JOIN ' . self::TBL_CLIENTS_ADDRESS . ' AS t5 ON (t5.id_client = t2.id) AND t5.is_main = 1
+            WHERE 1 ' . $where . '
+            ORDER BY ' . $filter['sortKey'] . ' ' . $filter['sortOrder'] . '
+            LIMIT ' . $offset . ',' . $limit, 
+            null, null, Database::ENCODE_HTML);
+        
+        // get order items
+        if($res)
+            foreach ($res as $k => $v)
+                $res[$k]['orderItems'] = $this->db->select_full('
+                    SELECT t1.*, t2.name AS productname, t2.url, t2.type_size
+                    FROM ' .  self::TBL_ORDER_ITEMS . ' AS t1
+                    LEFT JOIN ' . self::TBL_PRODUCTS . " AS t2 ON (t2.id = t1.product_id) 
+                    WHERE order_id='$v[id]'" . $whereItems, 
+                    null, null, Database::ENCODE_HTML);
+        
+        return $res;
+    }
+    
+    public function getCollectionPagesCount($filter)
+    {
+        $where = $this->prepareSql($filter);
+        $filter = $filter->getData();
+        
+        $res = $this->db->select_full('
+            SELECT COUNT(id) as cnt
+            FROM ' .  self::TBL_ORDERS  . ' WHERE 1 ' . $where,
+            null, null, Database::ENCODE_HTML);
+
+        $res['cnt'] = is_array($res) && $res[0]['cnt'] > 0 ? ceil($res[0]['cnt']/$filter['onpage']) : 1;
+        
+        return $res;
+    }
+    
+    private function prepareSql($filter)
+    {
+        $sql = '';
+        
+        $filters = $filter->getData();
+            
+        // date filter
+        $date_filter = $filter->getDateFilter();
+        if (is_array($date_filter) && count($date_filter) == 2)
+            $sql .= ' AND date_add >= "' . $date_filter[0] . ' 00:00:00" AND date_add <= "' . $date_filter[1] . ' 23:59:59"';
+      
+        
+        if (!empty($filters['status']))
+            $sql .= ' AND status = ' . $filters['status'];
+        
+        if (!empty($filters['fulltext']))
+            $sql .= " AND CONCAT(customer, phone, address, email, comment) LIKE  '%$filters[fulltext]%'";
+            
+        return $sql;
+    }
+    
+    private function prepareItemsSql($filter)
+    {
+        $sql = '';
+        
+        $filters = $filter->getData();
+        
+        if (!empty($filters['category']))
+        {
+            $res = $this->db->select_full('SELECT id,parent_id FROM ' . self::TBL_CATEGORIES, null, Database::RETURN_DATA_ASSOC);
+            $sql .= ' AND t2.category IN (' . $filters['category'] . $this->childIds($res,$filters['category']) . ')';    
+        }
+        
+        return $sql;
+    }
+
+    public function getOptions()
+    {
+        $res = $this->db->select(self::TBL_PARAMETERS, '*','', null,RETURN_DATA_ASSOC);
+
+        // formatting to array
+        foreach ($res as $val)
+            $arr[$val['id']] = unserialize($val['options_array']);
+
+        return $arr;
+    }
+
+    public function getOption($id)
+    {
+        $res = $this->db->select(self::TBL_PARAMETERS, 'options_array','WHERE id = ' . $id, null,RETURN_DATA_ASSOC);
+
+        return is_array($res) ? unserialize($res[0]['options_array']) : false;
+    }
+
+    public function getSizes()
+    {
+
+        $res = $this->db->select(self::TBL_CLOTH_SIZES, 'id,size,type_id','', null,RETURN_DATA_ASSOC);
+
+        // formatting to array
+        foreach ($res as $val)
+        {
+            $arr[$val['id']]['size'] = $val['size'];
+            $arr[$val['id']]['type'] = $val['type_id'];
+        }
+
+        return $arr;
+    }
+
+    public function getProductOption()
+    {
+        $res =  $this->db->select(self::TBL_ORDER_ITEMS, 'options','WHERE id = ' . $this->id, null,RETURN_DATA_ASSOC);
+
+        return is_array($res) ? $res[0] : false;
+    }
+
+    public function getProductData($id)
+    {
+        $res =  $this->db->select(self::TBL_ORDER_ITEMS, 'product_id,options,size,status','WHERE id = ' . $id, null,RETURN_DATA_ASSOC);
+
+        return is_array($res) ? $res[0] : false;
+    }
+
+    public function getProductQuantity($arr)
+    {
+        $res =  $this->db->select(self::TBL_PROD_REMAIN, 'id,value',
+      'WHERE product_id = ' . $arr['product_id'] . ' AND size_id = ' . $arr['size_id'] . ' AND params = "' . $arr['params'] . '"',
+      null,RETURN_DATA_ASSOC);
+
+        return is_array($res) ? $res[0] : false;
+    }
+    
+    // getting category childs
+    private function childIds($array,$id)
+    {
+        $list="";
+
+        foreach ($array as $key=>$row)
+        {
+            // echo of childs
+            if ($row['parent_id'] == $id)
+            {
+                $list .= ",".$row['id'];
+                // recursion if parent fot more childs
+                $list .= self::childIds($array, $row['id']);
+            }
+        }
+
+        return $list;    
+    }
+
+    public function changeStatus($id)
+    {
+        $res = $this->db->select(self::TBL_PRODUCTS, 'status',"WHERE id=$id",'','RETURN_DATA_ARR');
+        $status['status'] = $res[0]['status'] == 1 ? 2 : 1;
+        
+        if (is_array($status) && count($status))
+        {
+            return $this->db->update(self::TBL_PRODUCTS, $status, 'WHERE id=' . $id);
+        }
+        
+        return false;    
+    }
+    
+    public function updateValue($db)
+    {
+        return $this->db->update($db[0], $db[1], 'WHERE id=' . $this->id);    
+    }
+
+    public function updateProductQuantity($upd)
+    {
+        return $this->db->update(self::TBL_PROD_REMAIN, $upd, 'WHERE id=' . $upd['id']);
+    }
+}    
+?>

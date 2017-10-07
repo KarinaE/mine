@@ -1,0 +1,63 @@
+<?$btn = unserialize($v[0]->options_array)?>
+<div class="top-margin50">
+    <h4 class="panel-title filter-title border-bottom"><?=$v[0]->name?> <small data-toggle="tooltip" data-placement="top" title="<?=$this->moduleLanguage['product_form_option_use']?>">(&#63;)</small></spa></h4>
+    <ul class="size-filter color-filter">
+    <?foreach($btn as $sv):?>
+	<li>
+        <input class="color-checkbox <?=$sv['css']?>" id="color-checkbox-<?=$sv['order']?>" name="option-<?=$v[0]->id?>" type="checkbox" value="value<?=$sv['order']?>">
+        <label for="color-checkbox-<?=$sv['order']?>" data-toggle="tooltip" data-placement="top" title="<?=$sv['val']?>" data-original-title="<?=$sv['val']?>"></label>
+    </li>
+    <?endforeach;?>
+    </ul>
+    <a href="#" id="optionVal" class="button-option"  data-toggle="tooltip" data-placement="top" title="<?=$this->moduleLanguage['product_form_option_status']?>">Ø</a>
+</div><!--   button -->
+<script>
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+});
+
+// add|delete option value
+$("#optionVal").on('click',function(e)
+{
+    if (window.confirm('<?=$this->moduleLanguage['product_form_option_status']?>'))
+        $.get(BASE_URL + '/product/optionStatus/' + id, $(this).val(), function(answer)
+        {
+            if(answer)
+                alert(answer);
+        });
+});
+
+// option select and changing sizes and images divs
+$("input:checkbox[name='option-<?=$v[0]->id?>']").on('click', function()
+{
+    // loading bar
+    $('div.loading-images').css('display', 'block');
+    $('#optionVal').css('display', 'initial');
+    // adding option value to array
+    opts[<?=$v[0]->id?>] = $(this).val();
+    // append value to status button
+    $('#optionVal').val(opts);
+
+	// in the handler, 'this' refers to the box clicked on
+	var $box = $(this);
+	if ($box.is(":checked")) 
+    {
+		// the name of the box is retrieved using the .attr() method
+		var group = "input:checkbox[name='" + $box.attr("name") + "']";
+		// the checked state of the group/box on the other hand will change
+		$(group).prop("checked", false);
+		$box.prop("checked", true);
+	} 
+    else 
+		$box.prop("checked", false);
+
+    // no extra images if basic options selected
+    //checkBase();
+    // getting images
+    getSizes(opts);
+    getOptionsImages(opts);
+
+    $('div.loading-images').css('display', 'none');
+});
+
+</script>

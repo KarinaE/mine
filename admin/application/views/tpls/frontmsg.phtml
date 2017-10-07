@@ -1,0 +1,17 @@
+<?php if (is_array($this->errors)): ?>
+<?php foreach ($this->errors as $k => $v):?>
+<div><?php echo $v?></div>
+<?php endforeach;?>
+<?php endif;?>
+
+<?php if (is_array($this->msg)): ?>
+<?php foreach ($this->msg as $k => $v):?>
+<div><?php echo $v?></div>
+<?php endforeach;?>
+<?php endif;?>
+
+<?php if (is_array($this->warnings)): ?>
+<?php foreach ($this->warnings as $k => $v):?>
+<div><?php echo $v?></div>
+<?php endforeach;?>
+<?php endif;?>

@@ -1,0 +1,198 @@
+<link href="<?=CSS?>/bootstrap-switch.css" rel="stylesheet">
+
+<script src="<?=JS?>/highlight.js"></script>
+<script src="<?=JS?>/bootstrap-switch.js"></script>
+<script src="<?=JS?>/main.js"></script>
+<div class="col-md-12 buttons">
+    <a class="btn btn-primary save" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['parameters_save']?></a>
+    <a class="btn btn-success save-exit" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['parameters_save_and_exit']?></a>
+    <a class="btn btn-success save-add" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['parameters_save_and_create']?></a>
+    <a class="btn btn-danger  exit" data-pk="<?php echo models_helpers_Url::getValidBaseUrl().'parameters/';?>"><?=$this->moduleLanguage['parameters_exit']?></a>
+</div>
+<form name="editForm" method="POST">
+    <input type="hidden" name="author" value="<?=$this->data->_author ? $this->data->_author : $this->userInfo['id'];?>">
+    <input type="hidden" name="action" value="<?=Request::instance()->getAction();?>">
+    <div class="content-block col-md-12">
+        <div class="col-md-4">
+            <div class="form-group col-md-12">
+                <label><?=$this->moduleLanguage['parameters_form_name']?></label>
+                <input type="text" name="name" class="form-control" value="<?=$this->data->_name?>" placeholder="<?=$this->moduleLanguage['parameters_form_name_placeholder']?>">
+            </div>
+            <div class="form-group col-md-8">
+                <label><?=$this->moduleLanguage['parameters_form_type']?></label>
+                <select class="form-control" name="type">
+                    <?=models_helpers_Options::basicOptions(models_helpers_Options::getParamTypes(),$this->data->_type,'',$this->moduleLanguage['parameters_form_type_placeholder'])?>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label><?=$this->moduleLanguage['parameters_form_half']?></label>
+                <input type="radio" name="half" <?=$this->data->_half == 1 ? 'checked' : ''?> data-radio-all-off="true"  class="switch-radio">            
+            </div>
+            <div class="form-group col-md-12">
+                <label><?=$this->moduleLanguage['parameters_form_image']?></label>
+                <input type="text" name="image" class="form-control" onclick="openKCFinder(this)" value="<?=$this->data->_image?>" placeholder="<?=$this->moduleLanguage['parameters_form_image_placeholder']?>">
+            </div>
+            <div class="form-group col-md-12">
+                <label class="center-block" style="text-align: center;"><?=$this->moduleLanguage['parameters_form_image_preview']?></label>
+                <img width="128" class="img-thumbnail center-block" src="<?=$this->data->_image?>" />
+            </div>
+        </div>
+        <div class="col-md-8">
+        <?if(Request::instance()->getAction() == 'add'):?>
+            <div class="form-group col-md-12">
+                <label><?=$this->moduleLanguage['parameters_form_warning']?></label>
+            </div>
+        <?else:?>
+            <?if($this->data->_type == 'slider'):?>
+            <div class="form-group col-md-3">
+                <label><?=$this->moduleLanguage['parameters_form_slider_min']?></label>
+                <input type="text" name="min" value="<?=$this->data->_params['min']?>" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_slider_min_placeholder']?>">
+            </div>
+            <div class="form-group col-md-3">
+                <label><?=$this->moduleLanguage['parameters_form_slider_max']?></label>
+                <input type="text" name="max" value="<?=$this->data->_params['max']?>" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_slider_max_placeholder']?>">
+            </div>
+            <div class="form-group col-md-3">
+                <label><?=$this->moduleLanguage['parameters_form_slider_step']?></label>
+                <input type="text" name="step" value="<?=$this->data->_params['step']?>" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_slider_step_placeholder']?>">
+            </div>
+            <div class="form-group col-md-3">
+                <label><?=$this->moduleLanguage['parameters_form_slider_multiply']?></label>
+                <input type="text" name="multiply" value="<?=$this->data->_params['multiply']?>" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_slider_multiply_placeholder']?>">
+            </div>
+            <?endif;?>
+            <?if($this->data->_type == 'dblslider'):?>
+            <div class="form-group col-md-3">
+                <label><?=$this->moduleLanguage['parameters_form_slider_min']?></label>
+                <input type="text" name="min" value="<?=$this->data->_params['min']?>" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_slider_min_placeholder']?>">
+            </div>
+            <div class="form-group col-md-3">
+                <label><?=$this->moduleLanguage['parameters_form_slider_max']?></label>
+                <input type="text" name="max" value="<?=$this->data->_params['max']?>" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_slider_max_placeholder']?>">
+            </div>
+            <div class="form-group col-md-3">
+                <label><?=$this->moduleLanguage['parameters_form_slider_step']?></label>
+                <input type="text" name="step" value="<?=$this->data->_params['step']?>" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_slider_step_placeholder']?>">
+            </div>
+            <div class="form-group col-md-3">
+                <label><?=$this->moduleLanguage['parameters_form_slider_multiply']?></label>
+                <input type="text" name="multiply" value="<?=$this->data->_params['multiply']?>" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_slider_multiply_placeholder']?>">
+            </div>
+            <?endif;?>
+            <?if($this->data->_type == 'radio'):?>
+            <div class="form-group col-md-4">
+                <label><?=$this->moduleLanguage['parameters_form_radio_val']?></label>
+                <input type="text" name="val" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_radio_val_placeholder']?>">
+            </div>
+            <div class="form-group col-md-3">
+                <label><?=$this->moduleLanguage['parameters_form_radio_multiply']?></label>
+                <input type="text" name="multiply" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_radio_multiply_placeholder']?>">
+            </div>
+            <div class="form-group col-md-3">
+                <label><?=$this->moduleLanguage['parameters_form_radio_order']?></label>
+                <input type="text" name="order" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_radio_order_placeholder']?>">
+            </div>
+            <a type="submit" class="btn btn-primary upload-opt col-md-2"><?=$this->moduleLanguage['parameters_form_add']?></a>
+            <?endif;?>
+            <?if($this->data->_type == 'select'):?>
+            <div class="form-group col-md-3">
+                <label><?=$this->moduleLanguage['parameters_form_radio_order']?></label>
+                <input type="text" name="order" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_radio_order_placeholder']?>">
+            </div>
+            <div class="form-group col-md-4">
+                <label><?=$this->moduleLanguage['parameters_form_radio_val']?></label>
+                <input type="text" name="val" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_radio_val_placeholder']?>">
+            </div>
+            <div class="form-group col-md-3">
+                <label><?=$this->moduleLanguage['parameters_form_radio_multiply']?></label>
+                <input type="text" name="multiply" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_radio_multiply_placeholder']?>">
+            </div>
+            <a type="submit" class="btn btn-primary upload-opt col-md-2"><?=$this->moduleLanguage['parameters_form_add']?></a>
+            <?endif;?>
+            <?if($this->data->_type == 'imagebtn'):?>
+            <div class="form-group col-md-3">
+                <label><?=$this->moduleLanguage['parameters_form_imagebtn_val']?></label>
+                <input type="text" name="val" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_imagebtn_val_placeholder']?>">
+            </div>
+            <div class="form-group col-md-3">
+                <label><?=$this->moduleLanguage['parameters_form_imagebtn_css']?></label>
+                <input type="text" name="css" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_imagebtn_css_placeholder']?>">
+            </div>
+            <div class="form-group col-md-2">
+                <label><?=$this->moduleLanguage['parameters_form_imagebtn_multiply']?></label>
+                <input type="text" name="multiply" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_imagebtn_multiply_placeholder']?>">
+            </div>
+            <div class="form-group col-md-2">
+                <label><?=$this->moduleLanguage['parameters_form_imagebtn_order']?></label>
+                <input type="text" name="order" class="form-control" placeholder="<?=$this->moduleLanguage['parameters_form_imagebtn_order_placeholder']?>">
+            </div>
+            <a type="submit" class="btn btn-primary upload-opt col-md-2"><?=$this->moduleLanguage['parameters_form_add']?></a>
+            <?endif;?>
+        <?endif;?>
+        <?if($this->data->_type == 'imagebtn' || $this->data->_type == 'radio' || $this->data->_type == 'select'):?>
+            <div id="options" class="ajax-bottom"></div>
+        <?endif;?>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+function openKCFinder(field) 
+{
+    window.KCFinder = {
+        callBack: function(url) 
+        {
+            field.value = url;
+            window.KCFinder = null;
+        }
+    };
+    window.open('<?=JS?>/kcfinder/browse.php?type=images&language=<?=strtolower(models_helpers_Url::getConfigLanguage())?>', 
+        'kcfinder_image', 'status=0, toolbar=0, location=0, menubar=0, ' +
+        'directories=0, resizable=1, scrollbars=0, width=800, height=600'
+    );
+}
+
+<?if(Request::instance()->getAction() == 'edit'):?>
+var id = <?=$this->data->_id?>;
+
+$(document).ready(function()
+{
+    $('a.upload-opt').on('click', function(e)
+    {
+        e.preventDefault();   
+        $('div.loading').css('display', 'block');
+        var data = new FormData();
+        // allow form data
+        data.append('val', $('input[name="val"]').val());
+        data.append('multiply', $('input[name="multiply"]').val());
+        data.append('order', $('input[name="order"]').val());
+        if($('input[name="css"]').val())
+            data.append('css', $('input[name="css"]').val());
+            
+
+        $.ajax({
+            type: 'POST',               
+            processData: false,
+            contentType: false,
+            data: data,
+            url: BASE_URL + '/parameters/addOption/' + id,
+            success: function(jsonData)
+            {
+                if(jsonData)
+                    alert(jsonData);
+                getOptions();
+            }
+        }); 
+    });  
+});
+
+getOptions();
+// getting images
+function getOptions()
+{
+    $.get(BASE_URL + '/parameters/getlist/' + id, null, function(data)
+    {
+        $('.col-md-12 #options').html(data);
+    });
+}
+<?endif;?>
+</script>
