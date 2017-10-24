@@ -31,12 +31,12 @@ class models_Order extends models_BaseModel
         if($res)
             foreach ($res as $k => $v)
                 $res[$k]['orderItems'] = $this->db->select_full('
-                    SELECT t1.*, t2.name AS productname, t2.url, t2.type_size
+                    SELECT t1.*, t2.name AS productname
                     FROM ' .  self::TBL_ORDER_ITEMS . ' AS t1
                     LEFT JOIN ' . self::TBL_PRODUCTS . " AS t2 ON (t2.id = t1.product_id) 
                     WHERE order_id='$v[id]'" . $whereItems, 
                     null, null, Database::ENCODE_HTML);
-        
+
         return $res;
     }
     
@@ -58,18 +58,18 @@ class models_Order extends models_BaseModel
     private function prepareSql($filter)
     {
         $sql = '';
-        
+
         $filters = $filter->getData();
-            
+
         // date filter
         $date_filter = $filter->getDateFilter();
         if (is_array($date_filter) && count($date_filter) == 2)
             $sql .= ' AND date_add >= "' . $date_filter[0] . ' 00:00:00" AND date_add <= "' . $date_filter[1] . ' 23:59:59"';
-      
-        
+
+
         if (!empty($filters['status']))
             $sql .= ' AND status = ' . $filters['status'];
-        
+
         if (!empty($filters['fulltext']))
             $sql .= " AND CONCAT(customer, phone, address, email, comment) LIKE  '%$filters[fulltext]%'";
             
@@ -79,15 +79,10 @@ class models_Order extends models_BaseModel
     private function prepareItemsSql($filter)
     {
         $sql = '';
-        
+
         $filters = $filter->getData();
-        
-        if (!empty($filters['category']))
-        {
-            $res = $this->db->select_full('SELECT id,parent_id FROM ' . self::TBL_CATEGORIES, null, Database::RETURN_DATA_ASSOC);
-            $sql .= ' AND t2.category IN (' . $filters['category'] . $this->childIds($res,$filters['category']) . ')';    
-        }
-        
+
+
         return $sql;
     }
 
@@ -109,21 +104,6 @@ class models_Order extends models_BaseModel
         return is_array($res) ? unserialize($res[0]['options_array']) : false;
     }
 
-    public function getSizes()
-    {
-
-        $res = $this->db->select(self::TBL_CLOTH_SIZES, 'id,size,type_id','', null,RETURN_DATA_ASSOC);
-
-        // formatting to array
-        foreach ($res as $val)
-        {
-            $arr[$val['id']]['size'] = $val['size'];
-            $arr[$val['id']]['type'] = $val['type_id'];
-        }
-
-        return $arr;
-    }
-
     public function getProductOption()
     {
         $res =  $this->db->select(self::TBL_ORDER_ITEMS, 'options','WHERE id = ' . $this->id, null,RETURN_DATA_ASSOC);
@@ -138,15 +118,7 @@ class models_Order extends models_BaseModel
         return is_array($res) ? $res[0] : false;
     }
 
-    public function getProductQuantity($arr)
-    {
-        $res =  $this->db->select(self::TBL_PROD_REMAIN, 'id,value',
-      'WHERE product_id = ' . $arr['product_id'] . ' AND size_id = ' . $arr['size_id'] . ' AND params = "' . $arr['params'] . '"',
-      null,RETURN_DATA_ASSOC);
 
-        return is_array($res) ? $res[0] : false;
-    }
-    
     // getting category childs
     private function childIds($array,$id)
     {
@@ -163,25 +135,25 @@ class models_Order extends models_BaseModel
             }
         }
 
-        return $list;    
+        return $list;
     }
 
     public function changeStatus($id)
     {
         $res = $this->db->select(self::TBL_PRODUCTS, 'status',"WHERE id=$id",'','RETURN_DATA_ARR');
         $status['status'] = $res[0]['status'] == 1 ? 2 : 1;
-        
+
         if (is_array($status) && count($status))
         {
             return $this->db->update(self::TBL_PRODUCTS, $status, 'WHERE id=' . $id);
         }
-        
-        return false;    
+
+        return false;
     }
-    
+
     public function updateValue($db)
     {
-        return $this->db->update($db[0], $db[1], 'WHERE id=' . $this->id);    
+        return $this->db->update($db[0], $db[1], 'WHERE id=' . $this->id);
     }
 
     public function updateProductQuantity($upd)

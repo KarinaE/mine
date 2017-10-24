@@ -126,12 +126,12 @@ class models_Configs extends models_BaseModel
         
         return $this->db->delete(self::TBL_LANGUAGE, 'WHERE id=' . $this->id);
     }
-    
+
     public function deleteParam()
-    {         
+    {
         return $this->db->delete(self::TBL_PARAMS, 'WHERE id=' . $this->id);
     }
-    
+
     public function deleteGroup()
     {         
         return $this->db->delete(self::TBL_UTYPES, 'WHERE id=' . $this->id);
@@ -175,26 +175,6 @@ class models_Configs extends models_BaseModel
             $this->db->update(self::TBL_MENU_REL, $res, 'WHERE menu_id=' . $val['id_parent'] . ' AND user_types_id='. $this->id);
             $i++;
         }
-    }
-    
-    public function updateCurrency($val)
-    {
-        $res['val'] = $val['rate'];
-        return $this->db->update(self::TBL_CURRENCY, $res, 'WHERE name="' . $val['currency'] . '"');                
-    }
-    
-    public function updateDiamonds($type,$res)
-    {
-        // clear table before updating
-        if($type == 'Pear')
-            $this->db->query('TRUNCATE TABLE ' . self::TBL_DIAMONDS . '');
-        
-        $sql = '';
-
-        foreach ($res as $s)
-            $sql .= '("' . $type . '","' . $s['Color'] . '", "' . $s['Clarity'] . '", "' . $s['HighSize'] . '", "' . $s['LowSize'] . '", "' . $s['Price'] . '"),';
-        
-        return $this->db->query('INSERT INTO ' . self::TBL_DIAMONDS . ' (shape,color,clarity,hisize,lowsize,price) VALUES ' . substr($sql, 0, -1));                
     }
 }  
 ?>
