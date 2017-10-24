@@ -3,19 +3,14 @@ defined('_ACCESS') or die;
 
 abstract class models_BaseModel
 {    
-    const TBL_CATEGORIES    = 'categories';
-
     const TBL_CLIENTS_INFO      = 'clients_info';
     const TBL_CLIENTS_PHONES    = 'clients_phones';
     const TBL_CLIENTS_EMAILS    = 'clients_emails';
     const TBL_CLIENTS_ADDRESS   = 'clients_address';
     const TBL_CLIENTS_SOC_ACC   = 'clients_soc_acc';
 
-    const TBL_CLOTH_TYPES   = 'cloth_types';
-    const TBL_CLOTH_SIZES   = 'cloth_sizes';
-    const TBL_CLOTH_OPTIONS = 'cloth_size_options';
 
-    const TBL_COMMENTS      = 'comments';
+    const TBL_CATEGORIES    = 'categories';
     const TBL_COMPONENTS    = 'components';
     const TBL_CONTENT       = 'content';
     const TBL_CURRENCY      = 'currency';
@@ -23,10 +18,7 @@ abstract class models_BaseModel
     const TBL_MENU          = 'menu';
     const TBL_MENU_NAME     = 'menu_name';
     const TBL_MENU_REL      = 'menu_user_types_relations';
-    const TBL_MODULES       = 'modules';
-    const TBL_MOD_ITEMS     = 'modules_items';
     const TBL_LANGUAGE      = 'language';
-    const TBL_LOOKBOOK      = 'lookbook';
     const TBL_OPTIONS       = 'options';
 
     const TBL_ORDERS        = 'orders';
@@ -40,14 +32,17 @@ abstract class models_BaseModel
     const TBL_PROD_REMAIN   = 'product_quantity';
     const TBL_PROD_WARDROBE = 'product_wardrobe_images';
 
-    const TBL_SUPPLIERS     = 'suppliers';
-    const TBL_SUPP_SIZES    = 'suppliers_sizes';
-    const TBL_SUPP_VALUES   = 'suppliers_sizes_values';
+   // const TBL_CLOTH_TYPES   = 'cloth_types';
+    const TBL_CLOTH_SIZES   = 'cloth_sizes';
+   // const TBL_CLOTH_OPTIONS = 'cloth_size_options';
 
     const TBL_TEMPLATES     = 'templates';
     const TBL_USERS         = 'users';
     const TBL_UTYPES        = 'user_types';
     const TBL_UTYPES_REL    = 'user_types_rel';
+
+    const TBL_BRAND_OPTIONS  = 'brand_options';
+    const TBL_BRANDS = 'brands';
     
     protected $id;
     protected $db;

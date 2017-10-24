@@ -19,11 +19,11 @@ class controllers_IndexController extends controllers_BaseController
         
         $this->viewer->components = $this->model->getComponents();
         
-        $this->viewer->popular = $this->model->getPopularContent();
-        $this->viewer->last    = $this->model->getLastContent();
-        $this->viewer->edited  = $this->model->getEditedContent();
+       // $this->viewer->popular = $this->model->getPopularContent();
+       // $this->viewer->last    = $this->model->getLastContent();
+       // $this->viewer->edited  = $this->model->getEditedContent();
 
-        $this->viewer->userStats = $this->model->getUserStats($this->viewer->userInfo['id']);
+       // $this->viewer->userStats = $this->model->getUserStats($this->viewer->userInfo['id']);
         $this->viewer->usersLogs = $this->model->getUsersLogs();
         
         $this->viewer->setTemplate($this->control_name.'/index.phtml');

@@ -1,4 +1,4 @@
-<div class="col-md-3 col-md-offset-0">
+<div class="col-md-8 col-md-offset-0">
     <h3><?=$this->moduleLanguage['shop']?></h3>
     <ul class="list-group">
         <?foreach ($this->components as $key => $val):?>
@@ -23,30 +23,7 @@
             <?endif;?>
         <?endforeach;?>
     </ul>
-    <h3><?=$this->moduleLanguage['content']?></h3>
-    <ul class="list-group">
-    <?foreach ($this->components as $key => $val):?>
-        <?if ($val['type'] == 'content'):?>
-        <li class="list-group-item">
-            <a href="<?=models_helpers_Url::getValidBaseUrl().$val['path']?>">
-                <img src="<?=IMG . '/components/' . $val['img']?>" width="32" /> <?=$val['name']?>
-            </a>
-        </li>
-        <?endif;?>
-    <?endforeach;?>
-    </ul>
-    <h3><?=$this->moduleLanguage['design']?></h3>
-    <ul class="list-group">
-    <?foreach ($this->components as $key => $val):?>
-        <?if ($val['type'] == 'view'):?>
-        <li class="list-group-item">
-            <a href="<?=models_helpers_Url::getValidBaseUrl().$val['path']?>">
-                <img src="<?=IMG . '/components/' . $val['img']?>" width="32" /> <?=$val['name']?>
-            </a>
-        </li>
-        <?endif;?>
-    <?endforeach;?>
-    </ul>
+
     <h3><?=$this->moduleLanguage['options']?></h3>
     <ul class="list-group">
     <?foreach ($this->components as $key => $val):?>
@@ -58,68 +35,6 @@
         </li>
         <?endif;?>
     <?endforeach;?>
-    </ul>
-    <h3><?=$this->moduleLanguage['plugins']?></h3>
-    <ul class="list-group">
-    <?foreach ($this->components as $key => $val):?>
-        <?if ($val['type'] == 'plugin'):?>
-        <li class="list-group-item">
-            <a href="<?=models_helpers_Url::getValidBaseUrl().$val['path']?>">
-                <img src="<?=IMG . '/components/' . $val['img']?>" width="32" /> <?=$val['name']?>
-            </a>
-        </li>
-        <?endif;?>
-    <?endforeach;?>
-    </ul>
-</div>
-<div class="col-md-5  col-md-offset-0">
-    <h3><?=$this->moduleLanguage['popular']?></h3>
-    <ul class="list-group popular">
-    <?if($this->popular):?>
-    <?foreach ($this->popular as $key => $val):?>
-        <li class="list-group-item">
-            <span class="title">
-                <a href="<?=models_helpers_Url::getValidBaseUrl().'content/edit/'.$val['id']?>">
-                    <?=$val['name']?>
-                </a>
-            </span>
-            <span class="date"><?=$val['date_add']?></span>
-            <span class="badge"><?=$val['views']?></span>
-        </li>
-    <?endforeach;?>
-    <?endif;?>
-    </ul>
-    <h3><?=$this->moduleLanguage['last_add']?></h3>
-    <ul class="list-group popular">
-    <?if($this->last):?>
-    <?foreach ($this->last as $key => $val):?>
-        <li class="list-group-item">
-            <span class="lastTitle">
-                <a href="<?=models_helpers_Url::getValidBaseUrl().'content/edit/'.$val['id']?>">
-                    <?=$val['name']?>
-                </a>
-            </span>
-            <span class="date"><?=$val['date_add']?></span>
-            <span class="badge"><?=$val['author_name']?></span>
-        </li>
-    <?endforeach;?>
-    <?endif;?>
-    </ul>
-    <h3><?=$this->moduleLanguage['last_edited']?></h3>
-    <ul class="list-group edited">
-    <?if($this->edited):?>
-    <?foreach ($this->edited as $key => $val):?>
-        <li class="list-group-item">
-            <span class="lastTitle">
-                <a href="<?=models_helpers_Url::getValidBaseUrl().'content/edit/'.$val['id']?>">
-                    <?=$val['name']?>
-                </a>
-            </span>
-            <span class="date"><?=$val['date_edit']?></span>
-            <span class="badge"><?=$val['author_edit']?></span>
-        </li>
-    <?endforeach;?>
-    <?endif;?>
     </ul>
 </div>
 <div class="col-md-3  col-md-offset-0">

@@ -51,21 +51,21 @@ class models_Index extends models_BaseModel
         return $res;
     }
     
-    public function getUserStats($id)
-    {
-        $res = $this->db->select_full('
-            (SELECT COUNT(id) as quntity FROM ' . self::TBL_CONTENT .' WHERE author = ' . $id . ')
-            UNION
-            (SELECT COUNT(id) FROM ' . self::TBL_CATEGORIES .' WHERE author = ' . $id . ')
-            UNION
-            (SELECT COUNT(id) FROM ' . self::TBL_MODULES .' WHERE author = ' . $id . ')
-            UNION
-            (SELECT COUNT(id) FROM ' . self::TBL_TEMPLATES .' WHERE author = ' . $id . ')
-            ' , null, Database::RETURN_DATA_ASSOC
-        );   
-        
-        return $res;
-    }
+//    public function getUserStats($id)
+//    {
+//        $res = $this->db->select_full('
+//            (SELECT COUNT(id) as quntity FROM ' . self::TBL_CONTENT .' WHERE author = ' . $id . ')
+//            UNION
+//            (SELECT COUNT(id) FROM ' . self::TBL_CATEGORIES .' WHERE author = ' . $id . ')
+//            UNION
+//            (SELECT COUNT(id) FROM ' . self::TBL_MODULES .' WHERE author = ' . $id . ')
+//            UNION
+//            (SELECT COUNT(id) FROM ' . self::TBL_TEMPLATES .' WHERE author = ' . $id . ')
+//            ' , null, Database::RETURN_DATA_ASSOC
+//        );
+//
+//        return $res;
+//    }
     
     public function getUsersLogs()
     {

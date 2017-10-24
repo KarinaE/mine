@@ -1,45 +1,53 @@
-<?$this->options = unserialize($this->options['options_array']);?>
+
 <table class="table table-striped small">
-  <thead>
+    <thead>
     <tr>
-      <th style="text-align:center;"><?=$this->moduleLanguage['product_form_option_option']?></th>
-      <th style="text-align:center;"><?=$this->moduleLanguage['product_form_option_order']?></th>
-      <th style="text-align:center;"><?=$this->moduleLanguage['product_form_option_action']?></th>
+        <th style="text-align:center;"><?=$this->moduleLanguage['product_form_option_logo']?></th>
+        <th style="text-align:center;"><?=$this->moduleLanguage['product_form_option_type']?></th>
+        <th style="text-align:center;"><?=$this->moduleLanguage['product_form_option_category']?></th>
+        <th style="text-align:center;"><?=$this->moduleLanguage['product_form_option_price']?></th>
+        <th style="text-align:center;"><?=$this->moduleLanguage['product_form_option_discount']?></th>
+        <th style="text-align:center;"><?=$this->moduleLanguage['product_form_radio_order']?></th>
+        <th style="text-align:center;"><?=$this->moduleLanguage['product_form_option_action']?></th>
     </tr>
-  </thead>
-  <tbody>
-  <?if(!empty($this->options)):?>
-  <?foreach($this->options as $key=>$val):?>
-    <tr>
-      <td align="center"><?=$this->model->getOptionName($val['option'])?></td>
-      <td align="center"><b><?=$val['order']?></b></td>
-      <td align="center" style="vertical-align: middle;"><a style="cursor: pointer;" data-pk="<?=$key?>" class="moddel"><?=$this->moduleLanguage['product_form_delete']?></a></td>
-    </tr>
+    </thead>
+    <tbody>
+    <?if(!empty($this->productTypes)):?>
+    <? foreach ($this->productTypes as $val):?>
+            <tr class="success">
+                <td align="center"><?if($val['image']):?><img src="<?=$val['image']?>" width="50" alt="N/A"><?endif;?></td>
+                <td align="center"><b><?=$val['fashion_name']?></b></td>
+                <td align="center"><?=$val['category']?></td>
+                <td align="center"><?=$val['price']?></td>
+                <td align="center" style="vertical-align: middle;"><?=$val['discount']?></td>
+                <td align="center" style="vertical-align: middle;"><?=$val['order']?></td>
+                <td align="center" style="vertical-align: middle;"><a style="cursor: pointer;" data-id="<?=$val['id']?>" class="moddel"><?=$this->moduleLanguage['product_form_delete']?></a></td>
+            </tr>
     <?endforeach;?>
     <?endif;?>
-  </tbody>
+    </tbody>
 </table>
-<div class="loading-options"></div>
+<div class="loading"></div>
 <script type="text/javascript">
-$(document).ready(function()
-{
-    $('a.moddel').click(function()
+    $(document).ready(function()
     {
-        var key = $(this).data('pk');
+        $('a.moddel').click(function()
+        {
+            var id = $(this).data('id');
 
-        $('div.loading-options').css('display', 'block');
-        $.ajax({
-            url: BASE_URL + '/product/deleteOption/' + id,
-            type: "POST",
-            data: {data:key},
-            complete: function()
-            {
-                getOptions();
-                renderOptions();
-                getOptionsImages();
-            },
-            dataType: 'html'
+            $('div.loading').css('display', 'block');
+            $.ajax({
+                url: BASE_URL + '/product/deleteOption/' + id,
+                type: "POST",
+
+                complete: function()
+                {
+                    getOptions();
+                },
+                dataType: 'html'
+
+            });
         });
     });
-});
+
 </script>
