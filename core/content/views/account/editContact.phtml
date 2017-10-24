@@ -1,0 +1,11 @@
+<div class="step-heading"><?=$this->moduleLanguage['acc_edit']?></div>
+<div class="row">
+    <div class="col-sm-4">
+        <form class="login-form reg-form" method="POST" action="/account/editContact/?<?=$_SERVER['QUERY_STRING']?>">
+            <input type="tel" name="phone"  class="login-form-input" placeholder="<?=$this->moduleLanguage['phone']?>">
+            <input type="text" name="address"  class="login-form-input" placeholder="<?=$this->moduleLanguage['address']?>" required>
+            <button type="submit" class="btn btn-custom-xs"><?=$this->moduleLanguage['acc_addr_edit']?></button>
+            <a href="/account/account" class="btn btn-custom-xs link"><?=$this->moduleLanguage['cancel']?></a>
+        </form>
+    </div>
+</div>

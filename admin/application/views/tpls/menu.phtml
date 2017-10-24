@@ -1,0 +1,21 @@
+<ul class="nav nav-tabs">
+    <?php if (is_array($this->admmenu) && count($this->admmenu)):?>
+    <?php foreach ($this->admmenu as $k => $v):?>
+    <li id="mdv-<?php echo $v['id']?>" class="<?php echo Request::instance()->getController() == $v['ident'] ? ' active' : ''?>">
+        <?$submenu = models_helpers_Menu::instance()->getMenuData(null, $v['id']);?>
+        <a <?if (is_array($submenu)):?>class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"<?endif;?> href="<?=models_helpers_Url::getValidBaseUrl()?><?php echo $v['type'] == 'cat' ? 'javascript:void(0)' : $v['ident']?>">
+            <?php echo $v['name']?> <?php if (is_array($submenu)):?><span class="caret"></span><?php endif;?>
+        </a>
+        <?php if (is_array($submenu)):?>
+        <ul class="dropdown-menu" id="msub-<?php echo $v['id']?>">
+            <?php foreach ($submenu as $menurow):?>
+            <li<?php echo Request::instance()->getController() == $menurow['ident'] ? ' class="active"' : ''?>>
+                <a href="<?=models_helpers_Url::getValidBaseUrl()?><?php echo $menurow['ident']?>"><?php echo $menurow['name']?></a>
+            </li>
+            <?php endforeach;?>
+        </ul>
+        <?php endif;?>
+    </li>
+    <?php endforeach;?>
+    <?php endif;?>
+</ul>

@@ -1,0 +1,35 @@
+<?if (!empty($this->result)):?>
+    <div class="message">
+        <p><?=$this->moduleLanguage['translit_result']?></p>
+        <p>'<?=$this->result?>'</p>
+        <a href="/additional" class="btn btn-custom-xs"><?=$this->moduleLanguage['back']?></a>
+    </div>
+<?else:?>
+    <h2><?=$this->moduleLanguage['translit_title']?></h2>
+    <h5><?=$this->moduleLanguage['translit_description']?></h5>
+    <form class="login-form reg-form" method="POST" action="/additional/transliteration">
+        <input type="text" name="link"  class="login-form-input"  placeholder="<?=$this->moduleLanguage['translit_input']?>"required>
+        <button type="submit" class="btn btn-custom-xs"><?=$this->moduleLanguage['translit_submit']?></button>
+    </form>
+<?endif;?>
+<?if (!empty($this->changedword)):?>
+    <div class="message">
+        <p><?=$this->moduleLanguage['wordchange_result']?></p>
+        <p>'<?=$this->changedword?>'</p>
+        <a href="/additional" class="btn btn-custom-xs"><?=$this->moduleLanguage['back']?></a>
+    </div>
+<?else:?>
+    <h2><?=$this->moduleLanguage['wordchange_title']?></h2>
+    <h5><?=$this->moduleLanguage['wordchange_description']?></h5>
+    <form class="login-form reg-form" method="POST" action="/additional/wordChange">
+        <p><?=$this->moduleLanguage['wordchange_input_fraze']?></p>
+        <input type="text" name="fraze"  class="login-form-input" required>
+        <p><?=$this->moduleLanguage['wordchange_input_wordnum']?></p>
+        <input type="text" name="word_num"  class="login-form-input" value="0" required>
+        <p><?=$this->moduleLanguage['wordchange_input_case']?></p>
+        <p><?=$this->moduleLanguage['wordchange_cases']?></p>
+        <input type="text" name="case"  class="login-form-input" required>
+        <button type="submit" class="btn btn-custom-xs"><?=$this->moduleLanguage['wordchange_submit']?></button>
+    </form>
+<?endif;?>
+

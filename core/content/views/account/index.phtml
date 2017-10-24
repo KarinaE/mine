@@ -1,0 +1,62 @@
+<meta name="google-signin-client_id" content="260082803045-08ppmrcqi8qaqi5kji6qtfmsdde48io2.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '1790911861239584',
+                xfbml      : true,
+                version    : 'v2.9'
+            });
+            FB.AppEvents.logPageView();
+        };
+
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="welcome text-center">
+                    <?=$this->moduleLanguage['login']?>
+                    <?if(@$this->Msg):?>
+                        <?=$this->Msg?>
+                    <?endif;?>
+                </div>
+            </div>
+        </div><!--  row -->
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card card-container">
+                    <h2 class='login_title text-center'><?=$this->moduleLanguage['email_login']?></h2>
+                    <form class="form-signin" method="POST" action="/account/signin">
+                        <input type="email" name="email" class="login_box" placeholder="<?=$this->moduleLanguage['acc_email']?>" required autofocus>
+                        <input type="password" name="password" class="login_box" placeholder="<?=$this->moduleLanguage['acc_password']?>" required>
+                        <h4 class="login_title text-center">
+                            <a href="/account/forgot_password" class="login"><?=$this->moduleLanguage['forgot_password']?></a>
+                        </h4>
+                        <button class="btn btn-lg" name="signin" type="submit"><?=$this->moduleLanguage['login']?></button>
+                    </form><!-- /form -->
+                </div><!-- /card-container -->
+            </div>
+            <div class="col-sm-6">
+                <div class="card card-container">
+                    <h2 class='login_title text-center'><?=$this->moduleLanguage['soc_acc_login']?></h2>
+                    <form class="form-signin">
+                        <a href="<?=$this->link['fb']?>" role="button" class="login-form-input facebook-login"></a><br>
+                        <a href="<?=$this->link['google']?>" role="button" class="login-form-input google-login"></a>
+                        <h4 class='login_title text-center'><?=$this->moduleLanguage['new_client']?></h4>
+                        <a href="/account/register" class="btn btn-lg register"><?=$this->moduleLanguage['register']?></a>
+                    </form>
+                </div>
+            </div>
+        </div><!--  row -->
+    </div><!-- /container -->
+
+
+
+

@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="row">
+        <?if(empty ($this->postData) AND !empty(Request::instance()->getActionName()) AND (Request::instance()->getActionName())=='deleteAction'):?>
+            <form method="POST" action='/account/delete'>
+                <div class="message text-center">
+                    <p><?=$this->Msg_sheet?></p>
+                    <input type=submit name="delete" class="btn btn-custom-xs" value="<?=$this->moduleLanguage['acc_delete']?>">
+                    <a href="/account/account" class="btn btn-custom-xs link"><?=$this->moduleLanguage['cancel']?></a>
+                </div>
+        </form>
+        <?else:?>
+            <div class="message text-center">
+                <p><?=$this->Msg_sheet?></p>
+                <?if(isset($this->linkRefresh)):?>
+                    <p><a href="/account/regLinkRefresh&link=<?=$this->linkRefresh?>"><?=$this->moduleLanguage['reg_link_refresh']?></a></p>
+                <?endif;?>
+            </div>
+        <?endif;?>
+    </div>
+</div>
+

@@ -1,0 +1,133 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-2 col-sm-4">
+            <ul class="nav nav-tabs tabs-vertical" role="tablist">
+                <li role="presentation"><a href="#personal" aria-controls="home" role="tab" data-toggle="tab"><?=$this->moduleLanguage['my_info']?></a></li>
+                <li role="presentation"><a href="#my-orders" aria-controls="profile" role="tab" data-toggle="tab"><?=$this->moduleLanguage['my_orders']?></a></li>
+                <li role="presentation"><a href="#my-adres" aria-controls="settings" role="tab" data-toggle="tab"><?=$this->moduleLanguage['my_addrs']?></a></li>
+                <li role="presentation"><a href="#my-purse" aria-controls="settings" role="tab" data-toggle="tab"><?=$this->moduleLanguage['my_bonuses']?></a></li>
+                <li role="presentation"><a href="#my-passwordChange" aria-controls="settings" role="tab" data-toggle="tab"><?=$this->moduleLanguage['change_pass']?></a></li>
+                <li role="presentation"><a href="/account/logout"><?=$this->moduleLanguage['logout']?></a></li>
+            </ul>
+        </div> <!-- col-md-2 col-sm-3 -->
+        <div class="col-lg-10 col-sm-9">
+            <div class="tab-content vertical-tab-content">
+                <div role="tabpanel" class="tab-pane <?if(empty(Request::instance()->getPath()) OR (Request::instance()->getPath()=='editInfo')):?>active<?endif?>" id="personal">
+                    <div class="step-heading"><?=$this->moduleLanguage['my_info']?></div>
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-4">
+                            <p><?=$this->moduleLanguage['acc_name']?></p>
+                            <p><?=$this->moduleLanguage['acc_lastname']?></p>
+                            <p><?=$this->moduleLanguage['acc_gender']?></p>
+                            <p><?=$this->moduleLanguage['acc_birthday']?></p>
+                            <p><?=$this->moduleLanguage['acc_email']?></p>
+                        </div>
+                        <?if (!empty(Request::instance()->getPath()) AND (Request::instance()->getPath()=='editInfo')):?>
+                            <?include "editInfo.phtml"?>
+                        <?else:?>
+                        <div class="col-sm-9 col-xs-8">
+                            <p class="personal-info"><?=$this->data[0]['first_name']?></p>
+                            <p class="personal-info"><?=$this->data[0]['last_name']?></p>
+                            <?if (!empty($this->data[0]['gender'])):?>
+                                <p class="personal-info"><?=($this->data[0]['gender'])==1 ? $this->moduleLanguage['gender_m'] : $this->moduleLanguage['gender_f'];?></p>
+                            <?else:?>
+                                <p class="personal-info">--</p>
+                            <?endif;?>
+                            <p class="personal-info"><?=$this->data[0]['birth_date']?></p>
+                            <p class="personal-info personal-info-email"><?=$this->data[0]['email']?></p>
+                        </div>
+                        <div class="col-sm-12">
+                            <a class="mydata" href="<?=$_SERVER["REQUEST_URI"]?>/editInfo"><?=$this->moduleLanguage['acc_edit']?></a>
+                            <a class="mydata" href="/account/delete"><?=$this->moduleLanguage['acc_delete']?></a>
+                        </div>
+                        <?endif;?>
+                    </div><!-- row -->
+                </div> <!-- #personal  -->
+                <div role="tabpanel" class="tab-pane" id="my-orders">
+                    <div class="step-heading"><?=$this->moduleLanguage['my_orders']?></div>
+                    <?if (!empty ($this->orderData)):?>
+                    <?foreach ($this->orderData as $key=>$order):?>
+                        <div class="my-order-text month"><?=$this->moduleLanguage[$order['month']]." ".$order['year']?></div>
+                        <div class="my-order-text"><?=$order['date_add']?></div>
+                        <div class="my-order-info">
+                            <div class="col-xs-6">
+                                <div class="my-order-text"><?=$order['price']?><?=$this->moduleLanguage['uah']?></div>
+                                <div class="my-order-text text-gray"><?=$this->moduleLanguage['ord_number']?>: <span class="my-order-nmbr"><?=$order['order_id']?></span></div>
+                            </div> <!-- col-xs-6 -->
+                            <div class="col-xs-6">
+                                <div class="my-order-text"><?=$this->moduleLanguage['ord_status']?>: <span class="text-gray"><?=$this->moduleLanguage['delivered']?></span></div>
+                            </div> <!-- col-xs-6 -->
+                            <div class="col-xs-12 my-order-info-bottom">
+                                    <img class="img myorder" src="<?=$order['image']?>" alt="">
+                            </div>
+                        </div><!--  my-order-info   -->
+                    <?endforeach;?>
+                    <?endif;?>
+                </div> <!--  #my-orders -->
+                <div role="tabpanel" class="tab-pane <?if(Request::instance()->getPath()=='addContact' OR Request::instance()->getPath()=='editContact' OR Request::instance()->getPath()=='deleteContact'):?>active<?endif?>" id="my-adres">
+                    <?if(!empty(Request::instance()->getPath()) AND Request::instance()->getPath()=='addContact'):?>
+                        <?include "addContact.phtml"?>
+                    <?elseif(!empty(Request::instance()->getPath()) AND Request::instance()->getPath()=='editContact'):?>
+                        <?include "editContact.phtml"?>
+                    <?else:?>
+                    <div class="step-heading"><?=$this->moduleLanguage['my_addrs']?></div>
+                    <button type="button" class="btn add-adres"><a href="<?=$_SERVER["REQUEST_URI"]?>/addContact" class="add-adres"><?=$this->moduleLanguage['add_addr']?></a></button>
+                        <div class="row">
+                        <?if (!empty ($this->contactData['main'][0]['address'])):?>
+                        <div class="col-sm-6">
+                            <div class="my-adres">
+                                <div class="my-order-text my-adres-name"><?=$this->data[0]['first_name']." ".$this->data[0]['last_name']?></div>
+                                <div class="my-adres-info">
+                                    <p><?=$this->contactData['main'][0]['address']?></p>
+                                    <p><?=$this->contactData['main'][0]['phone']?></p>
+                                </div>
+                                <div class="my-order-text"><?=$this->moduleLanguage['acc_defaultaddr']?></div>
+                                <div class="row my-adres-boottom">
+                                    <div class="col-xs-4 col-md-6 col-sm-5">
+                                        <a href="deleteContact/?arec=<?=$this->contactData['main'][0]['id_addr']?>&prec=<?=$this->contactData['main'][0]['id_tel']?>" class="btn btn-xs btn-custom-xs myaddress"><?=$this->moduleLanguage['acc_delete_option']?></a>
+                                    </div>
+                                    <div class="col-xs-8 col-md-6 col-sm-7">
+                                        <a href="<?=$_SERVER["REQUEST_URI"]?>/editContact/?arec=<?=$this->contactData['main'][0]['id_addr']?>&prec=<?=$this->contactData['main'][0]['id_tel']?>&m=<?=$this->contactData['main'][0]['is_main']?>" class="btn btn-xs btn-custom-xs myaddress"><?=$this->moduleLanguage['acc_addr_edit']?></a>
+                                    </div>
+                                </div>
+                            </div> <!--  my-adres  -->
+                        </div> <!--  col-sm-6  -->
+                        <?endif;?>
+                        <?if (!empty ($this->contactData['additional'][0]['address'])):?>
+                        <?foreach ($this->contactData['additional'] as $key => $value):?>
+                        <div class="col-sm-6">
+                            <div class="my-adres">
+                                <div class="my-order-text my-adres-name"><?=$this->data[0]['first_name']." ".$this->data[0]['last_name']?></div>
+                                <div class="my-adres-info">
+                                    <p><?=$value['address']?></p>
+                                    <p><?=$value['phone']?></p>
+                                </div>
+                                <a href="changeDefault/?arec=<?=$value['id_addr']?>&marec=<?=$this->contactData['main'][0]['id_addr']?>&prec=<?=$value['id_tel']?>&mprec=<?=$this->contactData['main'][0]['id_tel']?>" class="save-adres"><?=$this->moduleLanguage['acc_make_default_addr']?></a>
+                                <div class="row my-adres-boottom">
+                                    <div class="col-xs-4 col-md-6 col-sm-5">
+                                        <a href="deleteContact/?arec=<?=$value['id_addr']?>&prec=<?=$value['id_tel']?>" class="btn btn-xs btn-custom-xs myaddress"><?=$this->moduleLanguage['acc_delete_option']?></a>
+                                    </div>
+                                    <div class="col-xs-8 col-md-6 col-sm-7">
+                                        <a href="<?=$_SERVER["REQUEST_URI"]?>/editContact/?arec=<?=$value['id_addr']?>&prec=<?=$value['id_tel']?>&m=<?=$value['is_main']?>" class="btn btn-xs btn-custom-xs myaddress"><?=$this->moduleLanguage['acc_addr_edit']?></a>
+                                    </div>
+                                </div>
+                            </div> <!--  my-adres  -->
+                        </div> <!--  col-sm-6  -->
+                        <?endforeach;?>
+                        <?endif;?>
+                    </div> <!-- row -->
+                    <?endif;?>
+                </div> <!-- my-adres  -->
+                <div role="tabpanel" class="tab-pane" id="my-purse">
+                    <div class="step-heading"><?=$this->moduleLanguage['my_bonuses']?></div>
+                    <p><?=$this->moduleLanguage['bonuses']?><?=(!empty($this->data[0]['bonuses']))?$this->data[0]['bonuses']:0?></p>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="my-passwordChange">
+                    <?include "passwordChange.phtml"?>
+                </div>
+            </div>
+        </div> <!-- col-xs-8 -->
+    </div> <!-- row -->
+</div>
+
+

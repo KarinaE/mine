@@ -1,0 +1,79 @@
+<div class="container">
+    <div class="row">
+        <?foreach ($this->productInfo as $product):?>
+
+                <div class="col-sm-12">
+                    <p><?=$this->moduleLanguage['details']?></p>
+                    <div class="col-sm-4">
+                        <img src="<?=$product['product_image']?>" width="100" alt="N/A" align="left">
+                    </div>
+                    <div class="col-sm-8">
+                        <p><?=$product['product_name']?></p>
+                        <p><?=$this->moduleLanguage['cart_product_price']?>&nbsp;<?=$this->moduleLanguage['cart_product_discount']?></p>
+                        <p><?=$product['price']?>&nbsp;<?=$product['discount']?></p>
+                        <p><?=$this->moduleLanguage['cart_product_new_price']?>
+                        <p><?=$product['new_price']?>
+                        <p><?=$this->moduleLanguage['cart_product_size']?></p>
+                        <p><?=session::instance()->get('size');?></p>
+                        <a class="btn btn-custom-xs" >
+                            <p data-toggle="modal" data-target="#checkout"><?=$this->moduleLanguage['buy']?></p>
+                        </a>
+                        <a class="btn btn-custom-xs" href="/cart/cancel"><?=$this->moduleLanguage['cancel']?></a>
+                    </div>
+                </div>
+
+        <?endforeach;?>
+        <div class="modal fade" id="checkout" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><span><?=$this->moduleLanguage['checkout']?></span></h4>
+                    </div>
+                    <form id="checkoutForm" method="post" action="/cart/addOrder">
+                        <div class="modal-body row row-cart">
+                            <div class="col-md-6">
+                                <div class="form-group col-md-12">
+                                    <label><?=$this->moduleLanguage['fname']?> *</label>
+                                    <input type="text" name="f_name" required class="form-control">
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label><?=$this->moduleLanguage['email']?> *</label>
+                                    <input type="email" name="email" required class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group col-md-12">
+                                    <label><?=$this->moduleLanguage['lname']?> *</label>
+                                    <input type="text" name="l_name" required class="form-control">
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label><?=$this->moduleLanguage['phone']?> *</label>
+                                    <input type="text" name="phone" required class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="col-md-12">
+                                    <label><?=$this->moduleLanguage['address']?> *</label>
+                                    <input type="text" name="address"  required class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="col-md-12">
+                                    <textarea class="form-control" name="comment" rows="3" placeholder="<?=$this->moduleLanguage['comment']?>"></textarea>
+                                </div>
+                            </div>
+                            <div class="cart-total checkout">
+                                <label><?=$this->moduleLanguage['total']?></label>
+                                <div class="value"><?=$this->productInfo[0]['new_price']?></div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="checkout-button modal-checkout"><p><?=$this->moduleLanguage['add_order']?></p></button>
+                        </div>
+                    </form>
+                </div> <!-- Modal content-->
+            </div>
+        </div> <!-- Modal -->
+    </div>
+</div>

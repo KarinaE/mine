@@ -1,0 +1,78 @@
+<div class="col-sm-6 col-xs-8">
+    <form id="edit_form" method="POST" action="/account/editInfo">
+        <p><input type="text" name="first_name" class="login-form-input edit" value="<?=$this->data[0]['first_name']?>" required></p>
+        <p><input type="text" name="last_name" class="login-form-input edit" value="<?=$this->data[0]['last_name']?>"></p>
+        <div class="row">
+            <div class="col-sm-3 col-xs-5 login_title">
+                <input class="radio-btn" id="radio-btn-1" type="radio" name="gender" value="1" <?if ($this->data[0]['gender']==1) echo "checked"?>>
+                <label for="radio-btn-1"><?=$this->moduleLanguage['gender_m']?></label>
+            </div>
+            <div class="col-sm-3 col-xs-5 login_title">
+                <input class="radio-btn" id="radio-btn-2" type="radio" name="gender" value="2"  <?if ($this->data[0]['gender']==2) echo "checked"?>>
+                <label for="radio-btn-2"><?=$this->moduleLanguage['gender_f']?></label>
+            </div>
+        </div>
+
+        <div class="row ">
+            <div class="col-sm-4">
+                <select id="years" name="b_year" class="login-form-input edit select-date"  >
+                    <option><?=$this->data[0]['byear']?></option>
+                    <option><?=$this->moduleLanguage['year']?></option>
+                </select>
+            </div>
+            <div class="col-sm-4">
+                <select id="months" name="b_month" class="login-form-input edit select-date">
+                    <option><?=$this->data[0]['bmonth']?></option>
+                    <option><?=$this->moduleLanguage['month']?></option>
+                </select>
+            </div>
+            <div class="col-sm-4">
+                <select id="days" name="b_date" class="login-form-input edit select-date">
+                    <option><?=$this->data[0]['bday']?></option>
+                    <option ><?=$this->moduleLanguage['day']?></option>
+                </select>
+            </div>
+        </div>
+        <p><input type="email" name="email" class="login-form-input edit" value="<?=$this->data[0]['email']?>" required></p>
+        <br><br><button class="btn btn-custom-xs" type="submit"><?=$this->moduleLanguage['save']?></button>
+        <a class="btn btn-custom-xs link" href="/account/account"><?=$this->moduleLanguage['cancel']?></a>
+    </form>
+</div>
+<script>
+    $(function()  {
+
+        //populate our years select box
+        for (i = new Date().getFullYear(); i > 1900; i--){
+            $('#years').append($('<option />').val(i).html(i));
+        }
+        //populate our months select box
+        for (i = 1; i < 13; i++){
+            $('#months').append($('<option />').val(i).html(i));
+        }
+
+        //"listen" for change events
+        $('#years, #months').change(function(){
+            updateNumberOfDays();
+        });
+
+    });
+
+    //function to update the days based on the current values of month and year
+    function updateNumberOfDays(){
+
+        $('#days').html('');
+        month = $('#months').val();
+        year = $('#years').val();
+        days = daysInMonth(month, year);
+
+        for(i=1; i < days+1 ; i++){
+            $('#days').append($('<option />').val(i).html(i));
+        }
+
+    }
+
+    //helper function
+    function daysInMonth(month, year) {
+        return new Date(year, month, 0).getDate();
+    }
+</script>

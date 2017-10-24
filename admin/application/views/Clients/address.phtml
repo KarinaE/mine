@@ -1,0 +1,39 @@
+<table class="table table-striped small">
+    <thead>
+    <tr>
+        <th><?=$this->moduleLanguage['clients_form_address']?></th>
+        <th style="text-align:right;"><?=$this->moduleLanguage['clients_form_contacts_action']?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?if($this->address):?>
+        <?foreach($this->address as $val):?>
+            <tr>
+                <td><?=$val['address']?></td>
+                <td><a style="cursor: pointer;" data-pk="<?=$val['id']?>" class="adel"><?=$this->moduleLanguage['clients_form_contacts_delete']?></a></td>
+            </tr>
+        <?endforeach;?>
+    <?endif;?>
+    </tbody>
+</table>
+<div class="loading address"></div>
+<script type="text/javascript">
+    $(document).ready(function()
+    {
+        $('a.adel').click(function()
+        {
+            del_id = $(this).data('pk');
+            $('div.loading.address').css('display', 'block');
+            $.ajax({
+                url: BASE_URL + '/clients/deleteAddress/' + del_id,
+                success: function(jsonData)
+                {
+                    if(jsonData)
+                        alert(jsonData);
+                    getAddress();
+                },
+                dataType: 'html'
+            });
+        });
+    });
+</script>
