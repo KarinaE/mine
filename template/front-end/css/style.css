@@ -5,6 +5,15 @@ body, html {
 .row{
     margin-top: 20px;
 }
+.auth_title{
+	width: 115px;
+	margin-left: 900px;
+}
+.auth_title a,
+.auth_title a:hover,
+.auth_title a:focus{
+	color:  darkslategrey;
+}
 input:active,
 input:focus{
     outline:none;
@@ -32,9 +41,6 @@ hr{
 .card-container.card {
     max-width: 350px;
 }
-
-
-
 a.download,
 a.download:focus,
 a.download:hover {
@@ -83,7 +89,6 @@ a.login:focus,
 a.login:active{
     color:darkslategray;
 }
-
 .form-signin #inputEmail,
 .form-signin #inputPassword {
     direction: ltr;
@@ -121,6 +126,9 @@ a.login:active{
     color: lightslategray;
     font-size: 16px;
     text-transform: uppercase;
+}
+.login-form p.smalltext{
+	font-size: 12px;
 }
 .login-form-input.edit {
     height: 24px;
@@ -216,14 +224,49 @@ a.login:active{
 .btn.btn-custom-xs.link:focus{
     background-color: lightslategray;
 }
-
-.btn.btn-custom-xs.myaddress {
-	margin-top: 30px;
-	background-color: #9d9d9d;
+.product{
+	height: 100px;
+	margin-top: 20px;
+}
+.checkout {
+	margin-bottom: -10px;
+}
+.cart-total, .cart-total .text {
+	font-weight: 600;
+	margin-bottom: 10px;
+	font-size: 16px!important;
+}
+.cart-total {
+	width: 100%;
+	clear: both;
+	display: table;
+	margin-bottom: 5px;
+}
+.cart-total, .cart-total .text {
+	font-weight: 600;
+	margin-bottom: 10px;
+	font-size: 16px!important;
+}
+.cart-total .text {
+	float: left;
+	margin-left: 20px;
+	font-size: 14px;
+	font-weight: 500;
+}
+.cart-total .value {
+	float: right;
+	margin-right: 20px;
+	font-weight: 600;
+}
+.btn.btn-custom-xs.product{
 	color: white;
-	cursor: inherit;
-	text-decoration: underline;
-	width: 80%;
+	background-color: #343a40;
+	border-radius: unset;
+	width: 50%;
+}
+.btn.btn-custom-xs.product:hover,
+.btn.btn-custom-xs.product:focus{
+	color: rgba(255,255,255,.5);
 }
 .tabs-vertical {
 	border-bottom: 1px solid #a0a0a0;
@@ -270,7 +313,6 @@ a.login:active{
 	text-transform: uppercase;
 	font-size: 22px;
 }
-
 a.mydata,
 a.mydata:focus,
 a.mydata:hover {
@@ -295,6 +337,14 @@ a.mydata:hover {
 .btn.add-adres:focus,
 .btn.add-adres:active {
 	text-decoration: none;
+}
+.btn.btn-custom-xs.myaddress {
+	margin-top: 30px;
+	background-color: #9d9d9d;
+	color: white;
+	cursor: inherit;
+	text-decoration: underline;
+	width: 80%;
 }
 a.add-adres{
 	color: black;

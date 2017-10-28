@@ -10,8 +10,6 @@ set_include_path(get_include_path() . PATH . PATH_SEPARATOR . '.' . PATH_SEPARAT
 
 // include file loader
 require_once __DIR__ . '/core/loader.php';
-// include memcache helper
-require_once __DIR__ . '/lib/memcached/Base.php';
 
 $ses  = Settings::instance()->getParam('session');
 $glob = Settings::instance()->getParam('globals');

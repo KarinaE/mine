@@ -1,23 +1,17 @@
 <div class="container">
-    <div class="row">
-        <?foreach ($this->productInfo as $product):?>
-            <div class="tab-content vertical-tab-content">
-                <div class="col-sm-6">
-                    <div class="col-sm-4">
-                        <img src="<?=$product['product_image']?>" width="100" alt="N/A" align="left">
-                    </div>
-                    <div class="col-sm-8">
-                        <p><?=$product['product_name']?></p>
-                        <p><?=$this->moduleLanguage['product_price']?>&nbsp;<?=$this->moduleLanguage['product_discount']?></p>
-                        <p><?=$product['price']?>&nbsp;<?=$product['discount']?></p>
-                        <p><?=$this->moduleLanguage['product_newprice']?>
-                        <p><?=$product['new_price']?>
-                        <p><?=$this->moduleLanguage['product_size']?></p>
-                        <p><?=$product['size']?></p>
-                        <a href="/cart" class="btn btn-custom-xs"><?=$this->moduleLanguage['product_add_cart']?></a>
-                    </div>
-                </div>
+    <?foreach ($this->productInfo as $product):?>
+        <div class="row">
+            <div class="col-md-2">
+                <img src="<?=$product['product_image']?>" class="product" alt="N/A">
             </div>
-        <?endforeach;?>
-    </div> <!-- row -->
+            <div class="col-md-6">
+                <p><?=$product['product_name']?></p>
+                <p><?=$this->moduleLanguage['product_price']?>: <?=$product['price']?>$</p>
+                <p><?=$this->moduleLanguage['product_discount']?>: <?=$product['discount']?>$</p>
+                <p><?=$this->moduleLanguage['product_newprice']?>: <?=$product['new_price']?>$</p>
+                <p><?=$this->moduleLanguage['product_size']?>: <?=$product['size']?></p>
+                <a href="/cart" class="btn btn-custom-xs product"><?=$this->moduleLanguage['product_add_cart']?></a>
+            </div>
+        </div><!-- row -->
+    <?endforeach;?>
 </div> <!-- container -->

@@ -9,9 +9,6 @@ class controllers_IndexController extends controllers_BaseController
 	public function __construct()
 	{
 		parent::__construct();
-
-
-
 	}
 
 	public function indexAction()
@@ -21,7 +18,8 @@ class controllers_IndexController extends controllers_BaseController
         
         $this->viewer->components = $this->model->getComponents();
         $this->viewer->usersLogs = $this->model->getUsersLogs();
-        
+        $this->viewer->Stats = $this->model->getStats();
+
         $this->viewer->setTemplate($this->control_name.'/index.phtml');
     } 
 }

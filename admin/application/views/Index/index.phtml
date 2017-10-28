@@ -23,48 +23,25 @@
             <?endif;?>
         <?endforeach;?>
     </ul>
-
-    <h3><?=$this->moduleLanguage['options']?></h3>
-    <ul class="list-group">
-    <?foreach ($this->components as $key => $val):?>
-        <?if ($val['type'] == 'options'):?>
-        <li class="list-group-item">
-            <a href="<?=models_helpers_Url::getValidBaseUrl().$val['path']?>">
-                <img src="<?=IMG . '/components/' . $val['img']?>" width="32" /> <?=$val['name']?>
-            </a>
-        </li>
-        <?endif;?>
-    <?endforeach;?>
-    </ul>
 </div>
 <div class="col-md-3  col-md-offset-0">
-    <h3><?=$this->moduleLanguage['user_stat']?></h3>
+    <h3><?=$this->moduleLanguage['product_stat']?></h3>
     <table class="table table-condensed small">
         <tbody>
             <tr>
                 <th scope="row">1</th>
-                <td><?=$this->moduleLanguage['user_stat_last_login']?></td>
-                <td><?php echo $this->userInfo['last_visit'] ? $this->userInfo['last_visit'] : $this->moduleLanguage['user_stat_last_never']?></td>
+                <td><?=$this->moduleLanguage['products_added']?></td>
+                <td><?=$this->Stats[0]["quntity"]?></td>
             </tr>
             <tr>
                 <th scope="row">2</th>
-                <td><?=$this->moduleLanguage['user_stat_materials']?></td>
-                <td><?=$this->userStats[0]["quntity"]?></td>
+                <td><?=$this->moduleLanguage['orders_placed']?></td>
+                <td><?=$this->Stats[1]["quntity"]?></td>
             </tr>
             <tr>
                 <th scope="row">3</th>
-                <td><?=$this->moduleLanguage['user_stat_categories']?></td>
-                <td><?=$this->userStats[1]["quntity"]?></td>
-            </tr>
-            <tr>
-                <th scope="row">4</th>
-                <td><?=$this->moduleLanguage['user_stat_modules']?></td>
-                <td><?=$this->userStats[2]["quntity"]?></td>
-            </tr>
-            <tr>
-                <th scope="row">5</th>
-                <td><?=$this->moduleLanguage['user_stat_templates']?></td>
-                <td><?=$this->userStats[3]["quntity"]?></td>
+                <td><?=$this->moduleLanguage['clients_count']?></td>
+                <td><?=$this->Stats[2]["quntity"]?></td>
             </tr>
         </tbody>
     </table>

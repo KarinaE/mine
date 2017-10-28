@@ -11,7 +11,7 @@ class models_productModel extends models_BaseModel
     public function productsOfBrand($data)
     {
         foreach ($data as $k=>$v) {
-            $data[$k]['products'] = $this->db->select_full('SELECT id as product_id, fashion_name as product_name, image as product_image, price, discount, size
+            $data[$k]['products'] = $this->db->select_full('SELECT id as product_id, fashion_name as product_name, image as product_image, price, discount, size, (price-discount) as new_price
                                                         FROM ' . self::TBL_OPT . ' 
                                                         WHERE brand_id = ' . $v['brand_id'], null, null, Database::ENCODE_HTML);
         }

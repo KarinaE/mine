@@ -1,42 +1,24 @@
-<section class="header">
-    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-8">
-        <div class="btn-group pull-right" role="group" aria-label="...">
-            <div class="btn-group" role="group">
-                <a href="/account/account" class="btn-simple btn-cabinet">
-                    <?=(isset($_SESSION['default']['name'])) ? $this->moduleLanguage['my_acc'] : $this->moduleLanguage['authorization'] ?></a>
-            </div>
-            <div class="btn-group" role="group">
-                <a href="/account/logout" class="btn-simple btn-exit">
-                    <?if (isset ($_SESSION['default']['name'])) echo $this->moduleLanguage['logout'];?></a>
-            </div>
-        </div>
-    </div> <!--   col-md-3 col-sm-4 hidden-xs  -->
-</section>
 <div class="container">
     <div class="row">
+        <div class="auth_title">
+            <a href="/account/account">
+                <?=(isset($_SESSION['default']['name'])) ? $this->moduleLanguage['my_acc'] : $this->moduleLanguage['authorization'] ?></a>
+            <a href="/account/logout">
+                <?if (isset ($_SESSION['default']['name'])) echo $this->moduleLanguage['logout'];?></a>
+        </div>
+    </div> <!--row-->
+    <div class="row">
         <?foreach($this->products as $brand):?>
-        <div class="col-sm-4">
-            <div class="col-sm-6">
-                <img src="<?=$brand['brand_image']?>" width="50" alt="N/A">
+        <?if (!empty ($brand['products'])):?>
+            <?foreach ($brand['products'] as $products):?>
+            <div class="col-md-4 col-sm-6">
+                <img src="<?=$products['product_image']?>" class="product" alt="N/A">
+                <p><?=$brand['brand_name']?> <?=$products['product_name']?></p>
+                <p><?=$this->moduleLanguage['product_newprice']?>: <?=$products['new_price']?>$</p>
+                <a href="/product/productInfo/?pid=<?=$products['product_id']?>" class="btn btn-custom-xs product"><?=$this->moduleLanguage['product_add_cart']?></a>
             </div>
-        </div>
-        <div class="col-sm-12">
-            <?if (empty ($brand['products'])):?>
-                <p><?=$this->moduleLanguage['no_items']?></p>
-            <?else:?>
-                <?foreach ($brand['products'] as $products):?>
-                <div class="tab-content vertical-tab-content">
-                    <div class="col-sm-4">
-                        <img src="<?=$products['product_image']?>" width="100" alt="70">
-                        <p><?=$products['product_name']?></p>
-                        <p><?=$this->moduleLanguage['product_price']?>&nbsp;<?=$this->moduleLanguage['product_discount']?></p>
-                        <p><?=$products['price']?>&nbsp;<?=$products['discount']?></p>
-                        <a href="/product/productInfo/?pid=<?=$products['product_id']?>" class="btn btn-lg register"><?=$this->moduleLanguage['product_add_cart']?></a>
-                    </div>
-                </div>
-                <?endforeach;?>
-            <?endif;?>
-        </div>
+            <?endforeach;?>
+        <?endif;?>
         <?endforeach;?>
-    </div>
-</div>
+    </div> <!--row-->
+</div><!--container-->
