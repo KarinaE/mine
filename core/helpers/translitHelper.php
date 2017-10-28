@@ -20,8 +20,9 @@ class translitHelper
         if (preg_match('/[^A-Za-z0-9_\-]/', $title)) {
             // transliteration
             $url = self:: translitIt($title);
+
         }
-        return @$$url;
+        return $url;
     }
 
     private function translitIt($str)
