@@ -10,10 +10,11 @@
         </form>
         <?else:?>
             <div class="message text-center">
-                <p><?=$this->Msg_sheet?></p>
+                <p><?=$this->Msg_sheet?>
                 <?if(isset($this->linkRefresh)):?>
-                    <p><a href="/account/regLinkRefresh&link=<?=$this->linkRefresh?>"><?=$this->moduleLanguage['reg_link_refresh']?></a></p>
+                    <a href="/account/regLinkRefresh/?link=<?=$this->linkRefresh?>"><?=$this->moduleLanguage['reg_link_refresh']?></a>
                 <?endif;?>
+                </p>
             </div>
         <?endif;?>
     </div>

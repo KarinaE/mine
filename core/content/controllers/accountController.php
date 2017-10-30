@@ -11,19 +11,17 @@ class controllers_accountController extends controllers_BaseController
     protected $getData;
     protected $data;
     protected $contactData;
+    protected $salt;
     protected $tpl = array(
         'registerAction'        => 'register.phtml',
-       // 'editContactAction'     => 'account.phtml',
-        ///'deleteContactAction'   => 'account.phtml',
-        'confirm'               => 'message.phtml',
-        'regLinkRefresh'        => 'message.phtml',
+        'confirmAction'         => 'message.phtml',
+        'regLinkRefreshAction'  => 'message.phtml',
         'socialButtons'         => 'index.phtml',
         'accountAction'         => 'account.phtml',
-        'passwordChange'        => 'passwordChange.phtml',
         'forgot_passwordAction' => 'forgotpass.phtml',
-        'pass_reset'            => 'passreset.phtml',
+        'passwordChangeAction'  => 'passwordChange.phtml',
+        'pass_resetAction'      => 'passreset.phtml',
         'deleteAction'          => 'message.phtml',
-        'logout'                => 'index.phtml'
     );
 
 
@@ -36,6 +34,7 @@ class controllers_accountController extends controllers_BaseController
         //getting action name to set template
         $action= Request::instance()->getActionName();
         $this->viewer->setTemplate($this->control_name.'/'.$this->tpl[$action]);
+        $this->salt = '10F5S3cB';
     }
 
     //checking incoming data against security risks
@@ -63,7 +62,7 @@ class controllers_accountController extends controllers_BaseController
                     $this->viewer->Msg = $this->viewer->moduleLanguage['email_exist'];
                 else {
                     //getting user data
-                    $this->postData['password'] = password_hash($this->postData['password'], PASSWORD_BCRYPT);
+                    $this->postData['password'] = crypt($this->postData['password'], $this->salt);
                     $this->postData['birth_date'] = $this->postData['b_year'] . '-' . $this->postData['b_month'] . '-' . $this->postData['b_date'];
                     unset ($this->postData['b_year'], $this->postData['b_month'], $this->postData['b_date']);
                     //meaning adding user with link to confirm his email against in his activation status
@@ -90,7 +89,7 @@ class controllers_accountController extends controllers_BaseController
         }
     }
 
-    private function regLinkRefresh()
+    public function regLinkRefreshAction()
     {
         //getting user data with activation link
         $user = $this->model->regLinkRefresh($this->getData['link']);
@@ -149,11 +148,11 @@ class controllers_accountController extends controllers_BaseController
     public function signinAction()
     {
         $email = $this->postData['email'];
-        $password = $this->postData['password'];
+        $password = crypt($this->postData['password'],$this->salt);
         //checking if user exists
         $user_data = $this->model->signIn($email);
 
-        if ($user_data and password_verify($password, $user_data[0]['password']))
+        if ($user_data and hash_equals($user_data[0]['password'],$password))
         {
             //if user has not confirmed his registration via email, account will not appear
             if ($user_data[0]['activation'] !== '1')
@@ -308,29 +307,6 @@ class controllers_accountController extends controllers_BaseController
         header('Location:' . HEADPATH_ROOT . 'account/account');
     }
 
-//    // making array of used options
-//    private function getProductOptions()
-//    {
-//        $usedParams = null;
-//
-//        // getting all product options ids
-//        foreach($this->data['dreamBox'] as $k => $v)
-//            foreach ($v as $key => $val)
-//                if($key == "used_params")
-//                    foreach ($val as $item => $value)
-//                        $usedParams .= key($val[$item]).',';
-//        // getting options from DB
-//        $optionsArray = $this->model->getUsedParameters(substr($usedParams,0,-1));
-//
-//        // making array from serrialized values
-//        if($optionsArray )
-//            foreach ($optionsArray as $k => $v)
-//            {
-//                $this->data['product_options'][$v['id']] = unserialize($v['options_array']);
-//                $this->data['product_options'][$v['id']]['type'] = $v['type'];
-//            }
-//    }
-
     public function passwordChangeAction()
     {
         $id= session::instance()->get('id');
@@ -340,14 +316,15 @@ class controllers_accountController extends controllers_BaseController
         if ($this->postData)
         {
             if (!empty ($this->pass))
-            {   // if user has password we have to check it against what he entered
-                $password = $this->postData['existing_password'];
+            {
+                // if user has password we have to check it against what he entered
+                $password = crypt($this->postData['existing_password'], $this->salt);
 
-                if (password_verify($password, $this->pass)) //if pasword entered matches one in db
+                if (hash_equals($this->pass, $password)) //if pasword entered matches one in db
                 {
                     if ($this->postData['new_password']==$this->postData['password_check']) //if new pass entered and confirmed correctly
                     {
-                        $new_password= password_hash($this->postData['new_password'], PASSWORD_BCRYPT);
+                        $new_password= crypt($this->postData['new_password'],$this->salt);
                         if ($this->model-> passwordChange($new_password,$id)) //changing pass
                         {
                             $this->viewer->Msg_sheet = $this->viewer->moduleLanguage['pass_changed'];
@@ -363,14 +340,15 @@ class controllers_accountController extends controllers_BaseController
         }
     }
 
-    private function setPassword(){
+    private function setPassword()
+    {
         $id= session::instance()->get('id');
         //getting user's pass (if not empty; can be empty when entered with soc. acc.)
         $passCheck = $this->model->passCheck($id);
         $this->pass = $passCheck[0]['password'];
         if ($this->postData['new_password']==$this->postData['password_check']) //if new pass entered and confirmed correctly
         {
-            $new_password= password_hash($this->postData['new_password'], PASSWORD_BCRYPT);
+            $new_password= crypt($this->postData['new_password'], $this->salt);
             if ($this->model-> passwordChange($new_password,$id)) //setting pass
             {
                 $this->viewer->Msg_sheet=$this->viewer->moduleLanguage['pass_changed'];
@@ -411,19 +389,18 @@ class controllers_accountController extends controllers_BaseController
         }
     }
 
-    private function pass_reset ()
+    public function pass_resetAction ()
     {
         if ($this->postData)
         {
             $id= session::instance()->get('id');
-            $password = password_hash($this->postData['new_password'], PASSWORD_BCRYPT);
+            $password = crypt($this->postData['new_password'], $this->salt);
             if (isset ($id))
                 if ($this->model->passwordChange($password, $id))
                 {
                     $this->viewer->Msg_sheet = $this->viewer->moduleLanguage['pass_changed'];
                     $this->viewer->setTemplate($this->control_name.'/message.phtml');
                 }
-
         } else {
             $this->link=filterHelper::checkData($this->getData['mailconfirmation']);
             //checking if the link exists and was sent within 1 hour
@@ -434,8 +411,11 @@ class controllers_accountController extends controllers_BaseController
                 $user = $this->model->emailconf($this->link);
                 if ($user)
                     session::instance()->set('id',$user[0]['id']);
-            }else
+            }else{
                 $this->viewer->Msg = $this->viewer->moduleLanguage['wrong_link'];
+                $this->viewer->setTemplate($this->control_name.'/message.phtml');
+            }
+
         }
     }
 
@@ -531,17 +511,4 @@ class controllers_accountController extends controllers_BaseController
         session::instance()->delete('name');
         header('Location:' . HEADPATH_ROOT . 'account/');
     }
-
-//    protected function obCode($tpl=NULL)
-//    {
-//        // getting module
-//        ob_start();
-//        // including file
-//        require "views/$this->contentTpl/".$tpl;
-//        // getting file's html code
-//        $html = ob_get_contents();
-//        ob_end_clean();
-//        // returning "templated" code
-//        return $html;
- //   }
 }

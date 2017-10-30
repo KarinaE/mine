@@ -3,9 +3,9 @@
 <?endif;?>
     <div class="row">
         <div class="col-sm-6">
-            <form class="login-form" method="POST" action="/account/?action=pass_reset">
-                <input type="password" name="new_password" class="login-form-input" placeholder="<?=$this->content['LANGUAGE']['new_pass_line']?>" required>
-                <button type="submit" name="savep" class="btn btn-custom-xs"><?=$this->content['LANGUAGE']['save']?></button>
+            <form class="login-form" method="POST" action="/account/pass_reset">
+                <input type="password" name="new_password" class="login-form-input" placeholder="<?=$this->moduleLanguage['new_pass_line']?>" required>
+                <button type="submit" name="savep" class="btn btn-custom-xs"><?=$this->moduleLanguage['save']?></button>
             </form>
         </div>
     </div>

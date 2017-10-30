@@ -1,23 +1,6 @@
 <?php
 class models_accountModel extends models_BaseModel
 {
-//    // checking image format
-//    private function checkOptionImage($image,$val)
-//    {
-//        // cutting url to format
-//        $value = substr($image, 0, strpos($image, '.'));
-//
-//        // availible formats for image
-//        $formats = array('.jpg','.png','.gif');
-//        //checking file
-//        foreach ($formats as $k => $v)
-//            if(file_exists($_SERVER['DOCUMENT_ROOT'].HEADPATH_ROOT.$value.$val.$v))
-//                return $value.$val.$v;
-//
-//        // if no images selected - returning base value
-//        return $image;
-//    }
-
     public function register($data)
     {   //forming arrays and inserting data to different tables
 
@@ -136,55 +119,6 @@ class models_accountModel extends models_BaseModel
         return $data;
     }
 
-//    public function getDreamBox($id)
-//    {
-//        // order by condition
-//        $order = isset($_GET['order']) ? ' ORDER BY p.'.$_GET['order'] : ' ORDER BY p.status';
-//
-//        $arr = $this->db->dbSel('',
-//            "d.id as dId, p.id, p.cat_img, p.url, p.category, p.name, p.price, p.oldprice, p.description, p.status, c.name AS catname,
-//            c.page, b.name AS brand, substring_index(GROUP_CONCAT(DISTINCT i.smallimg ORDER BY i.main,i.date_add SEPARATOR '|'), '|', 2) AS img,
-//            GROUP_CONCAT(DISTINCT o.option_value SEPARATOR '|') AS option_value",
-//            self::TBL_DRB . ' AS d
-//            LEFT JOIN ' . self::TBL_PRD . ' AS p ON p.id = d.product_id
-//            LEFT JOIN ' . self::TBL_LOB . ' AS l ON l.product_id = p.id
-//            LEFT JOIN ' . self::TBL_CAT . ' AS c ON c.id = p.category
-//            LEFT JOIN ' . self::TBL_SUP . ' AS b ON b.id = p.brand
-//            LEFT JOIN ' . self::TBL_IMG . ' AS i ON i.content_id = p.id AND i.type=2
-//            LEFT JOIN ' . self::TBL_PRA . ' AS o ON o.product_id = p.id',
-//            'WHERE d.client_id = ' . $id,
-//            "GROUP BY p.id" . $order);
-//
-//        foreach ($arr as $k => $v)
-//        {
-//            // main images
-//            $arr[$k]['img'] = explode('|',$v['img']);
-//
-//            // getting product options
-//            if($v['option_value'])
-//                foreach (explode('|',$v['option_value']) as $key => $val)
-//                {
-//                    // making array of used product options
-//                    $options = explode('_',$val);
-//                    foreach($options as $item => $value)
-//                    {
-//                        // always skip first empty item
-//                        if($item !== 0)
-//                        {
-//                            $option = explode('-',$value);
-//                            $arr[$k]['used_params'][$key][$option[0]] = preg_replace('~[^0-9]+~','',$option[1]);
-//
-//                            // getting option images
-//                            foreach ($arr[$k]['img'] as $item => $value)
-//                                $arr[$k]['used_params'][$key]['images'][$item] = $this->checkOptionImage($arr[$k]['img'][$item],$val);
-//                        }
-//                    }
-//                }
-//        }
-//
-//        return $arr;
-//    }
-
     public function socialDataToUser($data)
     {   //forming arrays and updating accounts of existing clients
         $arr = array(
@@ -237,12 +171,6 @@ class models_accountModel extends models_BaseModel
         return $id_client;
     }
 
-//    public function getUsedParameters($ids)
-//    {
-//        return $this->db->dbSel('','DISTINCT(options_array), id, type', self::TBL_OPT,  "WHERE id IN ($ids)");
-//
-//    }
-
     public function passCheck($id)
     {
         return $this->db->select_full("SELECT * FROM ". self::TBL_CLI . " WHERE id = $id",null, Database::RETURN_DATA_ASSOC);
@@ -259,7 +187,7 @@ class models_accountModel extends models_BaseModel
 
     public function activationReset($email, $link)
     {
-        $user = $this->db->select_full('SELECT id_client, first_name FROM '. self::TBL_CLE ." WHERE email = '".$email."'");
+        $user = $this->db->select_full('SELECT id_client, first_name FROM '. self::TBL_CLE ." WHERE email = '".$email."'",null, Database::RETURN_DATA_ASSOC);
         $arr = array(
             'id'=> $user[0]['id_client'],
             'activation' => $link,
