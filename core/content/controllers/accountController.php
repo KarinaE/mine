@@ -2,8 +2,6 @@
 // не существует прямого доступа к фалу
 defined('_ACCESS') or die;
 
-
-
 class controllers_accountController extends controllers_BaseController
 {
     protected $model;
