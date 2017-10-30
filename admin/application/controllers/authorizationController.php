@@ -19,9 +19,10 @@ class controllers_AuthorizationController extends controllers_BaseController
     $auth = new models_Authorization();
     $this->viewer->setLayout('auth');
 
+
     if($auth->loggedAdmin() && $this->request->getAction() != 'logout')
-      $this->viewer->redirect('/');
-    
+        $this->viewer->redirect('/');
+
     $form = new models_check_Auth();
     if($form->checkForm() && !$this->notices->hasError())
     {

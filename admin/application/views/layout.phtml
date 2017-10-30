@@ -33,7 +33,7 @@
             </div>
             <?php echo models_helpers_NavBar::instance()->getNavBar(); ?>
             <div class="userinfo-block">
-                <?=$this->layoutLanguage['login_as']?> <a href="<?php echo $this->user_path.'/users/edit/'.$this->userInfo['id'];?>"><?php echo $this->userInfo['name'];?></a>                
+                <?=$this->layoutLanguage['login_as']?> <?php echo $this->userInfo['name'];?></>
                 <div class="logout"><a href="<?=$this->user_path?>/authorization/logout"> <?=$this->layoutLanguage['exit']?> <img src="<?=IMG?>/logout.png" title="<?=$this->layoutLanguage['exit']?>"/></a></div>
             </div>
             <noscript>

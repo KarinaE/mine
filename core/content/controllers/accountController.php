@@ -146,7 +146,7 @@ class controllers_accountController extends controllers_BaseController
     public function signinAction()
     {
         $email = $this->postData['email'];
-        $password = crypt($this->postData['password'],$this->salt);
+        $password = crypt($this->postData['password'], $this->salt);
         //checking if user exists
         $user_data = $this->model->signIn($email);
 

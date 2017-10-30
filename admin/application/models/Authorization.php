@@ -14,7 +14,7 @@ class models_Authorization extends models_BaseModel
             if($res[0]['status'] == 0)
                 $this->notices->addError($this->message['auth_blocked']);
 
-            if(!self::checkPassw($data->passw, $res[0]['salt'], $res[0]['passw']))
+            if(!self::checkPassw($res[0]['passw'], $data->passw))
                 $this->notices->addError($this->message['auth_notfound']);
 
             if(!$this->notices->hasError())
@@ -23,25 +23,14 @@ class models_Authorization extends models_BaseModel
                     'id' => $res[0]['id'],
                     'login' => $res[0]['login'],
                     'name' => $res[0]['name'],
-                    'vizapassw' => $data->passw,
-                    'passw' => $res[0]['passw'],
+                   // 'vizapassw' => $data->passw,
+                   // 'passw' => $res[0]['passw'],
                     'last_visit' => $res[0]['visit']
                 );
 
-                $prj = new models_Users($userInfo['id']);
-                $prjs = $prj->getUserProjects();
 
                 Session::instance('default')->set('user_logged', 1);
-
-                foreach ($prjs as $v)
-                {
-                  $userInfo['user_types_id'] = $v->user_type_id;
-                  $userInfo['user_types_name'] = $v->user_type;
-                  $userInfo['type'] = $v->user_type_ident;
-                  
-                  Session::instance()->set('admin_userInfo', $userInfo);
-                }
-                
+                Session::instance()->set('admin_userInfo', $userInfo);
                 $this->db->update(self::TBL_USERS, array('last_visit' => date('Y-m-d H:i:s')), 'id = ' . $res[0]['id']);
                 return true;
             }
@@ -68,16 +57,16 @@ class models_Authorization extends models_BaseModel
         return true;
     }
 
-    static public function checkPassw($passw, $salt, $hash)
+    static public function checkPassw($passw, $input_password)
     {
-        return $hash === md5(md5($passw) . $salt);
+        return hash_equals($passw, $input_password);
     }
 
-    static public function generateHash($passw, &$salt, $nosalt = false)
-    {
-        if(!$salt && !$nosalt)
-            $salt = substr(md5(rand()), 0,8);
-
-        return md5(md5($passw) . $salt);
-    }
+//    static public function generateHash($passw, &$salt, $nosalt = false)
+//    {
+//        if(!$salt && !$nosalt)
+//            $salt = substr(md5(rand()), 0,8);
+//
+//        return md5(md5($passw) . $salt);
+//    }
 }

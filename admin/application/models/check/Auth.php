@@ -11,25 +11,25 @@ class models_check_Auth extends models_check_BaseForm
   
   public function checkForm()
   {
-    if( $this->isPost() )
-    {
+      if( $this->isPost() )
+      {
+          $salt = 'aExVwKYfa77xTZC';
+          $login = $this->get('login');
 
-      $login = $this->get('login');
+          if (!$login) $this->notices->addError($this->message['auth_check_login']);
 
-      if (!$login) $this->notices->addError('Поле "login" обязательное!');
+          $passw  = crypt($this->get('passw'),$salt);
+          $check  = $this->get('passw', FILTER_SANITIZE_STRING);
 
-      $passw  = $this->get('passw');
-      $check  = $this->get('passw', FILTER_SANITIZE_STRING);
+          if (!$passw) $this->notices->addError($this->message['auth_check_passw']) ;
+          if (!$check) $this->notices->addError($this->message['auth_check_passw_error']);
 
-      if (!$passw) $this->notices->addError('Поле "Пароль" обязательное!') ;
-      if (!$check) $this->notices->addError('Поле "Пароль" указано не корректно!');
-      
-      $this->addData('login', $login);
-      $this->addData('passw', $passw);
-      return true;
-    }
-    
-    return false;
+          $this->addData('login', $login);
+          $this->addData('passw', $passw);
+          return true;
+      }
+
+        return false;
   }
 }
 ?>

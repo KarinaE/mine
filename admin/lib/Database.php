@@ -86,6 +86,7 @@ class Database
      */
     public function update($table, $data, $condition)
     {
+
       $out = false;
 
       if (is_array($data) && sizeof($data))
