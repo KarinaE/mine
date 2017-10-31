@@ -59,7 +59,7 @@ class models_Authorization extends models_BaseModel
 
     static public function checkPassw($passw, $input_password)
     {
-        return hash_equals($passw, $input_password);
+        return models_helpers_Access::hash_equals($passw, $input_password);
     }
 
 //    static public function generateHash($passw, &$salt, $nosalt = false)
