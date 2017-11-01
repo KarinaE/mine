@@ -1,4 +1,5 @@
 <?php
+
 class models_productModel extends models_BaseModel
 {
     public function getProductsList()
@@ -8,6 +9,7 @@ class models_productModel extends models_BaseModel
         $data = $this->productsOfBrand($data);
         return $data;
     }
+
     public function productsOfBrand($data)
     {
         foreach ($data as $k=>$v) {
@@ -27,5 +29,4 @@ class models_productModel extends models_BaseModel
 
         return $data;
     }
-
 }

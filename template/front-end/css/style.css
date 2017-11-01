@@ -5,6 +5,16 @@ body, html {
 .row{
     margin-top: 20px;
 }
+.btn-secondary.index{
+	background-color: #343a40;
+	border-color: #343a40;
+}
+.btn-secondary.index:hover,
+.btn-secondary.index:focus{
+	background-color: #868e96;
+	border-color: #868e96;
+}
+
 .auth_title{
 	width: 115px;
 	margin-left: 900px;
@@ -372,7 +382,7 @@ a.my-adres{
 	text-decoration: underline;
 }
 .img.myorder{
-	width: 60px;
+	width: 90px;
 	height: 80px;
 }
 

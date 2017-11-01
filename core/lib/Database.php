@@ -74,7 +74,7 @@ class Database
      */
     public function select_full($sql, $returnType = self::RETURN_DATA_NUM, $returnData = self::RETURN_DATA_OBJ, $encode_html = false)
     {
-        //var_dump($sql);
+       // var_dump($sql);
       return $this->proccess($sql, $returnType, $returnData, $encode_html);
     }
 
@@ -127,7 +127,7 @@ class Database
             $upd_vals[] = '`' . $k . '` = VALUES(`' . $k . '`)';
 
           $sql = 'INSERT INTO `' . $table . '` (`' . implode('`,`', array_keys($data)) . '`) VALUES (' . substr(str_repeat('?,', count($data)),0,-1) . ') ON DUPLICATE KEY UPDATE ' . implode(',', $upd_vals);
-          
+
           $res = $this->handle->Execute($sql, $data);
         }
         $this->printError();
@@ -280,11 +280,10 @@ class Database
           case 1:
             die($this->handle->ErrorMsg());
             break;
-//          case 2:
-//            echo '<pre>' . $this->handle->ErrorMsg() . '</pre>';
-//            break;
+          case 2:
+            echo '<pre>' . $this->handle->ErrorMsg() . '</pre>';
+            break;
         }
       }
     }
 }
-?>

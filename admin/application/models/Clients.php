@@ -68,18 +68,21 @@ class models_Clients extends models_BaseModel
     {
         // get orders
         $res = $this->db->select_full('
-            SELECT *, DATE_FORMAT(date_add,"%d-%m-%y %H:%i") AS date_add
-            FROM ' .  self::TBL_ORDERS  . ' 
-            WHERE id_client = ' . $this->id
+            SELECT t1.*, DATE_FORMAT(t1.date_add,"%d-%m-%y %H:%i") AS date_add, t2.first_name, t2.last_name, t3. address, t4.phone
+            FROM ' .  self::TBL_ORDERS  . ' as t1
+            LEFT JOIN ' . self::TBL_CLIENTS_INFO . ' AS t2 ON (t1.id_client = t2.id)
+            LEFT JOIN ' . self::TBL_CLIENTS_ADDRESS . ' AS t3 ON (t1.id_client = t3.id_client)
+            LEFT JOIN ' . self::TBL_CLIENTS_PHONES . ' AS t4 ON (t1.id_client = t4.id_client)
+            WHERE t1.id_client = ' . $this->id
             ,null, null, Database::ENCODE_HTML);
 
         // get order items
         if($res)
             foreach ($res as $k => $v)
                 $res[$k]['orderItems'] = $this->db->select_full('
-                    SELECT t1.*, t2.name AS productname
+                    SELECT t1.*, t2.fashion_name AS productname
                     FROM ' .  self::TBL_ORDER_ITEMS . ' AS t1
-                    LEFT JOIN ' . self::TBL_PRODUCTS . " AS t2 ON (t2.id = t1.product_id) 
+                    LEFT JOIN ' . self::TBL_PARAMETERS . " AS t2 ON (t2.id = t1.product_id) 
                     WHERE order_id='$v[id]'"
                     ,null, null, Database::ENCODE_HTML);
 

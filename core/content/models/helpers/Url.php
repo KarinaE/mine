@@ -12,7 +12,7 @@ class models_helpers_Url
     {
         $res = Database::instance()->select_full('
             SELECT path,admin_folder
-            FROM '.models_BaseModel::TBL_OPT.'
+            FROM '.models_BaseModel::TBL_BOP.'
             WHERE id = 1'
         );
 
@@ -23,7 +23,7 @@ class models_helpers_Url
     {
         $res = Database::instance()->select_full('
             SELECT admin_folder
-            FROM '. models_BaseModel::TBL_OPT.'
+            FROM '. models_BaseModel::TBL_BOP.'
             WHERE id = 1'
         );
 
@@ -34,7 +34,7 @@ class models_helpers_Url
     {
         $res = Database::instance()->select_full('
             SELECT path
-            FROM '. models_BaseModel::TBL_OPT.'
+            FROM '. models_BaseModel::TBL_BOP.'
             WHERE id = 1'
         );
         return $res[0]->path;
@@ -44,7 +44,7 @@ class models_helpers_Url
     {
     $res = Database::instance()->select_full('
             SELECT sitename
-            FROM '. models_BaseModel::TBL_OPT.'
+            FROM '. models_BaseModel::TBL_BOP.'
             WHERE id = 1'
         );
 
@@ -55,7 +55,7 @@ class models_helpers_Url
     {
         $res = Database::instance()->select_full('
             SELECT admin_lang
-            FROM '. models_BaseModel::TBL_OPT.'
+            FROM '. models_BaseModel::TBL_BOP.'
             WHERE id = 1'
         );
 

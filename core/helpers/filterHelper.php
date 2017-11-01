@@ -1,4 +1,4 @@
-<?
+<?php
 // no  direct access
 defined('_ACCESS') or die;
 
@@ -35,7 +35,6 @@ class filterHelper
 
             $data[$key] = $element;
         }
-
         return $data;
     }
 

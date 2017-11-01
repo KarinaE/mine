@@ -46,7 +46,6 @@ class Database
       $this->handle->Execute('set names ' . $charset);
       $this->printError();
     }
-  
 
     /**
      * Получить массив данных в виде $key => $value
@@ -74,6 +73,7 @@ class Database
      */
     public function select_full($sql, $returnType = self::RETURN_DATA_NUM, $returnData = self::RETURN_DATA_OBJ, $encode_html = false)
     {
+       // var_dump($sql);
       return $this->proccess($sql, $returnType, $returnData, $encode_html);
     }
 
@@ -217,8 +217,7 @@ class Database
           $out = $returnData == self::RETURN_DATA_OBJ ? $this->get_data_object($rows, $returnType, $encode_html) : $this->get_data_array($rows, $returnType, $encode_html);
         }
       }
-      
-      
+
       return $out;
     }
 

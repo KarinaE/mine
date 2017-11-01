@@ -22,25 +22,21 @@
     <script type="text/javascript" src="<?=JS?>bootstrap.min.js"></script>
 </head>
 <body>
+
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="/index">Главная</a>
+        <a class="navbar-brand" href="/index"><?=$this->layoutLanguage['main_page']?></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <?php $menu = models_helpers_Menu::instance()->getMenu();?>
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin">Админская часть</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/account">Раздел авторизации</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/product">Сторона сайта</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/additional">Дополнительный функционал</a>
-                </li>
+                <?foreach ($menu as $list):?>
+                    <li class="nav-item">
+                        <?if (($_SERVER['REQUEST_URI'] !== '/index') ? $href = "/index".$list['anchor']: $href = $list['anchor'])?>
+                        <a class="nav-link" href="<?=$href?>"><?=$list['name'];?></a>
+                    </li>
+                <?endforeach;?>
             </ul>
         </div>
     </nav>

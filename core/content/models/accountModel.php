@@ -1,4 +1,5 @@
 <?php
+
 class models_accountModel extends models_BaseModel
 {
     public function register($data)

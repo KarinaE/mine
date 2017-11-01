@@ -4,8 +4,6 @@ defined('_ACCESS') or die;
 
 class controllers_cartController extends controllers_BaseController
 {
-
-
     public function __construct()
     {
         parent::__construct();
@@ -33,6 +31,8 @@ class controllers_cartController extends controllers_BaseController
         $this->viewer->productInfo = $productInfo;
         session::instance()->set('product_image',$productInfo[0]['product_image']);
         session::instance()->set('new_price',$productInfo[0]['new_price']);
+        if (isset ($_SESSION['default']['name']))
+            $this->viewer->customerInfo = $this->model->customerInfo(session::instance()->get('id'));
     }
 
     public function addOrderAction()
@@ -49,10 +49,12 @@ class controllers_cartController extends controllers_BaseController
                 'email'      => $customer['email'],
                 'comment'    => $customer['comment'],
         );
-        if (!$order['customer']['id_client'] = $this->model->checkCustomer($customer['email']))
-        {
+        if ($customer['id_client'] = $this->model->checkCustomer($customer['email'])){
+            if ($this->model->addContactData($customer))
+                $order['customer']['id_client'] = $customer['id_client'];
+        } else
             $order['customer']['id_client'] = $this->model->addNewClient($customer);
-        }
+
         $order['product'] = array(
             'product_id' => session::instance()->get('pr_id'),
             'image'      => session::instance()->get('product_image'),
@@ -64,12 +66,14 @@ class controllers_cartController extends controllers_BaseController
             $this->success();
 
     }
+
     public function success()
     {
         $this->sesDeleteProduct();
         $this->viewer->Msg_sheet = $this->viewer->moduleLanguage['order_complete'];
         $this->viewer->setTemplate($this->control_name.'/message.phtml');
     }
+
     public function cancelAction()
     {
         $this->sesDeleteProduct();

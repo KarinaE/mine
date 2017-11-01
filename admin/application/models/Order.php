@@ -26,6 +26,10 @@ class models_Order extends models_BaseModel
             ORDER BY ' . $filter['sortKey'] . ' ' . $filter['sortOrder'] . '
             LIMIT ' . $offset . ',' . $limit, 
             null, null, Database::ENCODE_HTML);
+
+
+
+
         
         // get order items
         if($res)
@@ -86,57 +90,57 @@ class models_Order extends models_BaseModel
         return $sql;
     }
 
-    public function getOptions()
-    {
-        $res = $this->db->select(self::TBL_PARAMETERS, '*','', null,RETURN_DATA_ASSOC);
-
-        // formatting to array
-        foreach ($res as $val)
-            $arr[$val['id']] = unserialize($val['options_array']);
-
-        return $arr;
-    }
-
-    public function getOption($id)
-    {
-        $res = $this->db->select(self::TBL_PARAMETERS, 'options_array','WHERE id = ' . $id, null,RETURN_DATA_ASSOC);
-
-        return is_array($res) ? unserialize($res[0]['options_array']) : false;
-    }
-
-    public function getProductOption()
-    {
-        $res =  $this->db->select(self::TBL_ORDER_ITEMS, 'options','WHERE id = ' . $this->id, null,RETURN_DATA_ASSOC);
-
-        return is_array($res) ? $res[0] : false;
-    }
-
-    public function getProductData($id)
-    {
-        $res =  $this->db->select(self::TBL_ORDER_ITEMS, 'product_id,options,size,status','WHERE id = ' . $id, null,RETURN_DATA_ASSOC);
-
-        return is_array($res) ? $res[0] : false;
-    }
-
-
-    // getting category childs
-    private function childIds($array,$id)
-    {
-        $list="";
-
-        foreach ($array as $key=>$row)
-        {
-            // echo of childs
-            if ($row['parent_id'] == $id)
-            {
-                $list .= ",".$row['id'];
-                // recursion if parent fot more childs
-                $list .= self::childIds($array, $row['id']);
-            }
-        }
-
-        return $list;
-    }
+//    public function getOptions()
+//    {
+//        $res = $this->db->select_full(self::TBL_PARAMETERS, '*','', null,RETURN_DATA_ASSOC);
+//
+//        // formatting to array
+//        foreach ($res as $val)
+//            $arr[$val['id']] = unserialize($val['options_array']);
+//
+//        return $arr;
+//    }
+//
+//    public function getOption($id)
+//    {
+//        $res = $this->db->select(self::TBL_PARAMETERS, 'options_array','WHERE id = ' . $id, null,RETURN_DATA_ASSOC);
+//
+//        return is_array($res) ? unserialize($res[0]['options_array']) : false;
+//    }
+//
+//    public function getProductOption()
+//    {
+//        $res =  $this->db->select(self::TBL_ORDER_ITEMS, 'options','WHERE id = ' . $this->id, null,RETURN_DATA_ASSOC);
+//
+//        return is_array($res) ? $res[0] : false;
+//    }
+//
+//    public function getProductData($id)
+//    {
+//        $res =  $this->db->select(self::TBL_ORDER_ITEMS, 'product_id,options,size,status','WHERE id = ' . $id, null,RETURN_DATA_ASSOC);
+//
+//        return is_array($res) ? $res[0] : false;
+//    }
+//
+//
+//    // getting category childs
+//    private function childIds($array,$id)
+//    {
+//        $list="";
+//
+//        foreach ($array as $key=>$row)
+//        {
+//            // echo of childs
+//            if ($row['parent_id'] == $id)
+//            {
+//                $list .= ",".$row['id'];
+//                // recursion if parent fot more childs
+//                $list .= self::childIds($array, $row['id']);
+//            }
+//        }
+//
+//        return $list;
+//    }
 
     public function changeStatus($id)
     {
@@ -156,9 +160,9 @@ class models_Order extends models_BaseModel
         return $this->db->update($db[0], $db[1], 'WHERE id=' . $this->id);
     }
 
-    public function updateProductQuantity($upd)
-    {
-        return $this->db->update(self::TBL_PROD_REMAIN, $upd, 'WHERE id=' . $upd['id']);
-    }
+//    public function updateProductQuantity($upd)
+//    {
+//        return $this->db->update(self::TBL_PROD_REMAIN, $upd, 'WHERE id=' . $upd['id']);
+//    }
 }    
 ?>

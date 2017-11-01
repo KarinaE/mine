@@ -39,7 +39,7 @@ class Request
         if($this->controller)
         {
             $this->action = @$this->link[2];
-            $this->path   = @$this->link[3];      
+            $this->path   = @$this->link[3];
         }
     }
     
@@ -49,8 +49,6 @@ class Request
         if($this->controller)
         {
             $filename = str_replace('_', '/', $this->getControllerName()) . '.php';
-
-
 
             if(!file_exists( 'core/content/' . $filename))
             {
@@ -86,12 +84,9 @@ class Request
     
     private function getUri()
     {
-        $uri   = $_SERVER['REQUEST_URI'];
-        
-        $admin = models_helpers_Url::getAdmin();
+        $uri = $_SERVER['REQUEST_URI'];
 
-    
-        return explode('/', substr($uri, strrpos($uri, $admin) + strlen($admin)));
+        return explode('/', $uri);
     }
     
     public function getActionName()

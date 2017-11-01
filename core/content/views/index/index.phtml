@@ -1,32 +1,32 @@
-
 <div class="jumbotron">
     <div class="container">
         <h4 class="display-4"><?=$this->moduleLanguage['title']?></h4>
         <h5><?=$this->moduleLanguage['description']?></h5>
-        <p><a class="download" href="#" role="button" download><?=$this->moduleLanguage['cv_download']?></a></p>
+        <br><p><a class="download"role="button" href="<?=HEADPATH_ROOT?>template/resumeRU.pdf"  target="_blank" download=""><?=$this->moduleLanguage['cv_download']?></a></p>
     </div>
 </div>
 <div class="container">
     <div class="row">
         <div class="col-md-6">
             <h2><?=$this->moduleLanguage['admin_t']?></h2>
-            <p><?=$this->moduleLanguage['admin_d']?></p>
-            <p><a class="btn btn-secondary" href="/admin" role="button"><?=$this->moduleLanguage['details']?> &raquo;</a></p>
+            <p><?=$this->moduleLanguage['admin_d']?> </p>
+            <p><a class="btn btn-secondary index" name ="admin" href="/admin" role="button"><?=$this->moduleLanguage['details']?> &raquo;</a></p>
         </div>
         <div class="col-md-6">
             <h2><?=$this->moduleLanguage['auth_t']?></h2>
             <p><?=$this->moduleLanguage['auth_d']?> </p>
-            <p><a class="btn btn-secondary" href="/account" role="button"><?=$this->moduleLanguage['details']?> &raquo;</a></p>
+            <?if (isset($_SESSION['default']['name'])? $href = "account/account" : $href = "account");?>
+            <p><a class="btn btn-secondary index" name ="account" href="<?=$href?>" role="button"><?=$this->moduleLanguage['details']?> &raquo;</a></p>
         </div>
         <div class="col-md-6">
             <h2><?=$this->moduleLanguage['website_t']?></h2>
             <p><?=$this->moduleLanguage['website_d']?> </p>
-            <p><a class="btn btn-secondary" href="/product" role="button"><?=$this->moduleLanguage['details']?> &raquo;</a></p>
+            <p><a class="btn btn-secondary index" name ="product" href="/product" role="button"><?=$this->moduleLanguage['details']?> &raquo;</a></p>
         </div>
         <div class="col-md-6">
             <h2><?=$this->moduleLanguage['additional_t']?></h2>
             <p><?=$this->moduleLanguage['additional_d']?> </p>
-            <p><a class="btn btn-secondary" href="/additional" role="button"><?=$this->moduleLanguage['details']?> &raquo;</a></p>
+            <p><a class="btn btn-secondary index" name ="additional" href="/additional" role="button"><?=$this->moduleLanguage['details']?> &raquo;</a></p>
         </div>
-    </div>
+    </div> <!-- /row -->
 </div> <!-- /container -->

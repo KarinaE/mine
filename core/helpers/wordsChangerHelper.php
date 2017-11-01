@@ -1,11 +1,10 @@
-<?
+<?php
 // no  direct access
 defined('_ACCESS') or die;
 
 class wordsChangerHelper
 {
     private static $instance;
-
 
     public static function instance()
     {
@@ -14,6 +13,7 @@ class wordsChangerHelper
 
         return self::$instance;
     }
+
     //Counting word # inside the fraze should start with 0
     public function getFraze($fraze, $word_number, $case)
     {

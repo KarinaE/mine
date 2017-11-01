@@ -48,7 +48,6 @@ class controllers_ClientsController extends controllers_BaseController
 
     public function addPhoneAction()
     {
-
         $id = (int)$this->request->getPath();
         if(empty($_POST['phone']))
         {
@@ -148,7 +147,6 @@ class controllers_ClientsController extends controllers_BaseController
                 }
             }
         }
-
         // getting client data
         $this->viewer->data = $form->getData();
         $this->viewer->orders    = $model->getOrders();

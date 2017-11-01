@@ -6,7 +6,6 @@ class models_helpers_Notices
   static private $instance;
 
   private $errors   = array();
-
   private $errors_tpl;
   private $messages_tpl;
   private $warnings_tpl;
@@ -127,7 +126,6 @@ class models_helpers_Notices
     $tmp = Session::instance()->get('messages_warnings');
     return ($tmp && is_array($tmp) && sizeof($tmp)) ? true : false;
   }
-
 
   private function clearMessages()
   {

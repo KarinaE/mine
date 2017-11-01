@@ -1,4 +1,12 @@
 <div class="container">
+    <div class="row">
+        <div class="auth_title">
+            <a href="/account/account">
+                <?=(isset($_SESSION['default']['name'])) ? $this->moduleLanguage['my_acc'] : $this->moduleLanguage['authorization'] ?></a>
+            <a href="/account/logout">
+                <?if (isset ($_SESSION['default']['name'])) echo $this->moduleLanguage['logout'];?></a>
+        </div>
+    </div> <!--row-->
     <h3><?=$this->moduleLanguage['details']?></h3>
     <?foreach ($this->productInfo as $product):?>
         <div class="row">
@@ -28,27 +36,27 @@
                         <div class="col-md-6">
                             <div class="form-group col-md-12">
                                 <label><?=$this->moduleLanguage['fname']?> *</label>
-                                <input type="text" name="f_name" required class="form-control">
+                                <input type="text" name="f_name" required class="form-control" value = "<?=$this->customerInfo[0]['first_name']?>">
                             </div>
                             <div class="form-group col-md-12">
                                 <label><?=$this->moduleLanguage['email']?> *</label>
-                                <input type="email" name="email" required class="form-control">
+                                <input type="email" name="email" required class="form-control" <?if(!empty($this->customerInfo[0]['email'])):?> value="<?=$this->customerInfo[0]['email']?>"<?endif;?> >
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group col-md-12">
                                 <label><?=$this->moduleLanguage['lname']?> *</label>
-                                <input type="text" name="l_name" required class="form-control">
+                                <input type="text" name="l_name" required class="form-control" value = "<?=$this->customerInfo[0]['last_name']?>">
                             </div>
                             <div class="form-group col-md-12">
                                 <label><?=$this->moduleLanguage['phone']?> *</label>
-                                <input type="text" name="phone" required class="form-control">
+                                <input type="text" name="phone" required class="form-control" <?if(!empty($this->customerInfo[0]['phone'])):?> value="<?=$this->customerInfo[0]['phone']?>"<?endif;?> >
                             </div>
                         </div>
                         <div class="form-group col-md-12">
                             <div class="col-md-12">
                                 <label><?=$this->moduleLanguage['address']?> *</label>
-                                <input type="text" name="address"  required class="form-control">
+                                <input type="text" name="address"  required class="form-control" <?if(!empty($this->customerInfo[0]['address'])):?> value="<?=$this->customerInfo[0]['address']?>"<?endif;?> >
                             </div>
                         </div>
                         <div class="form-group col-md-12">

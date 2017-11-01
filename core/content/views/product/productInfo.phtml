@@ -1,4 +1,12 @@
 <div class="container">
+    <div class="row">
+        <div class="auth_title">
+            <a href="/account/account">
+                <?=(isset($_SESSION['default']['name'])) ? $this->moduleLanguage['my_acc'] : $this->moduleLanguage['authorization'] ?></a>
+            <a href="/account/logout">
+                <?if (isset ($_SESSION['default']['name'])) echo $this->moduleLanguage['logout'];?></a>
+        </div>
+    </div> <!--row-->
     <?foreach ($this->productInfo as $product):?>
         <div class="row">
             <div class="col-md-2">

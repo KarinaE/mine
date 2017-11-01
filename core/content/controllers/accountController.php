@@ -1,4 +1,4 @@
-<?
+<?php
 // не существует прямого доступа к фалу
 defined('_ACCESS') or die;
 
@@ -21,7 +21,6 @@ class controllers_accountController extends controllers_BaseController
         'pass_resetAction'      => 'passreset.phtml',
         'deleteAction'          => 'message.phtml',
     );
-
 
     public function __construct()
     {
@@ -195,9 +194,8 @@ class controllers_accountController extends controllers_BaseController
             //getting user info
             $this->viewer->data = $this->model->userData($id);
             $this->viewer->contactData = $this->model->userContactData($id);
+          //  var_dump($this->viewer->contactData); die;
             $this->viewer->orderData = $this->model->userOrderData($id);
-            // getting parameters used with products
-            // $this->getProductOptions();
             //checking if user has set password (there is no pass when entered by soc_id)
             $passCheck = $this->model->passCheck($id);
             $this->viewer->pass = $passCheck[0]['password'];

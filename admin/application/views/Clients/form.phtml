@@ -56,11 +56,7 @@
                             <label><?=$this->moduleLanguage['clients_form_bonuces']?></label>
                             <input type="text" name="bonuces" value="<?=$this->data->_bonuses?>" class="form-control">
                         </div>
-                        <div class="form-group col-md-5">
-                            <label><?=$this->moduleLanguage['clients_form_avatar']?></label>
-                            <input type="text" name="avatar" class="form-control" onclick="openKCFinder(this)" value="<?=$this->data->_image?>" placeholder="<?=$this->moduleLanguage['clients_form_avatar_load']?>">
-                        </div>
-                        <div class="form-group col-md-7">
+                        <div class="form-group col-md-12">
                             <label><?=$this->moduleLanguage['clients_form_comments']?></label>
                             <input type="text" name="comments" class="form-control" value="<?=$this->data->_comments?>" placeholder="<?=$this->moduleLanguage['clients_form_comments_placeholder']?>">
                         </div>
@@ -160,7 +156,7 @@
                                 <tr class="<?=models_helpers_Options::$statusColors[$val['status']]?>">
                                     <td><?=$val['id']?></td>
                                     <td class="middle-size"><i data-db="orders-address" data-type="input" data-id="<?=$val['id']?>"><?=$val['address']?></i></td>
-                                    <td class="middle-size"><b><i data-db="orders-customer" data-type="input" data-id="<?=$val['id']?>"><?=$val['customer'];?></i></b></td>
+                                    <td class="middle-size"><b><i data-db="orders-customer" data-type="input" data-id="<?=$val['id']?>"><?=$val['first_name']." ".$val['last_name'];?></i></b></td>
                                     <td><?=$val['date_add']?></td>
                                     <td><i data-db="orders-comment" data-type="input" data-id="<?=$val['id']?>"><?=$val['comment']?></i></td>
                                     <td><i data-db="orders-price" data-type="input" data-id="<?=$val['id']?>"><?=$val['price']?></i></td>
@@ -175,7 +171,7 @@
                                 <tr class="<?=models_helpers_Options::$statusColors[$v['status']]?>">
                                     <td></td>
                                     <td><img src="<?=$v['image']?>" width="30"/></td>
-                                    <td><?if(!$v['name']):?><a href="/<?=$v['url']?>"><?=$v['productname']?></a><?else:?><?=$v['name']?><?endif;?></td>
+                                    <td><?=$v['productname']?></td>
                                     <td colspan="2"><i data-db="clients_order_items-options" data-type="textarea" data-id="<?=$v['id']?>"><?=$v['options']?></i></td>
                                     <td><i data-db="clients_order_items-price" data-type="input" data-id="<?=$v['id']?>"><?=$v['price']?></i></td>
                                     <td></td>

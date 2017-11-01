@@ -21,7 +21,7 @@ class controllers_orderController extends controllers_BaseController
         parent::indexAction();
 
         // getting product options
-        $this->viewer->options = $this->model->getOptions();
+       // $this->viewer->options = $this->model->getOptions();
 
         $this->viewer->setTemplate($this->control_name.'/index.phtml');
     }

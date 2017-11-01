@@ -1,4 +1,4 @@
-<?
+<?php
 // no  direct access
 defined('_ACCESS') or die;
 
@@ -45,5 +45,4 @@ class translitHelper
         );
         return strtr($str,$tr);
     } // replacing all russian symbols with english, spaces with underscore
-
 }

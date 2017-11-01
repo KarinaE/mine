@@ -9,7 +9,6 @@ class models_Index extends models_BaseModel
         $res = $this->db->select_full('
             SELECT * FROM ' . self::TBL_COMPONENTS . ' WHERE language = "' . $language . '" ORDER BY id DESC', null, Database::RETURN_DATA_ASSOC
         );
-
         return $res;
     }
     
@@ -36,6 +35,7 @@ class models_Index extends models_BaseModel
             (SELECT COUNT(id) FROM ' . self::TBL_CLIENTS_INFO .' WHERE 1)
             ' , null, Database::RETURN_DATA_ASSOC
         );
+        //var_dump($res); die;
 
         return $res;
     }

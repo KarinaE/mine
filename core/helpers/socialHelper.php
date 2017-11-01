@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Karina
- * Date: 12.07.2017
- * Time: 12:29
- */
-
 defined('_ACCESS') or die;
 use Facebook\Facebook;
 use Facebook\FacebookApp;
@@ -13,11 +6,8 @@ use Facebook\Authentication\OAuth2Client;
 
 class socialHelper
 {
-
-
     private static $instance;
 
-    
     public static function instance()
     {
         if (!self::$instance)
@@ -56,7 +46,6 @@ class socialHelper
         $service = new Google_Service_Oauth2($client);
        return $client->createAuthUrl();
     }
-
 
     public function facebook()
 
@@ -179,7 +168,4 @@ class socialHelper
             return $user;
         }
     }
-
-
-
 }

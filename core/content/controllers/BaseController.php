@@ -1,4 +1,4 @@
-<?
+<?php
 // не существует прямого доступа к фалу
 defined('_ACCESS') or die;
 
@@ -18,6 +18,7 @@ class controllers_BaseController{
         $this->notices  = models_helpers_Notices::instance();
         $this->viewer->setTemplateFolder('views/');
         $this->control_name = strtolower($this->request->getController());
+        $this->viewer->layoutLanguage = models_helpers_Language::instance()->getPack('Layout');
         $this->viewer->moduleLanguage = models_helpers_Language::instance()->getPack($this->control_name);
     }
 

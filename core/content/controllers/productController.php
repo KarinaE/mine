@@ -2,18 +2,13 @@
 // не существует прямого доступа к фалу
 defined('_ACCESS') or die;
 
-
-
 class controllers_productController extends controllers_BaseController
 {
-
-
     public function __construct()
     {
         parent::__construct();
         $this->viewer->model = $this->model = new models_productModel();
         $this->datafilter();
-       // session::instance()->reset();
     }
 
 
