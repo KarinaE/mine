@@ -68,6 +68,7 @@ class models_helpers_Access
     {
         if(!function_exists('hash_equals'))
         {
+             echo 2; die;
             function hash_equals($str1, $str2)
             {
                 if(strlen($str1) != strlen($str2))
