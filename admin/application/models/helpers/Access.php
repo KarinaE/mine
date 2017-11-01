@@ -68,7 +68,6 @@ class models_helpers_Access
     {
         if(!function_exists('hash_equals'))
         {
-             echo 2; die;
             function hash_equals($str1, $str2)
             {
                 if(strlen($str1) != strlen($str2))
@@ -86,6 +85,7 @@ class models_helpers_Access
                     return !$ret;
                 }
             }
+            return hash_equals($str1, $str2);
         } else {
             $ret = hash_equals($str1, $str2);
             return $ret;
