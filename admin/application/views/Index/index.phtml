@@ -1,0 +1,67 @@
+<div class="col-md-8 col-md-offset-0">
+    <h3><?=$this->moduleLanguage['shop']?></h3>
+    <ul class="list-group">
+        <?foreach ($this->components as $key => $val):?>
+            <?if ($val['type'] == 'shop'):?>
+                <li class="list-group-item">
+                    <a href="<?=models_helpers_Url::getValidBaseUrl().$val['path']?>">
+                        <img src="<?=IMG . '/components/' . $val['img']?>" width="32" /> <?=$val['name']?>
+                    </a>
+                </li>
+            <?endif;?>
+        <?endforeach;?>
+    </ul>
+    <h3><?=$this->moduleLanguage['clients']?></h3>
+    <ul class="list-group">
+        <?foreach ($this->components as $key => $val):?>
+            <?if ($val['type'] == 'clients'):?>
+                <li class="list-group-item">
+                    <a href="<?=models_helpers_Url::getValidBaseUrl().$val['path']?>">
+                        <img src="<?=IMG . '/components/' . $val['img']?>" width="32" /> <?=$val['name']?>
+                    </a>
+                </li>
+            <?endif;?>
+        <?endforeach;?>
+    </ul>
+</div>
+<div class="col-md-3  col-md-offset-0">
+    <h3><?=$this->moduleLanguage['product_stat']?></h3>
+    <table class="table table-condensed small">
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td><?=$this->moduleLanguage['products_added']?></td>
+                <td><?=$this->Stats[0]["quntity"]?></td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td><?=$this->moduleLanguage['orders_placed']?></td>
+                <td><?=$this->Stats[1]["quntity"]?></td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td><?=$this->moduleLanguage['clients_count']?></td>
+                <td><?=$this->Stats[2]["quntity"]?></td>
+            </tr>
+        </tbody>
+    </table>
+    <h3><?=$this->moduleLanguage['user_stat_last_logins']?></h3>
+    <table class="table table-condensed  small">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th><?=$this->moduleLanguage['user_stat_user']?></th>
+                <th align="center"><?=$this->moduleLanguage['user_stat_last_login']?></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?foreach($this->usersLogs as $key => $val):?>
+            <tr>
+                <th scope="row"><?=$val['id']?></th>
+                <td><?=$val['name']?></td>
+                <td align="center"><?=$val['last_visit']?></td>
+            </tr>
+        <?endforeach;?>
+        </tbody>
+    </table>
+</div>

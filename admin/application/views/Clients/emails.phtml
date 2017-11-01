@@ -1,0 +1,43 @@
+<table class="table table-striped small">
+    <thead>
+    <tr>
+        <th><?=$this->moduleLanguage['clients_form_email_name']?></th>
+        <th><?=$this->moduleLanguage['clients_form_email']?></th>
+        <th><?=$this->moduleLanguage['clients_form_contacts_main']?></th>
+        <th><?=$this->moduleLanguage['clients_form_contacts_action']?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?if($this->emails):?>
+        <?foreach($this->emails as $val):?>
+            <tr>
+                <td><?=$val['first_name']?></td>
+                <td><?=$val['email']?></td>
+                <td><?if($val['is_main'] == 1):?><img width="25" src="<?=IMG?>/check.png"><?endif;?></td>
+                <td><a style="cursor: pointer;" data-pk="<?=$val['id']?>" class="e_del"><?=$this->moduleLanguage['clients_form_contacts_delete']?></a></td>
+            </tr>
+        <?endforeach;?>
+    <?endif;?>
+    </tbody>
+</table>
+<div class="loading emails"></div>
+<script type="text/javascript">
+    $(document).ready(function()
+    {
+        $('a.e_del').click(function()
+        {
+            del_id = $(this).data('pk');
+            $('div.loading.emails').css('display', 'block');
+            $.ajax({
+                url: BASE_URL + '/clients/deleteEmail/' + del_id,
+                success: function(jsonData)
+                {
+                    if(jsonData)
+                        alert(jsonData);
+                    getEmails();
+                },
+                dataType: 'html'
+            });
+        });
+    });
+</script>

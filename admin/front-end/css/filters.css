@@ -1,0 +1,119 @@
+.border-bottom {
+	border-bottom: 2px solid #f8f8fa;
+}
+.filter-title {
+	display: block;
+	width: 100%;
+	font-size: 16px;
+	color: #1d1d1b;
+	font-family: "OpenSansBold";
+	text-transform: uppercase;
+	margin: 0;
+	padding: 15px 20px;
+}
+.size-checkbox + label:before {
+	background: #f0f0f0; /* стр 988*/
+}
+.size-filter {
+	overflow: hidden; /* +стр 966*/
+	display: block;
+	margin: 20px auto 0 auto;
+}
+.size-filter li {
+	float: left;
+	width: 35px;
+	margin-right: 5px;
+	list-style: none;
+}
+.color-checkbox {
+	position: absolute;
+	opacity: 0;
+}
+.color-checkbox + label {
+	position: relative;
+	cursor: pointer;
+	padding: 0;
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+}
+.color-checkbox + label:before {
+	content: '';
+	display: block;
+	vertical-align: text-top;
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	border: 1px solid #acacac;
+}
+.color-checkbox-red + label:before {
+	background: #e30613;
+}
+.color-checkbox-yellow + label:before {
+	background: #fff15f;
+}
+.color-checkbox-blue + label:before {
+	background: #00497f;
+}
+.color-checkbox-grey + label:before {
+	background: #7d7d7d;
+}
+.color-checkbox-green + label:before {
+	background: #009640;
+}
+.color-checkbox-orange + label:before {
+	background: #f39200;
+}
+.color-checkbox-purple + label:before {
+	background: #6455a0;
+}
+.color-checkbox-rose + label:before {
+	background: #e6007e;
+}
+.color-checkbox-light-green + label:before {
+	background: #688816;
+}
+.color-checkbox-white + label:before {
+	background: #fff;
+}
+.color-checkbox-black + label:before {
+	background: #000;
+}
+.color-checkbox-multi + label:before {
+	background: url(../img/multicolor.png) center center no-repeat;
+	background-size: cover;
+}
+.color-checkbox:checked + label:before {
+	border: 3px solid #c9c9c9;
+}
+#optionVal{
+	display: none;
+}
+a.button-option {
+	display: inline-block;
+	margin-left: 50%;
+	font-family: arial,sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	color: rgb(68,68,68);
+	text-decoration: none;
+	user-select: none;
+	padding: .4em 1em;
+	outline: none;
+	border: 1px solid rgba(0,0,0,.1);
+	border-radius: 2px;
+	background: rgb(245,245,245) linear-gradient(#f4f4f4, #f1f1f1);
+	transition: all .218s ease 0s;
+}
+a.button-option:hover {
+	color: rgb(24,24,24);
+	border: 1px solid rgb(198,198,198);
+	background: #f7f7f7 linear-gradient(#f7f7f7, #f1f1f1);
+	box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+a.button-option:active {
+	color: rgb(51,51,51);
+	border: 1px solid rgb(204,204,204);
+	background: rgb(238,238,238) linear-gradient(rgb(238,238,238), rgb(224,224,224));
+	box-shadow: 0 1px 2px rgba(0,0,0,.1) inset;
+}

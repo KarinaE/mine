@@ -1,0 +1,12 @@
+AddDefaultCharset utf-8
+                                 
+RewriteEngine on
+RewriteBase /
+
+php_flag magic_quotes_gpc off
+
+# ���������� �� ������
+RewriteRule ^(front-end) - [L]
+
+RewriteCond  %{SCRIPT_FILENAME} !-f
+RewriteRule ^(.*) admin/index.php?$1 [L,QSA]

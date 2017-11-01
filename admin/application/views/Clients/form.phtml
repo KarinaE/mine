@@ -1,0 +1,345 @@
+<link href="<?=CSS?>/bootstrap-switch.css" rel="stylesheet">
+<link href="<?=CSS?>/chosen.css" rel="stylesheet">
+
+<script src="<?=JS?>/chosen.jquery.js"></script>
+<script src="<?=JS?>/highlight.js"></script>
+<script src="<?=JS?>/bootstrap-switch.js"></script>
+<script src="<?=JS?>/main.js"></script>
+<script src="<?=JS?>/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $(".chosen-select").chosen();
+    });
+</script>
+
+<div class="col-md-7 buttons">
+    <a class="btn btn-primary save" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['clients_save']?></a>
+    <a class="btn btn-success save-exit" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['clients_save_and_exit']?></a>
+    <a class="btn btn-success save-add" data-pk="<?=Request::getCurrentUrl();?>"><?=$this->moduleLanguage['clients_save_and_create']?></a>
+    <a class="btn btn-danger  exit" data-pk="<?php echo models_helpers_Url::getValidBaseUrl().'clients/';?>"><?=$this->moduleLanguage['clients_exit']?></a>
+</div>
+<div class="content-block col-md-12">
+    <form name="editForm" method="POST">
+        <input type="hidden" name="author" value="<?=$this->data->_author ? $this->data->_author : $this->userInfo['id'];?>">
+        <input type="hidden" name="action" value="<?=Request::instance()->getAction();?>">
+        <input type="hidden" name="params" value="<?if($this->params)foreach($this->params as $key => $val):echo $val['id']."|";endforeach;?>">
+        <input type="hidden" name="langs"  value="<?if($this->langs)foreach($this->langs  as $key => $val):echo $val['short_name']."|";endforeach;?>">
+        <div class="tabs">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-1" data-toggle="tab"><?=$this->moduleLanguage['clients_form_tab1']?></a></li>
+                <li><a href="#tab-2" data-toggle="tab"><?=$this->moduleLanguage['clients_form_tab2']?></a></li>
+                <li><a href="#tab-3" data-toggle="tab"><?=$this->moduleLanguage['clients_form_tab3']?></a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab-1">
+                    <div class="col-md-5">
+                        <div class="form-group col-md-6">
+                            <label><?=$this->moduleLanguage['clients_form_name']?></label>
+                            <input type="text" name="name" class="form-control" value="<?=$this->data->_first_name?>" placeholder="<?=$this->moduleLanguage['clients_form_name_placeholder']?>">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label><?=$this->moduleLanguage['clients_form_lname']?></label>
+                            <input type="text" name="lname" class="form-control" value="<?=$this->data->_last_name?>" placeholder="<?=$this->moduleLanguage['clients_form_lname_placeholder']?>">
+                        </div>
+
+                        <div class="form-group col-md-5">
+                            <label><?=$this->moduleLanguage['clients_form_birth_date']?></label>
+                            <input type="date" name="birth_date" class="form-control" value="<?=$this->data->_birth_date?>" placeholder="<?=$this->moduleLanguage['clients_form_birth_date_placeholder']?>">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label><?=$this->moduleLanguage['clients_form_gender']?></label>
+                            <select name="gender" class="form-control">
+                                <?=models_helpers_Options::basicOptions(models_helpers_Options::getGender(),$this->data->_gender,'',$this->moduleLanguage['clients_form_gender_placeholder'])?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label><?=$this->moduleLanguage['clients_form_bonuces']?></label>
+                            <input type="text" name="bonuces" value="<?=$this->data->_bonuses?>" class="form-control">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label><?=$this->moduleLanguage['clients_form_comments']?></label>
+                            <input type="text" name="comments" class="form-control" value="<?=$this->data->_comments?>" placeholder="<?=$this->moduleLanguage['clients_form_comments_placeholder']?>">
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <label class="center-block"><?=$this->moduleLanguage['clients_form_avatar_preview']?></label>
+                            <img width="128" class="img-thumbnail" src="<?=$this->data->_image?>" />
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="col-md-12">
+                            <?if(Request::instance()->getAction() == 'add'):?>
+                                <div class="form-group">
+                                    <label><?=$this->moduleLanguage['clients_form_contacts_warning']?></label>
+                                </div>
+                            <?else:?>
+                                <div class="form-group col-md-3">
+                                    <label><?=$this->moduleLanguage['clients_form_phone_name']?></label>
+                                    <input type="text" name="phname" class="form-control">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label><?=$this->moduleLanguage['clients_form_phone']?></label>
+                                    <input type="text" name="phone" value="<?=$this->data->_phone?>" class="form-control">
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label><?=$this->moduleLanguage['clients_form_contacts_main']?></label>
+                                    <input type="checkbox" name="main_phone">
+                                </div>
+                                <a type="submit" class="btn btn-primary mrg-btn-cnt upload-phone"><?=$this->moduleLanguage['clients_form_contacts_load_button']?></a>
+                                <div id="phones"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group col-md-3">
+                                <label><?=$this->moduleLanguage['clients_form_email_name']?></label>
+                                <input type="text" name="e_name" class="form-control">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label><?=$this->moduleLanguage['clients_form_email']?></label>
+                                <input type="text" name="email" value="<?=$this->data->_email?>" class="form-control">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label><?=$this->moduleLanguage['clients_form_contacts_main']?></label>
+                                <input type="checkbox" name="main_email">
+                            </div>
+                            <a type="submit" class="btn btn-primary mrg-btn-cnt upload-email"><?=$this->moduleLanguage['clients_form_contacts_load_button']?></a>
+                            <div id="emails"></div>
+                            <?endif;?>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="tab-2">
+                    <?if(Request::instance()->getAction() == 'add'):?>
+                        <div class="form-group">
+                            <label><?=$this->moduleLanguage['clients_form_contacts_warning']?></label>
+                        </div>
+                    <?else:?>
+                        <div class="col-md-6">
+                            <div class="col-md-9">
+                                <label><?=$this->moduleLanguage['clients_form_address']?></label>
+                                <input type="text" name="address" value="<?=$this->data->_address?>" class="form-control">
+                            </div>
+                            <a type="submit" class="btn btn-primary mrg-btn-cnt upload-address"><?=$this->moduleLanguage['clients_form_contacts_load_button']?></a>
+                            <div class="col-md-9" id="address"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="col-md-9">
+                                <label><?=$this->moduleLanguage['clients_form_soc_acc']?></label>
+                                <input type="text" name="soc_acc" value="<?=$this->data->_soc_acc?>" class="form-control">
+                            </div>
+                            <a type="submit" class="btn btn-primary mrg-btn-cnt upload-social"><?=$this->moduleLanguage['clients_form_contacts_load_button']?></a>
+                            <div class="col-md-6" id="social"></div>
+                        </div>
+                    <?endif;?>
+                </div>
+
+                <div class="tab-pane" id="tab-3">
+                    <div class="col-md-7">
+                    <?if($this->orders):?>
+                        <table class="table table-hover small orders">
+                            <thead>
+                            <tr>
+                                <th><?=$this->moduleLanguage['clients_order_table_id']?></th>
+                                <th><?=$this->moduleLanguage['clients_order_table_address']?></th>
+                                <th><?=$this->moduleLanguage['clients_order_table_customer']?></th>
+                                <th><?=$this->moduleLanguage['clients_order_table_date']?></th>
+                                <th><?=$this->moduleLanguage['clients_order_table_comment']?></th>
+                                <th><?=$this->moduleLanguage['clients_order_table_price']?></th>
+                                <th><?=$this->moduleLanguage['clients_order_table_status']?></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?foreach($this->orders as $key => $val):?>
+                                <tr class="<?=models_helpers_Options::$statusColors[$val['status']]?>">
+                                    <td><?=$val['id']?></td>
+                                    <td class="middle-size"><i data-db="orders-address" data-type="input" data-id="<?=$val['id']?>"><?=$val['address']?></i></td>
+                                    <td class="middle-size"><b><i data-db="orders-customer" data-type="input" data-id="<?=$val['id']?>"><?=$val['first_name']." ".$val['last_name'];?></i></b></td>
+                                    <td><?=$val['date_add']?></td>
+                                    <td><i data-db="orders-comment" data-type="input" data-id="<?=$val['id']?>"><?=$val['comment']?></i></td>
+                                    <td><i data-db="orders-price" data-type="input" data-id="<?=$val['id']?>"><?=$val['price']?></i></td>
+                                    <td>
+                                        <i data-db="orders-status" data-type="select" data-id="<?=$val['id']?>">
+                                            <?=models_helpers_Options::OrderStatuses($val['status'])?>
+                                        </i>
+                                    </td>
+                                </tr>
+                            <?if($val['orderItems']):?>
+                            <?foreach($val['orderItems'] as $k => $v):?>
+                                <tr class="<?=models_helpers_Options::$statusColors[$v['status']]?>">
+                                    <td></td>
+                                    <td><img src="<?=$v['image']?>" width="30"/></td>
+                                    <td><?=$v['productname']?></td>
+                                    <td colspan="2"><i data-db="clients_order_items-options" data-type="textarea" data-id="<?=$v['id']?>"><?=$v['options']?></i></td>
+                                    <td><i data-db="clients_order_items-price" data-type="input" data-id="<?=$v['id']?>"><?=$v['price']?></i></td>
+                                    <td></td>
+                                </tr>
+                            <?endforeach;?>
+                            <?endif;?>
+                            <?endforeach;?>
+                            <tbody>
+                        </table>
+                        <?else:?>
+                        <label><?=$this->moduleLanguage['clients_form_order_warning']?></label>
+                        <?endif;?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script type="text/javascript">
+    var id = <?=$this->data->_id?>;
+
+    $(document).ready(function()
+    {
+        $('a.upload-phone').on('click', function(e)
+        {
+            e.preventDefault();
+            $('div.loading.phones').css('display', 'block');
+            var data = new FormData();
+            // присвоение данных таблицы для отправки постом
+            data.append('phname', $('input[name="phname"]').val());
+            data.append('phone', $('input[name="phone"]').val());
+            data.append('is_main', $('input[name="main_phone"]').prop('checked'));
+
+
+            $.ajax({
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: data,
+                url: BASE_URL + '/clients/addPhone/' + id,
+                success: function(jsonData)
+                {
+                    if(jsonData)
+                        alert(jsonData);
+                    getPhones();
+                }
+            });
+        });
+
+        $('a.upload-email').on('click', function(e)
+        {
+            e.preventDefault();
+            $('div.loading.emails').css('display', 'block');
+            var data = new FormData();
+            // присвоение данных таблицы для отправки постом
+            data.append('e_name', $('input[name="e_name"]').val());
+            data.append('email', $('input[name="email"]').val());
+            data.append('is_main', $('input[name="main_email"]').prop('checked'));
+
+            $.ajax({
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: data,
+                url: BASE_URL + '/clients/addEmail/' + id,
+                success: function(jsonData)
+                {
+                    if(jsonData)
+                        alert(jsonData);
+                    getEmails();
+                }
+            });
+        });
+        $('a.upload-address').on('click', function(e)
+        {
+            e.preventDefault();
+            $('div.loading.address').css('display', 'block');
+            var data = new FormData();
+            // присвоение данных таблицы для отправки постом
+            data.append('address', $('input[name="address"]').val());
+
+            $.ajax({
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: data,
+                url: BASE_URL + '/clients/addAddress/' + id,
+                success: function(jsonData)
+                {
+                    if(jsonData)
+                        alert(jsonData);
+                    getAddress();
+                }
+            });
+        });
+        $('a.upload-social').on('click', function(e)
+        {
+            e.preventDefault();
+            $('div.loading.social').css('display', 'block');
+            var data = new FormData();
+            // присвоение данных таблицы для отправки постом
+            data.append('soc_acc', $('input[name="soc_acc"]').val());
+
+            $.ajax({
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: data,
+                url: BASE_URL + '/clients/addSocial/' + id,
+                success: function(jsonData)
+                {
+                    if(jsonData)
+                        alert(jsonData);
+                    getSocials();
+                }
+            });
+        });
+
+
+
+
+
+    });
+
+    getPhones();
+    getEmails();
+    getAddress();
+    getSocials();
+
+    // вызов картинок материала
+    function getPhones()
+    {
+        $.get(BASE_URL + '/clients/getPhoneslist/' + id, null, function(data)
+        {
+            $('.col-md-12 #phones').html(data);
+        });
+    }
+
+    function getEmails()
+    {
+        $.get(BASE_URL + '/clients/getEmailslist/' + id, null, function(data)
+        {
+            $('.col-md-12 #emails').html(data);
+        });
+    }
+    function getAddress()
+    {
+        $.get(BASE_URL + '/clients/getAddresslist/' + id, null, function(data)
+        {
+            $('.col-md-6 #address').html(data);
+        });
+    }
+    function getSocials()
+    {
+        $.get(BASE_URL + '/clients/getSocialList/' + id, null, function(data)
+        {
+            $('.col-md-6 #social').html(data);
+        });
+    }
+
+
+//    CKEDITOR.replace( 'content', {
+//        height: 300,
+//        language: '<?//=models_helpers_Url::getConfigLanguage()?>//',
+//
+//        filebrowserImageBrowseUrl: '<?//=JS?>///kcfinder/browse.php?opener=ckeditor&type=images',
+//        filebrowserImageUploadUrl: '<?//=JS?>///kcfinder/upload.php?opener=ckeditor&type=images',
+//    });
+</script>

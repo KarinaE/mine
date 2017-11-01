@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="row">
+        <div class="auth_title">
+            <a href="/account/account">
+                <?=(isset($_SESSION['default']['name'])) ? $this->moduleLanguage['my_acc'] : $this->moduleLanguage['authorization'] ?></a>
+            <a href="/account/logout">
+                <?if (isset ($_SESSION['default']['name'])) echo $this->moduleLanguage['logout'];?></a>
+        </div>
+    </div> <!--row-->
+    <div class="row">
+        <?foreach($this->products as $brand):?>
+        <?if (!empty ($brand['products'])):?>
+            <?foreach ($brand['products'] as $products):?>
+            <div class="col-md-4 col-sm-6">
+                <img src="<?=$products['product_image']?>" class="product" alt="N/A">
+                <p><?=$brand['brand_name']?> <?=$products['product_name']?></p>
+                <p><?=$this->moduleLanguage['product_newprice']?>: <?=$products['new_price']?>$</p>
+                <a href="/product/productInfo/?pid=<?=$products['product_id']?>" class="btn btn-custom-xs product"><?=$this->moduleLanguage['product_add_cart']?></a>
+            </div>
+            <?endforeach;?>
+        <?endif;?>
+        <?endforeach;?>
+    </div> <!--row-->
+</div><!--container-->

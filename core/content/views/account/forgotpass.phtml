@@ -1,0 +1,11 @@
+<?if(@$this->content['msg']):?>
+    <div class="login-form-header"><?=$this->content['msg']?></div>
+<?endif;?>
+<div class="row">
+    <div class="col-sm-4">
+        <form class="form-signin" method="POST" action="/account/forgot_password">
+            <input type="email" name="email" class="login-form-input" placeholder="<?=$this->moduleLanguage['acc_email']?>" required>
+            <button type="submit" name="passreset" class="btn btn-custom-xs"><?=$this->moduleLanguage['reset_password']?></button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,125 @@
+<script>
+    $(function()  {
+
+        //populate our years select box
+        for (i = new Date().getFullYear(); i > 1900; i--){
+            $('#years').append($('<option />').val(i).html(i));
+        }
+        //populate our months select box
+        for (i = 1; i < 13; i++){
+            $('#months').append($('<option />').val(i).html(i));
+        }
+
+        //"listen" for change events
+        $('#years, #months').change(function(){
+            updateNumberOfDays();
+        });
+
+    });
+
+    //function to update the days based on the current values of month and year
+    function updateNumberOfDays(){
+
+        $('#days').html('');
+        month = $('#months').val();
+        year = $('#years').val();
+        days = daysInMonth(month, year);
+
+        for(i=1; i < days+1 ; i++){
+            $('#days').append($('<option />').val(i).html(i));
+        }
+
+    }
+
+    //helper function
+    function daysInMonth(month, year) {
+        return new Date(year, month, 0).getDate();
+    }
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="welcome text-center">
+                <?=$this->moduleLanguage['registration']?>
+            </div>
+        </div>
+    </div> <!--  row -->
+    <div class="row">
+        <?if(@$this->Msg):?>
+            <div class="message text-center"><?=$this->Msg?></div>
+        <?endif;?>
+        <div class="registerform">
+            <form class="login-form reg-form" method="POST">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <a href="<?=$this->link_fb?>" role="button" class="login-form-input facebook-login"></a>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="<?=$this->link_google?>" role="button" class="login-form-input google-login"></a>
+                    </div>
+                </div> <!-- row -->
+                <h3 class="login_title text-center"><?=$this->moduleLanguage['email_register']?></h3>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input type="text" name="first_name" class="login-form-input" placeholder="<?=$this->moduleLanguage['acc_name']?>*" value="<?=(!empty($this->postData))?$this->postData['first_name']:""?>" required>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" name="last_name" class="login-form-input" placeholder="<?=$this->moduleLanguage['acc_lastname']?>*" value="<?=(!empty($this->postData))?$this->postData['last_name']:""?>" required>
+                    </div>
+                    <div class="col-sm-12">
+                        <input type="email" name="email" class="login-form-input" placeholder="<?=$this->moduleLanguage['acc_email']?>*" value="<?=(!empty($this->postData))?$this->postData['email']:""?>" required>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="password" name="password" class="login-form-input" placeholder="<?=$this->moduleLanguage['acc_password']?>*" required>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="password" name="password_check" class="login-form-input" placeholder="<?=$this->moduleLanguage['acc_password_repeat']?>*" required>
+                    </div>
+                    <div class="col-sm-4">
+                        <h5 class="login_title"><?=$this->moduleLanguage['acc_gender']?></h5>
+                    </div>
+                    <div class="col-sm-4 login_title text-center">
+                        <input class="radio-btn" id="radio-btn-1" type="radio" name="gender" value="1" checked>
+                        <label for="radio-btn-1"><?=$this->moduleLanguage['gender_m']?></label>
+                    </div>
+                    <div class="col-sm-4 login_title text-center">
+                        <input class="radio-btn" id="radio-btn-2" type="radio" value="2" name="gender">
+                        <label for="radio-btn-2"><?=$this->moduleLanguage['gender_f']?></label>
+                    </div>
+                    <div class="col-sm-12">
+                        <h5 class="login_title"><?=$this->moduleLanguage['acc_birthday']?></h5>
+                    </div>
+                    <div class="col-sm-4">
+                        <select id="years" name="b_year" class="login-form-input select-date">
+                            <option><?=$this->moduleLanguage['year']?></option>
+
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <select id="months" name="b_month" class="login-form-input select-date">
+                            <option><?=$this->moduleLanguage['month']?></option>
+
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <select id="days" name="b_date" class="login-form-input select-date">
+                            <option ><?=$this->moduleLanguage['day']?></option>
+                        </select>
+                    </div>
+                    <div class="col-sm-12">
+                        <h5 class="login_title"><?=$this->moduleLanguage['phone']?></h5>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="tel" name="phone" class="login-form-input input-phone" placeholder="067*" value="<?=(!empty($this->postData))?$this->postData['phone']:""?>">
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="login_title"><?=$this->moduleLanguage['sms_permission']?></p>
+                    </div>
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-lg register"><?=$this->moduleLanguage['register']?></button>
+                    </div>
+                </div><!-- row -->
+            </form>
+        </div>
+    </div> <!-- row cart-header -->
+</div>
