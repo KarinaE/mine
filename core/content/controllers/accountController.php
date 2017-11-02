@@ -16,7 +16,7 @@ class controllers_accountController extends controllers_BaseController
         'regLinkRefreshAction'  => 'message.phtml',
         'socialButtons'         => 'index.phtml',
         'accountAction'         => 'account.phtml',
-        'signinGoogleAction' => 'account.phtml',
+        'signinGoogleAction'    => 'account.phtml',
         'forgot_passwordAction' => 'forgotpass.phtml',
         'passwordChangeAction'  => 'passwordChange.phtml',
         'pass_resetAction'      => 'passreset.phtml',
