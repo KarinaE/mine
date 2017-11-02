@@ -94,9 +94,9 @@ class socialHelper
             }
 
             // Redirect the user back to the same page if url has "code" parameter in query string
-//            if (isset($_GET['code'])) {
-//                header('Location: ' . filter_var('http://'. $_SERVER['HTTP_HOST'] .'/account/account/', FILTER_SANITIZE_URL));
-//            }
+            if (isset($_GET['code'])) {
+                header('Location: ' . filter_var('http://'. $_SERVER['HTTP_HOST'] .'/account/account', FILTER_SANITIZE_URL));
+            }
             // Getting user facebook profile info
             try {
                 $profileRequest = $fb->get('/me?fields=name,first_name,last_name,email,link,gender,locale,picture');
