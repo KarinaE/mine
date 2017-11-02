@@ -44,6 +44,7 @@ class controllers_accountController extends controllers_BaseController
     public function indexAction()
     {
         parent::indexAction();
+        $this->socialButtons();
     }
 
     public function registerAction()
