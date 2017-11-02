@@ -243,6 +243,7 @@ class controllers_accountController extends controllers_BaseController
 
     private function facebookUser($user)
     {
+         echo "facebook user";
         $gender = ($user['gender']=='m') ? 1 : 2;
         $facebook_data = array(
             'first_name' => $user['first_name'],
@@ -265,6 +266,7 @@ class controllers_accountController extends controllers_BaseController
         } else
             $id = $this->model->addSocialUser($facebook_data); //if user with submitted email does not exist - we add whole profile
 
+        var_dump($id); die;
         //getting user data to set name and id in session
         //contactdata and order data will be taken from account() having SESSION['name']
         $user_data = $this->model->userData($id);
