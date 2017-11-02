@@ -34,5 +34,3 @@ class models_filters_ClientsFilter extends models_filters_BaseFilter
 
     }
 }
-
-?>

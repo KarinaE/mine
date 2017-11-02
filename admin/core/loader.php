@@ -7,6 +7,4 @@ $foo = function($className)
   
   include_once $_className;
 };
-
 spl_autoload_register($foo);
-?>

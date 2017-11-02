@@ -73,7 +73,6 @@ class Database
      */
     public function select_full($sql, $returnType = self::RETURN_DATA_NUM, $returnData = self::RETURN_DATA_OBJ, $encode_html = false)
     {
-       // var_dump($sql);
       return $this->proccess($sql, $returnType, $returnData, $encode_html);
     }
 
@@ -286,4 +285,3 @@ class Database
       }
     }
 }
-?>

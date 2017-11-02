@@ -4,17 +4,13 @@ defined('_ACCESS') or die;
 class Request
 {
     static private $instance;
-    
     private $defaultController = 'index';
     private $defaultAction = 'index';
-    
     private $errorController = 'error';
     private $errorAction = 'error';
-    
     private $controller;
     private $action;
     private $link;
-    
     public $path;
     
     private function __construct()

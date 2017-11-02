@@ -3,7 +3,6 @@ defined('_ACCESS') or die;
 
 class models_Clients extends models_BaseModel
 {
-
     public function getOne()
     {
         $res = $this->db->select_full('
@@ -98,6 +97,7 @@ class models_Clients extends models_BaseModel
             , null, Database::RETURN_DATA_ASSOC);
         return $res;
     }
+
     public function getEmails($id)
     {
         $res = $this->db->select_full('
@@ -107,6 +107,7 @@ class models_Clients extends models_BaseModel
             , null, Database::RETURN_DATA_ASSOC);
         return $res;
     }
+
     public function getAddress($id)
     {
         $res = $this->db->select_full('
@@ -116,6 +117,7 @@ class models_Clients extends models_BaseModel
             , null, Database::RETURN_DATA_ASSOC);
         return $res;
     }
+
     public function getSocial($id)
     {
         $res = $this->db->select_full('

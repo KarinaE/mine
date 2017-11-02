@@ -610,7 +610,6 @@ class ADORecordSet_ado extends ADORecordSet {
 
 		if ($this->hideErrors)  $olde = error_reporting(E_ERROR|E_CORE_ERROR);// sometimes $f->value be null
 		for ($i=0,$max = $this->_numOfFields; $i < $max; $i++) {
-			//echo "<p>",$t,' ';var_dump($f->value); echo '</p>';
 			switch($t) {
 			case 135: // timestamp
 				if (!strlen((string)$f->value)) $this->fields[] = false;

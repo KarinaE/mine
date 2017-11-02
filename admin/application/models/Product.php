@@ -5,7 +5,6 @@ class models_Product extends models_BaseModel
 {
     public function getOne()
     {
-
         $res = $this->db->select_full('
             SELECT *
             FROM ' .  self::TBL_PRODUCTS . '
@@ -40,6 +39,7 @@ class models_Product extends models_BaseModel
 
         return $res;
     }
+
     public function getFashionTypes($res)
     {
         foreach ($res as $k=>$v){

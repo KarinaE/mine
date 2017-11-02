@@ -35,7 +35,6 @@ abstract class controllers_BaseController
         $this->viewer->layoutLanguage = models_helpers_Language::instance()->getPack('Layout');
         $this->viewer->messageLanguage = models_helpers_Language::instance()->getPack('Messages');
         $this->viewer->moduleLanguage = models_helpers_Language::instance()->getPack($this->control_name);
-
         $this->viewer->user_path = models_helpers_Url::getUserPath();
         
         if (!$this->userInfo)
@@ -66,14 +65,7 @@ abstract class controllers_BaseController
         
         $datalist = $model->getCollection($filter);
 
-        
-        $pagesTotal = $model->getCollectionPagesCount($filter);
-        
-        if($filter->getPageCurrent() > $pagesTotal)
-            $this->viewer->redirect($filter->getLinkListingToPage($pagesTotal));
-        
         $this->viewer->filter = $filter;
-        $this->viewer->pagesTotal = $pagesTotal;
         $this->viewer->datalist = $datalist;
         $this->viewer->setTemplate($this->control_name.'/index.phtml');
     }

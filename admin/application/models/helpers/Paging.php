@@ -78,6 +78,4 @@ class models_helpers_Paging{
       return Viewer::instance()->getBuffered($this->paging_tpl);
     }
   }
-
 }
-?>

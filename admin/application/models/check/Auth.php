@@ -3,7 +3,6 @@ defined('_ACCESS') or die;
 
 class models_check_Auth extends models_check_BaseForm
 {
-    
   public function  initDefaults()
   {
     
@@ -30,4 +29,3 @@ class models_check_Auth extends models_check_BaseForm
         return false;
   }
 }
-?>

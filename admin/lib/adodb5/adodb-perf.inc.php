@@ -139,7 +139,6 @@ function adodb_log_sql(&$connx,$sql,$inputarr)
 		if ($prefix) $sql = $prefix.$sql;
 		$arr = array('b'=>strlen($sql).'.'.crc32($sql),
 					'c'=>substr($sql,0,3900), 'd'=>$params,'e'=>$tracer,'f'=>adodb_round($time,6));
-		//var_dump($arr);
 		$saved = $conn->debug;
 		$conn->debug = 0;
 

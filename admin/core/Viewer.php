@@ -133,4 +133,3 @@ class Viewer
     $this->redirect($url);
   }
 }
-?>

@@ -67,4 +67,3 @@ class models_filters_OrderFilter extends models_filters_BaseFilter
         return is_array($ret) ? $ret : array();
     }
 } 
-?>

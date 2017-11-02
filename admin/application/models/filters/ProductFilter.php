@@ -3,7 +3,6 @@ defined('_ACCESS') or die;
 
 class models_filters_ProductFilter extends models_filters_BaseFilter
 {
-
     public function __construct()
     {
         // возможные значения фильтра сортировки
@@ -36,4 +35,3 @@ class models_filters_ProductFilter extends models_filters_BaseFilter
 
     }
 }
-?>

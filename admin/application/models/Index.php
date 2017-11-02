@@ -35,10 +35,6 @@ class models_Index extends models_BaseModel
             (SELECT COUNT(id) FROM ' . self::TBL_CLIENTS_INFO .' WHERE 1)
             ' , null, Database::RETURN_DATA_ASSOC
         );
-        //var_dump($res); die;
-
         return $res;
     }
-    
 }
-?>

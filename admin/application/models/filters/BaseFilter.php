@@ -4,17 +4,13 @@ defined('_ACCESS') or die;
 abstract class models_filters_BaseFilter
 {
     protected $request;
-    
     protected $data;
     protected $link;
     protected $linkArray = array();
-    
     protected $sortKeys;
     protected $sortOrder;
-    
     protected $sortKeysDefault;
     protected $sortOrderDefault;
-    
     protected $onpageDefault;
     protected $pageDefault;
     
@@ -23,13 +19,9 @@ abstract class models_filters_BaseFilter
     public function __construct()
     {
         $this->request = Request::instance();
-        
         $this->onpageDefault = $this->onpageDefault ? $this->onpageDefault : Settings::instance()->getParam(array('main', 'onPageItemsDefault'));
-        
         $this->pageDefault = 1;
-        
         $this->sortOrder = array('asc', 'desc');
-        
         $this->parseFilter();
     }
         
@@ -106,7 +98,4 @@ abstract class models_filters_BaseFilter
     public function getLinkSort( $name ){
         return $this->getLinkExclude('sort') . 'sort/' . $name . (!$this->noSortOrderInLink ? '-' . ($this->data['sortKey'] == $name ? $this->data['linkSortOrderReverse'] : $this->data['linkSortOrderDefault']) : '') . '/';
     }
-  
 }
-  
-?>

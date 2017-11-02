@@ -93,6 +93,7 @@ class controllers_ClientsController extends controllers_BaseController
         $this->model->addEmail($options);
         exit;
     }
+
     public function addAddressAction()
     {
         $id = (int)$this->request->getPath();
@@ -103,6 +104,7 @@ class controllers_ClientsController extends controllers_BaseController
         $this->model->addAddress($options);
         exit;
     }
+
     public function addSocialAction()
     {
         $id = (int)$this->request->getPath();

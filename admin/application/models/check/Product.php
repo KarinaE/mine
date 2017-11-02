@@ -8,7 +8,6 @@ class models_check_Product extends models_check_BaseForm
         $this->addData('name', '');
         $this->addData('image', '');
         $this->addData('author', '');
-
     }
 
     public function checkForm()
@@ -32,4 +31,3 @@ class models_check_Product extends models_check_BaseForm
         return false;
     }
 }
-?>

@@ -13,7 +13,6 @@ class controllers_ProductController extends controllers_BaseController
         $this->viewer->model = $this->model = new models_Product();
     }
 
-
     public function indexAction()
     {
         parent::indexAction();
@@ -38,12 +37,9 @@ class controllers_ProductController extends controllers_BaseController
         $brand_id = (int)$this->request->getPath();
         $options = $this->model->getBrandProducts($brand_id);
 
-
-       // var_dump($_POST); die;
         $options = array('fashion_name' => $_POST['type'], 'price'=> $_POST['price'],
             'discount'=> $_POST['discount'],'brand_id'=> $brand_id,
             'size'=> $_POST['size'], 'order'=> $_POST ['order'], 'image'=>$_POST['img']);
-
 
         $this->model->addOption($options);
         exit;

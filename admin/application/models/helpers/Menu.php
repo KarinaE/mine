@@ -28,7 +28,6 @@ class models_helpers_Menu
     public function printMenu()
     {
         $res = $this->getMenuData();
-      //print_r($res); die;
 
         if (is_array($res))
         {

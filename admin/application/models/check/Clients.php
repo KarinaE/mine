@@ -18,7 +18,6 @@ class models_check_Clients extends models_check_BaseForm
     {
         $action = $this->get('action');
 
-
         if($this->isPost() && $action)
         {
             $fname = $this->get('name');
@@ -38,4 +37,3 @@ class models_check_Clients extends models_check_BaseForm
         return false;
     }
 }
-?>
