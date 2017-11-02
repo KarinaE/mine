@@ -114,7 +114,7 @@ class models_accountModel extends models_BaseModel
         $data = $this->db->select_full('SELECT t1.id as order_id, DATE_FORMAT(t1.date_add,\'%M\') as month, YEAR(t1.date_add) as year, DATE_FORMAT(t1.date_add, "%e.%m.%Y") as date_add, t1.ttl_amount as price, t2.image
                                 FROM '. self::TBL_ORD . ' AS t1                                           
                                 LEFT JOIN ' . self::TBL_ORI .' AS t2 ON (t1.id = t2.order_id)
-                                WHERE t1.id_client = '.$id.'
+                                WHERE t1.id_client = '.$id.' 
                                 ORDER BY date_add ASC',
                                 null, Database::RETURN_DATA_ASSOC);
         return $data;
