@@ -243,7 +243,6 @@ class controllers_accountController extends controllers_BaseController
 
     private function facebookUser($user)
     {
-         echo "facebook user";
         $gender = ($user['gender']=='m') ? 1 : 2;
         $facebook_data = array(
             'first_name' => $user['first_name'],
