@@ -142,7 +142,7 @@ class socialHelper
             $client->authenticate($_GET['code']);
             $_SESSION['access_token'] = $client->getAccessToken();
 
-            header('Location: ' . filter_var('http://'. $_SERVER['HTTP_HOST'] .'/account/account', FILTER_SANITIZE_URL));
+            header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
             exit;
         }
 
