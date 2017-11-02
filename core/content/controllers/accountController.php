@@ -24,7 +24,7 @@ class controllers_accountController extends controllers_BaseController
 
     public function __construct()
     {
-        session::instance()->reset();
+        Session::instance()->reset();
         parent::__construct();
         //initializing model
         $this->viewer->model = $this->model = new models_accountModel();
