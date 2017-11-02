@@ -16,6 +16,7 @@ class controllers_accountController extends controllers_BaseController
         'regLinkRefreshAction'  => 'message.phtml',
         'socialButtons'         => 'index.phtml',
         'accountAction'         => 'account.phtml',
+        'signinGoogleAction' => 'account.phtml',
         'forgot_passwordAction' => 'forgotpass.phtml',
         'passwordChangeAction'  => 'passwordChange.phtml',
         'pass_resetAction'      => 'passreset.phtml',
@@ -182,9 +183,6 @@ class controllers_accountController extends controllers_BaseController
 
     public function signinGoogleAction()
     {
-        if (isset($_SESSION['default']['name']))
-            $this->accountAction();
-        
         //getting user's data from soc acc
         $user= socialHelper::instance()->google();
         //checking if user exists
