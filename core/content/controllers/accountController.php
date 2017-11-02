@@ -194,7 +194,6 @@ class controllers_accountController extends controllers_BaseController
             //getting user info
             $this->viewer->data = $this->model->userData($id);
             $this->viewer->contactData = $this->model->userContactData($id);
-          //  var_dump($this->viewer->contactData); die;
             $this->viewer->orderData = $this->model->userOrderData($id);
             //checking if user has set password (there is no pass when entered by soc_id)
             $passCheck = $this->model->passCheck($id);

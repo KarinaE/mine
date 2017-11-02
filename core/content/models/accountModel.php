@@ -211,14 +211,14 @@ class models_accountModel extends models_BaseModel
         );
         $this->db->update(self::TBL_CLI, $arr, 'WHERE id=' . $arr['id']);
 
-        $user_has_email = $this->db->select_full('SELECT email FROM '. self::TBL_CLE. "WHERE id_client = $id",null, Database::RETURN_DATA_ASSOC);
+        $user_has_email = $this->db->select_full('SELECT email FROM '. self::TBL_CLE. " WHERE id_client = $id",null, Database::RETURN_DATA_ASSOC);
         if (!empty($user_has_email))
         {
             $email = array(
                 'first_name' => $data['first_name'],
                 'email'      => $data['email']
             );
-            $this->db->update(self::TBL_CLE,$email,"WHERE id_client=$id AND is_main=1" );
+            $this->db->update(self::TBL_CLE, $email,'WHERE id_client='.$id.' AND is_main=1');
         } else {
             $email = array(
                 'id_client' => $id,
