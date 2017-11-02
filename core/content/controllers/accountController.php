@@ -268,10 +268,9 @@ class controllers_accountController extends controllers_BaseController
         //getting user data to set name and id in session
         //contactdata and order data will be taken from account() having SESSION['name']
         $user_data = $this->model->userData($id);
-        var_dump($user_data);
+
         Session::instance()->set('name', $user_data[0]['first_name']);
         Session::instance()->set('id', $user_data[0]['id']);
-        var_dump($_SESSION); die;
         header('Location:' . HEADPATH_ROOT . 'account/account');
     }
 
