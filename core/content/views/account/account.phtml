@@ -36,7 +36,7 @@
                             <?else:?>
                                 <p class="personal-info">--</p>
                             <?endif;?>
-                            <p class="personal-info"><?=$this->data[0]['birth_date']?></p>
+                            <p class="personal-info"><?=(!empty($this->data[0]['birth_date'])) ? $this->data[0]['birth_date']: "--"?></p>
                             <p class="personal-info personal-info-email"><?=$this->data[0]['email']?></p>
                         </div>
                         <div class="col-sm-12">
