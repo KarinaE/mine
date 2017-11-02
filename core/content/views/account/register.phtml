@@ -41,14 +41,12 @@
         <div class="col-sm-12">
             <div class="welcome text-center">
                 <?=$this->moduleLanguage['registration']?>
+                <?if(@$this->Msg):?>
+                    <div class="message text-center"><?=$this->Msg?></div>
+                <?endif;?>
             </div>
         </div>
     </div> <!--  row -->
-    <div class="row">
-        <?if(@$this->Msg):?>
-            <div class="message text-center"><?=$this->Msg?></div>
-        <?endif;?>
-    </div>
     <div class="row">
         <div class="registerform">
             <form class="login-form reg-form" method="POST">
