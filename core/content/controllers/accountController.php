@@ -135,8 +135,8 @@ class controllers_accountController extends controllers_BaseController
             $user = $this->model->emailconf ($link);
         if (isset($user))
         {
-            session::instance()->set('name',$user[0]['first_name']);
-            session::instance()->set('id',$user[0]['id']);
+            Session::instance()->set('name',$user[0]['first_name']);
+            Session::instance()->set('id',$user[0]['id']);
             $this->viewer->Msg_sheet = $this->viewer->moduleLanguage['confirmation_complete'];
 
         } else
@@ -162,8 +162,8 @@ class controllers_accountController extends controllers_BaseController
                 $this->viewer->setTemplate($this->control_name.'/message.phtml');
             } else {
                 //if user confirmed reg  - redirecting to his acc
-                session::instance()->set('name', $user_data[0]['first_name']);
-                session::instance()->set('id', $user_data[0]['id']);
+                Session::instance()->set('name', $user_data[0]['first_name']);
+                Session::instance()->set('id', $user_data[0]['id']);
                 Viewer::instance()->redirect('/account/account');
             }
         } else {
@@ -191,7 +191,7 @@ class controllers_accountController extends controllers_BaseController
     {
         if (isset($_SESSION['default']['name']))
         {
-            $id = session::instance()->get('id');
+            $id = Session::instance()->get('id');
             //getting user info
             $this->viewer->data = $this->model->userData($id);
             $this->viewer->contactData = $this->model->userContactData($id);
@@ -223,8 +223,8 @@ class controllers_accountController extends controllers_BaseController
             //getting user data to set name and id in session
             //contactdata and order data will be taken from account() having SESSION['name']
             $this->viewer->data = $this->model->userData($user_exist_soc[0]['id_client']);
-            session::instance()->set('name',  $this->viewer->data[0]['first_name']);
-            session::instance()->set('id',  $this->viewer->data[0]['id']);
+            Session::instance()->set('name',  $this->viewer->data[0]['first_name']);
+            Session::instance()->set('id',  $this->viewer->data[0]['id']);
         } else {
             ////email is not always in fb profile
             if (isset($user['email']))
@@ -269,8 +269,8 @@ class controllers_accountController extends controllers_BaseController
         //getting user data to set name and id in session
         //contactdata and order data will be taken from account() having SESSION['name']
         $user_data = $this->model->userData($id);
-        session::instance()->set('name', $user_data['first_name']);
-        session::instance()->set('id', $user_data['id']);
+        Session::instance()->set('name', $user_data['first_name']);
+        Session::instance()->set('id', $user_data['id']);
         header('Location:' . HEADPATH_ROOT . 'account/account');
     }
 
@@ -298,14 +298,14 @@ class controllers_accountController extends controllers_BaseController
         //getting user data to set name and id in session
         //contactdata and order data will be taken from account() having SESSION['name']
         $user_data = $this->model->userData($id);
-        session::instance()->set('name', $user_data['first_name']);
-        session::instance()->set('id', $user_data['id']);
+        Session::instance()->set('name', $user_data['first_name']);
+        Session::instance()->set('id', $user_data['id']);
         header('Location:' . HEADPATH_ROOT . 'account/account');
     }
 
     public function passwordChangeAction()
     {
-        $id= session::instance()->get('id');
+        $id= Session::instance()->get('id');
         //getting user's pass (if not empty; can be empty when entered with soc. acc.)
         $passCheck = $this->model->passCheck($id);
         $this->pass = $passCheck[0]['password'];
@@ -338,7 +338,7 @@ class controllers_accountController extends controllers_BaseController
 
     private function setPassword()
     {
-        $id= session::instance()->get('id');
+        $id= Session::instance()->get('id');
         //getting user's pass (if not empty; can be empty when entered with soc. acc.)
         $passCheck = $this->model->passCheck($id);
         $this->pass = $passCheck[0]['password'];
@@ -389,7 +389,7 @@ class controllers_accountController extends controllers_BaseController
     {
         if ($this->postData)
         {
-            $id= session::instance()->get('id');
+            $id= Session::instance()->get('id');
             $password = crypt($this->postData['new_password'], $this->salt);
             if (isset ($id))
                 if ($this->model->passwordChange($password, $id))
@@ -406,7 +406,7 @@ class controllers_accountController extends controllers_BaseController
                 // changing user activation status to 1 using link in email
                 $user = $this->model->emailconf($this->link);
                 if ($user)
-                    session::instance()->set('id',$user[0]['id']);
+                    Session::instance()->set('id',$user[0]['id']);
             }else{
                 $this->viewer->Msg = $this->viewer->moduleLanguage['wrong_link'];
                 $this->viewer->setTemplate($this->control_name.'/message.phtml');
@@ -419,7 +419,7 @@ class controllers_accountController extends controllers_BaseController
     {
         //getting all user's data to enable tab-panels out of ?action=editInfo
         $this->accountAction();
-        $id= session::instance()->get('id');
+        $id= Session::instance()->get('id');
         if ($this->postData) //if user changed some info
         {
             $this->postData['birth_date'] = $this->postData['b_year'] . '-' . $this->postData['b_month'] . '-' . $this->postData['b_date'];
@@ -440,8 +440,8 @@ class controllers_accountController extends controllers_BaseController
         if(!empty($this->postData))
         {
             $data = array(
-                'id'         => session::instance()->get('id'),
-                'first_name' => session::instance()->get('name'),
+                'id'         => Session::instance()->get('id'),
+                'first_name' => Session::instance()->get('name'),
                 'id_tel'     => $this->getData['prec'],
                 'phone'      => $this->postData['phone'],
                 'id_addr'    => $this->getData['arec'],
@@ -472,8 +472,8 @@ class controllers_accountController extends controllers_BaseController
         $this->accountAction();
         if(!empty($this->postData))
         {
-            $this->postData['id'] = session::instance()->get('id');
-            $this->postData['first_name'] = session::instance()->get('name');
+            $this->postData['id'] = Session::instance()->get('id');
+            $this->postData['first_name'] = Session::instance()->get('name');
             if ($this->model->addContactData($this->postData))
                 header('Location:' . HEADPATH_ROOT . 'account/account');
         }
@@ -493,18 +493,18 @@ class controllers_accountController extends controllers_BaseController
         if(!isset($this->postData['delete'])) //setting warning message that account and all data will be deleted
             $this->viewer->Msg_sheet = $this->viewer->moduleLanguage['warning_account_deleted'];
         else {
-            $id = session::instance()->get('id');
+            $id = Session::instance()->get('id');
             $this->viewer->data = $this->model->deleteUser($id);
-            session::instance()->delete('id');
-            session::instance()->delete('name');
+            Session::instance()->delete('id');
+            Session::instance()->delete('name');
             $this->viewer->Msg_sheet = $this->viewer->moduleLanguage['account_deleted'];
         }
     }
 
     public function logoutAction()
     {
-        session::instance()->delete('id');
-        session::instance()->delete('name');
+        Session::instance()->delete('id');
+        Session::instance()->delete('name');
         header('Location:' . HEADPATH_ROOT . 'account/');
     }
 }

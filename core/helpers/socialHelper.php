@@ -102,7 +102,6 @@ class socialHelper
                 $profileRequest = $fb->get('/me?fields=name,first_name,last_name,email,link,gender,locale,picture');
                 $fbUserProfile = $profileRequest->getGraphNode()->asArray();
                 $fbUserProfile['network']='facebook';
-                var_dump( $fbUserProfile); die;
                 return $fbUserProfile;
 
             } catch (Facebook\Exceptions\FacebookResponseException $e) {
