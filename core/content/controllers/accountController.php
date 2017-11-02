@@ -24,7 +24,6 @@ class controllers_accountController extends controllers_BaseController
 
     public function __construct()
     {
-        Session::instance()->reset();
         parent::__construct();
         //initializing model
         $this->viewer->model = $this->model = new models_accountModel();
@@ -191,7 +190,6 @@ class controllers_accountController extends controllers_BaseController
     {
         if (isset($_SESSION['default']['name']))
         {
-             echo 2;
             $id = Session::instance()->get('id');
             //getting user info
             $this->viewer->data = $this->model->userData($id);
@@ -201,7 +199,6 @@ class controllers_accountController extends controllers_BaseController
             $passCheck = $this->model->passCheck($id);
             $this->viewer->pass = $passCheck[0]['password'];
         } else {
-            echo 4;
             $this->viewer->setTemplate($this->control_name.'/index.phtml');
             $this->socialButtons();
         }
@@ -271,8 +268,10 @@ class controllers_accountController extends controllers_BaseController
         //getting user data to set name and id in session
         //contactdata and order data will be taken from account() having SESSION['name']
         $user_data = $this->model->userData($id);
+        var_dump($user_data);
         Session::instance()->set('name', $user_data['first_name']);
         Session::instance()->set('id', $user_data['id']);
+        var_dump($_SESSION); die;
         header('Location:' . HEADPATH_ROOT . 'account/account');
     }
 
