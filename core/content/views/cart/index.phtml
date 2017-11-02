@@ -16,7 +16,7 @@
             <div class="col-md-6">
                 <p><?=$product['product_name']?></p>
                 <p><?=$this->moduleLanguage['cart_product_new_price']?>: <?=$product['new_price']?>$</p>
-                <p><?=$this->moduleLanguage['cart_product_size']?>: <?=session::instance()->get('size');?></p>
+                <p><?=$this->moduleLanguage['cart_product_size']?>: <?=Session::instance()->get('size');?></p>
                 <a class="btn btn-custom-xs product">
                     <p data-toggle="modal" data-target="#checkout"><?=$this->moduleLanguage['buy']?></p>
                 </a>

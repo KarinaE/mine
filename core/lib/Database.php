@@ -74,7 +74,6 @@ class Database
      */
     public function select_full($sql, $returnType = self::RETURN_DATA_NUM, $returnData = self::RETURN_DATA_OBJ, $encode_html = false)
     {
-      //  var_dump($sql);
       return $this->proccess($sql, $returnType, $returnData, $encode_html);
     }
 
@@ -280,9 +279,9 @@ class Database
           case 1:
             die($this->handle->ErrorMsg());
             break;
-//          case 2:
-//            echo '<pre>' . $this->handle->ErrorMsg() . '</pre>';
-//            break;
+          case 2:
+            echo '<pre>' . $this->handle->ErrorMsg() . '</pre>';
+            break;
         }
       }
     }

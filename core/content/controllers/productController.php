@@ -32,8 +32,8 @@ class controllers_productController extends controllers_BaseController
     {
        $product_id = $this->getData['pid'];
        $this->viewer->productInfo = $this->model->getProductInfo($product_id);
-       session::instance()->set('pr_id',$product_id);
-       session::instance()->set('size',$this->viewer->productInfo[0]['size']);
+       Session::instance()->set('pr_id',$product_id);
+       Session::instance()->set('size',$this->viewer->productInfo[0]['size']);
 
     }
 }
