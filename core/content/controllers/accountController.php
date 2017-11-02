@@ -181,7 +181,11 @@ class controllers_accountController extends controllers_BaseController
     }
 
     public function signinGoogleAction()
-    {   //getting user's data from soc acc
+    {
+        if (isset($_SESSION['default']['name']))
+            $this->accountAction();
+        
+        //getting user's data from soc acc
         $user= socialHelper::instance()->google();
         //checking if user exists
         $this->socialCheck($user);
