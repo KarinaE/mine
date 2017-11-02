@@ -27,7 +27,7 @@ class socialHelper
         $helper = $fb->getRedirectLoginHelper();
 
         $permissions = ['email']; // Optional permissions
-        return $helper->getLoginUrl('http://'. $_SERVER['HTTP_HOST'] .'/account/signinFacebook', $permissions);
+        return $helper->getLoginUrl('http://'. $_SERVER['HTTP_HOST'] .'/account/signinFacebook/', $permissions);
 
     }
 
@@ -35,7 +35,7 @@ class socialHelper
     {
         $client_id = "260082803045-08ppmrcqi8qaqi5kji6qtfmsdde48io2.apps.googleusercontent.com";
         $client_secret = "GtcSHNuhnfbsqUaLxWta1mbK";
-        $redirect_uri = 'http://'. $_SERVER['HTTP_HOST'] .'/account/signinGoogle';
+        $redirect_uri = 'http://'. $_SERVER['HTTP_HOST'] .'/account/signinGoogle/';
 
         $client = new Google_Client();
         $client->setClientId($client_id);
@@ -95,7 +95,7 @@ class socialHelper
 
             // Redirect the user back to the same page if url has "code" parameter in query string
             if (isset($_GET['code'])) {
-                header('Location: ' . filter_var('http://'. $_SERVER['HTTP_HOST'] .'/account/', FILTER_SANITIZE_URL));
+                header('Location: ' . filter_var('http://'. $_SERVER['HTTP_HOST'] .'/account/account', FILTER_SANITIZE_URL));
             }
             // Getting user facebook profile info
             try {
@@ -108,7 +108,7 @@ class socialHelper
                 echo 'Graph returned an error: ' . $e->getMessage();
                 session_destroy();
                 // Redirect user back to app login page
-                header("Location: http://". $_SERVER['HTTP_HOST'] ."/account/?action=login");
+                header("Location: http://". $_SERVER['HTTP_HOST'] ."/account");
                 exit;
             } catch (Facebook\Exceptions\FacebookSDKException $e) {
                 echo 'Facebook SDK returned an error: ' . $e->getMessage();
@@ -123,7 +123,7 @@ class socialHelper
     {
         $client_id = "260082803045-08ppmrcqi8qaqi5kji6qtfmsdde48io2.apps.googleusercontent.com";
         $client_secret = "GtcSHNuhnfbsqUaLxWta1mbK";
-        $redirect_uri = 'http://'. $_SERVER['HTTP_HOST'] .'/account/?action=signinGoogle';
+        $redirect_uri = 'http://'. $_SERVER['HTTP_HOST'] .'/account/signinGoogle/';
 
         $client = new Google_Client();
         $client->setClientId($client_id);
