@@ -191,6 +191,7 @@ class controllers_accountController extends controllers_BaseController
     {
         if (isset($_SESSION['default']['name']))
         {
+             echo 2;
             $id = Session::instance()->get('id');
             //getting user info
             $this->viewer->data = $this->model->userData($id);
@@ -200,6 +201,7 @@ class controllers_accountController extends controllers_BaseController
             $passCheck = $this->model->passCheck($id);
             $this->viewer->pass = $passCheck[0]['password'];
         } else {
+            echo 4;
             $this->viewer->setTemplate($this->control_name.'/index.phtml');
             $this->socialButtons();
         }
