@@ -270,7 +270,7 @@ class controllers_accountController extends controllers_BaseController
 
         var_dump($id);
         $user_data = $this->model->userData($id);
-        var_dump($user_data);
+        var_dump($user_data);die;
         session::instance()->set('name', $user_data['first_name']);
         session::instance()->set('id', $user_data['id']);
         header('Location:' . HEADPATH_ROOT . 'account/account');
