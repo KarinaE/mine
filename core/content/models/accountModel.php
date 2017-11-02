@@ -141,7 +141,7 @@ class models_accountModel extends models_BaseModel
 
     public function addSocialUser($data)
     {   //forming arrays and inserting data to different tables
-
+        echo "adding social user";
         $arr = array(
             'first_name'  => $data['first_name'],
             'last_name'   => $data['last_name'],
@@ -169,6 +169,7 @@ class models_accountModel extends models_BaseModel
             );
             $this->db->insert(self::TBL_CLE,$email, true);
         }
+        var_dump($id_client);
         return $id_client;
     }
 
