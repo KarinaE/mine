@@ -27,7 +27,7 @@ class socialHelper
         $helper = $fb->getRedirectLoginHelper();
 
         $permissions = ['email']; // Optional permissions
-        return $helper->getLoginUrl('http://'. $_SERVER['HTTP_HOST'] .'/account/?action=signinFacebook', $permissions);
+        return $helper->getLoginUrl('http://'. $_SERVER['HTTP_HOST'] .'/account/signinFacebook', $permissions);
 
     }
 
@@ -35,7 +35,7 @@ class socialHelper
     {
         $client_id = "260082803045-08ppmrcqi8qaqi5kji6qtfmsdde48io2.apps.googleusercontent.com";
         $client_secret = "GtcSHNuhnfbsqUaLxWta1mbK";
-        $redirect_uri = 'http://'. $_SERVER['HTTP_HOST'] .'/account/?action=signinGoogle';
+        $redirect_uri = 'http://'. $_SERVER['HTTP_HOST'] .'/account/signinGoogle';
 
         $client = new Google_Client();
         $client->setClientId($client_id);
