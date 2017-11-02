@@ -24,7 +24,6 @@ class controllers_accountController extends controllers_BaseController
 
     public function __construct()
     {
-         echo "HEllo"; 
         parent::__construct();
         //initializing model
         $this->viewer->model = $this->model = new models_accountModel();
@@ -150,7 +149,7 @@ class controllers_accountController extends controllers_BaseController
         //checking if user exists
         $user_data = $this->model->signIn($email);
 
-        if ($user_data and hash_equals($user_data[0]['password'],$password))
+        if ($user_data and models_helpers_Access::hash_equals($user_data[0]['password'],$password))
         {
             //if user has not confirmed his registration via email, account will not appear
             if ($user_data[0]['activation'] !== '1')
@@ -316,7 +315,7 @@ class controllers_accountController extends controllers_BaseController
                 // if user has password we have to check it against what he entered
                 $password = crypt($this->postData['existing_password'], $this->salt);
 
-                if (hash_equals($this->pass, $password)) //if pasword entered matches one in db
+                if (models_helpers_Access::hash_equals($this->pass, $password)) //if pasword entered matches one in db
                 {
                     if ($this->postData['new_password']==$this->postData['password_check']) //if new pass entered and confirmed correctly
                     {

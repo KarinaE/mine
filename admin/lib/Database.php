@@ -279,9 +279,9 @@ class Database
           case 1:
             die($this->handle->ErrorMsg());
             break;
-//          case 2:
-//            echo '<pre>' . $this->handle->ErrorMsg() . '</pre>';
-//            break;
+          case 2:
+            echo '<pre>' . $this->handle->ErrorMsg() . '</pre>';
+            break;
         }
       }
     }
