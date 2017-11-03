@@ -50,10 +50,17 @@ class controllers_cartController extends controllers_BaseController
                 'comment'    => $customer['comment'],
         );
         if ($customer['id_client'] = $this->model->checkCustomer($customer['email'])){
-            if ($this->model->addContactData($customer))
+            if ($res = $this->model->addContactData($customer)){
                 $order['customer']['id_client'] = $customer['id_client'];
-        } else
-            $order['customer']['id_client'] = $this->model->addNewClient($customer);
+                $order['customer']['id_tel'] = $res['id_tel'];
+                $order['customer']['id_addr'] = $res['id_addr'];
+            }
+        } else {
+            $res = $this->model->addNewClient($customer);
+            $order['customer']['id_client'] =$res[0]['id_client'];
+            $order['customer']['id_tel'] = $res[0]['id_tel'];
+            $order['customer']['id_addr'] = $res[0]['id_addr'];
+        }
 
         $order['product'] = array(
             'product_id' => Session::instance()->get('pr_id'),
@@ -61,10 +68,8 @@ class controllers_cartController extends controllers_BaseController
             'price'      => Session::instance()->get('new_price'),
             'size'       => Session::instance()->get('size')
         );
-
         if(!empty($this->model->addOrder($order)))
             $this->success();
-
     }
 
     public function success()

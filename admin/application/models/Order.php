@@ -19,9 +19,9 @@ class models_Order extends models_BaseModel
             t3.id AS t3id, t3.phone, t4.id AS t4id, t4.email, t5.id AS t5id, t5.address
             FROM ' .  self::TBL_ORDERS . ' AS t1 
             LEFT JOIN ' . self::TBL_CLIENTS_INFO . ' AS t2 ON t1.id_client = t2.id 
-            LEFT JOIN ' . self::TBL_CLIENTS_PHONES . ' AS t3 ON (t3.id_client = t2.id) AND t3.is_main = 1
+            LEFT JOIN ' . self::TBL_CLIENTS_PHONES . ' AS t3 ON (t3.id_client = t2.id) AND t1.id_tel = t3.id
             LEFT JOIN ' . self::TBL_CLIENTS_EMAILS . ' AS t4 ON (t4.id_client = t2.id) AND t4.is_main = 1
-            LEFT JOIN ' . self::TBL_CLIENTS_ADDRESS . ' AS t5 ON (t5.id_client = t2.id) AND t5.is_main = 1
+            LEFT JOIN ' . self::TBL_CLIENTS_ADDRESS . ' AS t5 ON (t5.id_client = t2.id) AND t1.id_addr = t5.id
             WHERE 1 ' . $where . '
             ORDER BY ' . $filter['sortKey'] . ' ' . $filter['sortOrder'] . '
             LIMIT ' . $offset . ',' . $limit, 

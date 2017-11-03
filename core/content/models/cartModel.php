@@ -25,6 +25,8 @@ class models_cartModel extends models_BaseModel
     {
         $ord = array(
             'id_client' => $order['customer']['id_client'],
+            'id_tel'    => $order['customer']['id_tel'],
+            'id_addr'   => $order['customer']['id_addr'],
             'comment'   => $order['customer']['comment'],
             'ttl_amount'=> $order['product']['price'],
             'date_add'  => date("Y-m-d H:i:s", time()),
@@ -91,12 +93,18 @@ class models_cartModel extends models_BaseModel
         );
         $this->db->insert(self::TBL_CCR,$ccr, true);
 
-        return $id_client;
+        $res = array(
+            'id_client' => $id_client,
+            'id_tel'    => $id_tel,
+            'id_addr'   => $id_ad
+        );
+
+        return $res;
     }
 
     public function addContactData($data)
     {
-        $has_main_phone= $this->db->select_full('SELECT id FROM ' . self::TBL_CCR. " WHERE id_client = '".$data['id_client']."' AND is_main=1");
+        $has_main_phone= $this->db->select_full('SELECT id FROM ' . self::TBL_CLP. " WHERE id_client = '".$data['id_client']."' AND is_main=1");
         $is_main_ph = (!empty ($has_main_phone))? 2 : 1;
         $phone = array(
             'id_client'  => $data['id_client'],
@@ -108,7 +116,7 @@ class models_cartModel extends models_BaseModel
 
         $id_tel= (!empty($inserted_phone))? $inserted_phone : NULL;
 
-        $has_main_address= $this->db->select_full('SELECT id FROM '. self::TBL_CCR ." WHERE id_client = '".$data['id']."' AND is_main=1");
+        $has_main_address= $this->db->select_full('SELECT id FROM '. self::TBL_CCR ." WHERE id_client = '".$data['id_client']."' AND is_main=1");
         $is_main_ad = (!empty ($has_main_address))? 2 : 1;
         $address = array(
         'id_client' => $data['id_client'],
@@ -124,7 +132,12 @@ class models_cartModel extends models_BaseModel
         'is_main' => $is_main_ad
         );
         $this->db->insert(self::TBL_CCR,$ccr, true);
-        return true;
+
+        $res = array(
+            'id_tel'  => $id_tel,
+            'id_addr' => $id_ad
+        );
+        return $res;
     }
 
 }
