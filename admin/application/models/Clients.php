@@ -69,9 +69,9 @@ class models_Clients extends models_BaseModel
         $res = $this->db->select_full('
             SELECT t1.*, DATE_FORMAT(t1.date_add,"%d-%m-%y %H:%i") AS date_add, t2.first_name, t2.last_name, t3. address, t4.phone
             FROM ' .  self::TBL_ORDERS  . ' as t1
-            LEFT JOIN ' . self::TBL_CLIENTS_INFO . ' AS t2 ON (t1.id_client = t2.id)
-            LEFT JOIN ' . self::TBL_CLIENTS_ADDRESS . ' AS t3 ON (t1.id_client = t3.id_client)
-            LEFT JOIN ' . self::TBL_CLIENTS_PHONES . ' AS t4 ON (t1.id_client = t4.id_client)
+            LEFT JOIN ' . self::TBL_CLIENTS_INFO . ' AS t2 ON (t1.id_client = t2.id) 
+            LEFT JOIN ' . self::TBL_CLIENTS_ADDRESS . ' AS t3 ON (t1.id_client = t3.id_client) AND t1.id_addr = t3.id
+            LEFT JOIN ' . self::TBL_CLIENTS_PHONES . ' AS t4 ON (t1.id_client = t4.id_client) AND t1.id_tel = t4.id
             WHERE t1.id_client = ' . $this->id
             ,null, null, Database::ENCODE_HTML);
 
