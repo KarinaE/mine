@@ -29,9 +29,9 @@ class models_Index extends models_BaseModel
     {
         $res = $this->db->select_full('
             (SELECT COUNT(id) as quntity FROM ' . self::TBL_PARAMETERS  .' WHERE 1)
-            UNION
+            UNION ALL
             (SELECT COUNT(id) FROM ' . self::TBL_ORDERS .' WHERE MONTH(date_add) = MONTH(CURRENT_DATE()))
-            UNION
+            UNION ALL
             (SELECT COUNT(id) FROM ' . self::TBL_CLIENTS_INFO .' WHERE 1)
             ' , null, Database::RETURN_DATA_ASSOC
         );
